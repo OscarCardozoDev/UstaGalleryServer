@@ -11,4 +11,5 @@
 export type * from './models/Credentials'
 export type * from './models/UserTypes'
 export type * from './models/Users'
+export type * from './models/Groups'
 export type * from './commonInputTypes'
