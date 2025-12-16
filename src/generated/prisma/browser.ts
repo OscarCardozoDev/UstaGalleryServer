@@ -32,3 +32,8 @@ export type UserTypes = Prisma.UserTypesModel
  * 
  */
 export type Users = Prisma.UsersModel
+/**
+ * Model Groups
+ * 
+ */
+export type Groups = Prisma.GroupsModel

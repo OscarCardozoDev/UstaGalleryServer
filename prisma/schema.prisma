@@ -1,13 +1,7 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
   output   = "../src/generated/prisma"
-  moduleFormat = "esm"
+  moduleFormat = "cjs"
 }
 
 datasource db {
@@ -34,12 +28,34 @@ model UserTypes {
 }
 
 model Users {
-  uid         String     @id
-  userType    UserTypes  @relation(fields: [userTypeId], references: [id])
-  userTypeId  String
-  name        String     @db.VarChar(25)
-  lastName    String     @db.VarChar(25)
+  uid              String     @id
+  userType         UserTypes  @relation(fields: [userTypeId], references: [id])
+  userTypeId       String
+  telNumber        String     @db.VarChar(12)
+  name             String     @db.VarChar(25)
+  lastName         String     @db.VarChar(25)
+  isActive         Boolean    @default(true)
+
+  // Relaciones
+  groups           Groups[]   @relation("GroupMembers")
+  profesor         Groups[]   @relation("GroupProfesor")
  
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  finishedAt       DateTime?
+}
+
+model Groups {
+  id           String   @id @default(uuid())
+  name         String   @db.VarChar(30)
+
+  // Profesor del grupo
+  profesor     Users   @relation("GroupProfesor", fields: [profesorId], references: [uid])
+  profesorId   String
+
+  // Estudiantes del grupo
+  members      Users[] @relation("GroupMembers")
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

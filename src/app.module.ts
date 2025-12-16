@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import configurationApp from 'config/configuration-app';
 
@@ -11,6 +12,7 @@ import configurationApp from 'config/configuration-app';
       isGlobal: true,
     }),
     AuthModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],

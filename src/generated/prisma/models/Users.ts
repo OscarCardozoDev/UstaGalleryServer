@@ -27,28 +27,37 @@ export type AggregateUsers = {
 export type UsersMinAggregateOutputType = {
   uid: string | null
   userTypeId: string | null
+  telNumber: string | null
   name: string | null
   lastName: string | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  finishedAt: Date | null
 }
 
 export type UsersMaxAggregateOutputType = {
   uid: string | null
   userTypeId: string | null
+  telNumber: string | null
   name: string | null
   lastName: string | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  finishedAt: Date | null
 }
 
 export type UsersCountAggregateOutputType = {
   uid: number
   userTypeId: number
+  telNumber: number
   name: number
   lastName: number
+  isActive: number
   createdAt: number
   updatedAt: number
+  finishedAt: number
   _all: number
 }
 
@@ -56,28 +65,37 @@ export type UsersCountAggregateOutputType = {
 export type UsersMinAggregateInputType = {
   uid?: true
   userTypeId?: true
+  telNumber?: true
   name?: true
   lastName?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
+  finishedAt?: true
 }
 
 export type UsersMaxAggregateInputType = {
   uid?: true
   userTypeId?: true
+  telNumber?: true
   name?: true
   lastName?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
+  finishedAt?: true
 }
 
 export type UsersCountAggregateInputType = {
   uid?: true
   userTypeId?: true
+  telNumber?: true
   name?: true
   lastName?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
+  finishedAt?: true
   _all?: true
 }
 
@@ -156,10 +174,13 @@ export type UsersGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type UsersGroupByOutputType = {
   uid: string
   userTypeId: string
+  telNumber: string
   name: string
   lastName: string
+  isActive: boolean
   createdAt: Date
   updatedAt: Date
+  finishedAt: Date | null
   _count: UsersCountAggregateOutputType | null
   _min: UsersMinAggregateOutputType | null
   _max: UsersMaxAggregateOutputType | null
@@ -186,21 +207,31 @@ export type UsersWhereInput = {
   NOT?: Prisma.UsersWhereInput | Prisma.UsersWhereInput[]
   uid?: Prisma.StringFilter<"Users"> | string
   userTypeId?: Prisma.StringFilter<"Users"> | string
+  telNumber?: Prisma.StringFilter<"Users"> | string
   name?: Prisma.StringFilter<"Users"> | string
   lastName?: Prisma.StringFilter<"Users"> | string
+  isActive?: Prisma.BoolFilter<"Users"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Users"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Users"> | Date | string
+  finishedAt?: Prisma.DateTimeNullableFilter<"Users"> | Date | string | null
   userType?: Prisma.XOR<Prisma.UserTypesScalarRelationFilter, Prisma.UserTypesWhereInput>
+  groups?: Prisma.GroupsListRelationFilter
+  profesor?: Prisma.GroupsListRelationFilter
 }
 
 export type UsersOrderByWithRelationInput = {
   uid?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
+  telNumber?: Prisma.SortOrder
   name?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   userType?: Prisma.UserTypesOrderByWithRelationInput
+  groups?: Prisma.GroupsOrderByRelationAggregateInput
+  profesor?: Prisma.GroupsOrderByRelationAggregateInput
 }
 
 export type UsersWhereUniqueInput = Prisma.AtLeast<{
@@ -209,20 +240,28 @@ export type UsersWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UsersWhereInput[]
   NOT?: Prisma.UsersWhereInput | Prisma.UsersWhereInput[]
   userTypeId?: Prisma.StringFilter<"Users"> | string
+  telNumber?: Prisma.StringFilter<"Users"> | string
   name?: Prisma.StringFilter<"Users"> | string
   lastName?: Prisma.StringFilter<"Users"> | string
+  isActive?: Prisma.BoolFilter<"Users"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Users"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Users"> | Date | string
+  finishedAt?: Prisma.DateTimeNullableFilter<"Users"> | Date | string | null
   userType?: Prisma.XOR<Prisma.UserTypesScalarRelationFilter, Prisma.UserTypesWhereInput>
+  groups?: Prisma.GroupsListRelationFilter
+  profesor?: Prisma.GroupsListRelationFilter
 }, "uid">
 
 export type UsersOrderByWithAggregationInput = {
   uid?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
+  telNumber?: Prisma.SortOrder
   name?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UsersCountOrderByAggregateInput
   _max?: Prisma.UsersMaxOrderByAggregateInput
   _min?: Prisma.UsersMinOrderByAggregateInput
@@ -234,72 +273,104 @@ export type UsersScalarWhereWithAggregatesInput = {
   NOT?: Prisma.UsersScalarWhereWithAggregatesInput | Prisma.UsersScalarWhereWithAggregatesInput[]
   uid?: Prisma.StringWithAggregatesFilter<"Users"> | string
   userTypeId?: Prisma.StringWithAggregatesFilter<"Users"> | string
+  telNumber?: Prisma.StringWithAggregatesFilter<"Users"> | string
   name?: Prisma.StringWithAggregatesFilter<"Users"> | string
   lastName?: Prisma.StringWithAggregatesFilter<"Users"> | string
+  isActive?: Prisma.BoolWithAggregatesFilter<"Users"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Users"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Users"> | Date | string
+  finishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Users"> | Date | string | null
 }
 
 export type UsersCreateInput = {
   uid: string
+  telNumber: string
   name: string
   lastName: string
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  finishedAt?: Date | string | null
   userType: Prisma.UserTypesCreateNestedOneWithoutUsersInput
+  groups?: Prisma.GroupsCreateNestedManyWithoutMembersInput
+  profesor?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
 }
 
 export type UsersUncheckedCreateInput = {
   uid: string
   userTypeId: string
+  telNumber: string
   name: string
   lastName: string
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  finishedAt?: Date | string | null
+  groups?: Prisma.GroupsUncheckedCreateNestedManyWithoutMembersInput
+  profesor?: Prisma.GroupsUncheckedCreateNestedManyWithoutProfesorInput
 }
 
 export type UsersUpdateInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userType?: Prisma.UserTypesUpdateOneRequiredWithoutUsersNestedInput
+  groups?: Prisma.GroupsUpdateManyWithoutMembersNestedInput
+  profesor?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
 }
 
 export type UsersUncheckedUpdateInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  groups?: Prisma.GroupsUncheckedUpdateManyWithoutMembersNestedInput
+  profesor?: Prisma.GroupsUncheckedUpdateManyWithoutProfesorNestedInput
 }
 
 export type UsersCreateManyInput = {
   uid: string
   userTypeId: string
+  telNumber: string
   name: string
   lastName: string
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  finishedAt?: Date | string | null
 }
 
 export type UsersUpdateManyMutationInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UsersUncheckedUpdateManyInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UsersListRelationFilter = {
@@ -315,28 +386,42 @@ export type UsersOrderByRelationAggregateInput = {
 export type UsersCountOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
+  telNumber?: Prisma.SortOrder
   name?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrder
 }
 
 export type UsersMaxOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
+  telNumber?: Prisma.SortOrder
   name?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrder
 }
 
 export type UsersMinOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
+  telNumber?: Prisma.SortOrder
   name?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrder
+}
+
+export type UsersScalarRelationFilter = {
+  is?: Prisma.UsersWhereInput
+  isNot?: Prisma.UsersWhereInput
 }
 
 export type UsersCreateNestedManyWithoutUserTypeInput = {
@@ -381,20 +466,90 @@ export type UsersUncheckedUpdateManyWithoutUserTypeNestedInput = {
   deleteMany?: Prisma.UsersScalarWhereInput | Prisma.UsersScalarWhereInput[]
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
+export type UsersCreateNestedOneWithoutProfesorInput = {
+  create?: Prisma.XOR<Prisma.UsersCreateWithoutProfesorInput, Prisma.UsersUncheckedCreateWithoutProfesorInput>
+  connectOrCreate?: Prisma.UsersCreateOrConnectWithoutProfesorInput
+  connect?: Prisma.UsersWhereUniqueInput
+}
+
+export type UsersCreateNestedManyWithoutGroupsInput = {
+  create?: Prisma.XOR<Prisma.UsersCreateWithoutGroupsInput, Prisma.UsersUncheckedCreateWithoutGroupsInput> | Prisma.UsersCreateWithoutGroupsInput[] | Prisma.UsersUncheckedCreateWithoutGroupsInput[]
+  connectOrCreate?: Prisma.UsersCreateOrConnectWithoutGroupsInput | Prisma.UsersCreateOrConnectWithoutGroupsInput[]
+  connect?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+}
+
+export type UsersUncheckedCreateNestedManyWithoutGroupsInput = {
+  create?: Prisma.XOR<Prisma.UsersCreateWithoutGroupsInput, Prisma.UsersUncheckedCreateWithoutGroupsInput> | Prisma.UsersCreateWithoutGroupsInput[] | Prisma.UsersUncheckedCreateWithoutGroupsInput[]
+  connectOrCreate?: Prisma.UsersCreateOrConnectWithoutGroupsInput | Prisma.UsersCreateOrConnectWithoutGroupsInput[]
+  connect?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+}
+
+export type UsersUpdateOneRequiredWithoutProfesorNestedInput = {
+  create?: Prisma.XOR<Prisma.UsersCreateWithoutProfesorInput, Prisma.UsersUncheckedCreateWithoutProfesorInput>
+  connectOrCreate?: Prisma.UsersCreateOrConnectWithoutProfesorInput
+  upsert?: Prisma.UsersUpsertWithoutProfesorInput
+  connect?: Prisma.UsersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsersUpdateToOneWithWhereWithoutProfesorInput, Prisma.UsersUpdateWithoutProfesorInput>, Prisma.UsersUncheckedUpdateWithoutProfesorInput>
+}
+
+export type UsersUpdateManyWithoutGroupsNestedInput = {
+  create?: Prisma.XOR<Prisma.UsersCreateWithoutGroupsInput, Prisma.UsersUncheckedCreateWithoutGroupsInput> | Prisma.UsersCreateWithoutGroupsInput[] | Prisma.UsersUncheckedCreateWithoutGroupsInput[]
+  connectOrCreate?: Prisma.UsersCreateOrConnectWithoutGroupsInput | Prisma.UsersCreateOrConnectWithoutGroupsInput[]
+  upsert?: Prisma.UsersUpsertWithWhereUniqueWithoutGroupsInput | Prisma.UsersUpsertWithWhereUniqueWithoutGroupsInput[]
+  set?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  disconnect?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  delete?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  connect?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  update?: Prisma.UsersUpdateWithWhereUniqueWithoutGroupsInput | Prisma.UsersUpdateWithWhereUniqueWithoutGroupsInput[]
+  updateMany?: Prisma.UsersUpdateManyWithWhereWithoutGroupsInput | Prisma.UsersUpdateManyWithWhereWithoutGroupsInput[]
+  deleteMany?: Prisma.UsersScalarWhereInput | Prisma.UsersScalarWhereInput[]
+}
+
+export type UsersUncheckedUpdateManyWithoutGroupsNestedInput = {
+  create?: Prisma.XOR<Prisma.UsersCreateWithoutGroupsInput, Prisma.UsersUncheckedCreateWithoutGroupsInput> | Prisma.UsersCreateWithoutGroupsInput[] | Prisma.UsersUncheckedCreateWithoutGroupsInput[]
+  connectOrCreate?: Prisma.UsersCreateOrConnectWithoutGroupsInput | Prisma.UsersCreateOrConnectWithoutGroupsInput[]
+  upsert?: Prisma.UsersUpsertWithWhereUniqueWithoutGroupsInput | Prisma.UsersUpsertWithWhereUniqueWithoutGroupsInput[]
+  set?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  disconnect?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  delete?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  connect?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  update?: Prisma.UsersUpdateWithWhereUniqueWithoutGroupsInput | Prisma.UsersUpdateWithWhereUniqueWithoutGroupsInput[]
+  updateMany?: Prisma.UsersUpdateManyWithWhereWithoutGroupsInput | Prisma.UsersUpdateManyWithWhereWithoutGroupsInput[]
+  deleteMany?: Prisma.UsersScalarWhereInput | Prisma.UsersScalarWhereInput[]
+}
+
 export type UsersCreateWithoutUserTypeInput = {
   uid: string
+  telNumber: string
   name: string
   lastName: string
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  finishedAt?: Date | string | null
+  groups?: Prisma.GroupsCreateNestedManyWithoutMembersInput
+  profesor?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
 }
 
 export type UsersUncheckedCreateWithoutUserTypeInput = {
   uid: string
+  telNumber: string
   name: string
   lastName: string
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  finishedAt?: Date | string | null
+  groups?: Prisma.GroupsUncheckedCreateNestedManyWithoutMembersInput
+  profesor?: Prisma.GroupsUncheckedCreateNestedManyWithoutProfesorInput
 }
 
 export type UsersCreateOrConnectWithoutUserTypeInput = {
@@ -429,88 +584,316 @@ export type UsersScalarWhereInput = {
   NOT?: Prisma.UsersScalarWhereInput | Prisma.UsersScalarWhereInput[]
   uid?: Prisma.StringFilter<"Users"> | string
   userTypeId?: Prisma.StringFilter<"Users"> | string
+  telNumber?: Prisma.StringFilter<"Users"> | string
   name?: Prisma.StringFilter<"Users"> | string
   lastName?: Prisma.StringFilter<"Users"> | string
+  isActive?: Prisma.BoolFilter<"Users"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Users"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Users"> | Date | string
+  finishedAt?: Prisma.DateTimeNullableFilter<"Users"> | Date | string | null
+}
+
+export type UsersCreateWithoutProfesorInput = {
+  uid: string
+  telNumber: string
+  name: string
+  lastName: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  finishedAt?: Date | string | null
+  userType: Prisma.UserTypesCreateNestedOneWithoutUsersInput
+  groups?: Prisma.GroupsCreateNestedManyWithoutMembersInput
+}
+
+export type UsersUncheckedCreateWithoutProfesorInput = {
+  uid: string
+  userTypeId: string
+  telNumber: string
+  name: string
+  lastName: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  finishedAt?: Date | string | null
+  groups?: Prisma.GroupsUncheckedCreateNestedManyWithoutMembersInput
+}
+
+export type UsersCreateOrConnectWithoutProfesorInput = {
+  where: Prisma.UsersWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsersCreateWithoutProfesorInput, Prisma.UsersUncheckedCreateWithoutProfesorInput>
+}
+
+export type UsersCreateWithoutGroupsInput = {
+  uid: string
+  telNumber: string
+  name: string
+  lastName: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  finishedAt?: Date | string | null
+  userType: Prisma.UserTypesCreateNestedOneWithoutUsersInput
+  profesor?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
+}
+
+export type UsersUncheckedCreateWithoutGroupsInput = {
+  uid: string
+  userTypeId: string
+  telNumber: string
+  name: string
+  lastName: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  finishedAt?: Date | string | null
+  profesor?: Prisma.GroupsUncheckedCreateNestedManyWithoutProfesorInput
+}
+
+export type UsersCreateOrConnectWithoutGroupsInput = {
+  where: Prisma.UsersWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsersCreateWithoutGroupsInput, Prisma.UsersUncheckedCreateWithoutGroupsInput>
+}
+
+export type UsersUpsertWithoutProfesorInput = {
+  update: Prisma.XOR<Prisma.UsersUpdateWithoutProfesorInput, Prisma.UsersUncheckedUpdateWithoutProfesorInput>
+  create: Prisma.XOR<Prisma.UsersCreateWithoutProfesorInput, Prisma.UsersUncheckedCreateWithoutProfesorInput>
+  where?: Prisma.UsersWhereInput
+}
+
+export type UsersUpdateToOneWithWhereWithoutProfesorInput = {
+  where?: Prisma.UsersWhereInput
+  data: Prisma.XOR<Prisma.UsersUpdateWithoutProfesorInput, Prisma.UsersUncheckedUpdateWithoutProfesorInput>
+}
+
+export type UsersUpdateWithoutProfesorInput = {
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userType?: Prisma.UserTypesUpdateOneRequiredWithoutUsersNestedInput
+  groups?: Prisma.GroupsUpdateManyWithoutMembersNestedInput
+}
+
+export type UsersUncheckedUpdateWithoutProfesorInput = {
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
+  userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  groups?: Prisma.GroupsUncheckedUpdateManyWithoutMembersNestedInput
+}
+
+export type UsersUpsertWithWhereUniqueWithoutGroupsInput = {
+  where: Prisma.UsersWhereUniqueInput
+  update: Prisma.XOR<Prisma.UsersUpdateWithoutGroupsInput, Prisma.UsersUncheckedUpdateWithoutGroupsInput>
+  create: Prisma.XOR<Prisma.UsersCreateWithoutGroupsInput, Prisma.UsersUncheckedCreateWithoutGroupsInput>
+}
+
+export type UsersUpdateWithWhereUniqueWithoutGroupsInput = {
+  where: Prisma.UsersWhereUniqueInput
+  data: Prisma.XOR<Prisma.UsersUpdateWithoutGroupsInput, Prisma.UsersUncheckedUpdateWithoutGroupsInput>
+}
+
+export type UsersUpdateManyWithWhereWithoutGroupsInput = {
+  where: Prisma.UsersScalarWhereInput
+  data: Prisma.XOR<Prisma.UsersUpdateManyMutationInput, Prisma.UsersUncheckedUpdateManyWithoutGroupsInput>
 }
 
 export type UsersCreateManyUserTypeInput = {
   uid: string
+  telNumber: string
   name: string
   lastName: string
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  finishedAt?: Date | string | null
 }
 
 export type UsersUpdateWithoutUserTypeInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  groups?: Prisma.GroupsUpdateManyWithoutMembersNestedInput
+  profesor?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
 }
 
 export type UsersUncheckedUpdateWithoutUserTypeInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  groups?: Prisma.GroupsUncheckedUpdateManyWithoutMembersNestedInput
+  profesor?: Prisma.GroupsUncheckedUpdateManyWithoutProfesorNestedInput
 }
 
 export type UsersUncheckedUpdateManyWithoutUserTypeInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
+export type UsersUpdateWithoutGroupsInput = {
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userType?: Prisma.UserTypesUpdateOneRequiredWithoutUsersNestedInput
+  profesor?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
+}
+
+export type UsersUncheckedUpdateWithoutGroupsInput = {
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
+  userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  profesor?: Prisma.GroupsUncheckedUpdateManyWithoutProfesorNestedInput
+}
+
+export type UsersUncheckedUpdateManyWithoutGroupsInput = {
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
+  userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+
+/**
+ * Count Type UsersCountOutputType
+ */
+
+export type UsersCountOutputType = {
+  groups: number
+  profesor: number
+}
+
+export type UsersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  groups?: boolean | UsersCountOutputTypeCountGroupsArgs
+  profesor?: boolean | UsersCountOutputTypeCountProfesorArgs
+}
+
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UsersCountOutputType
+   */
+  select?: Prisma.UsersCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountGroupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GroupsWhereInput
+}
+
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountProfesorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GroupsWhereInput
+}
 
 
 export type UsersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   uid?: boolean
   userTypeId?: boolean
+  telNumber?: boolean
   name?: boolean
   lastName?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  finishedAt?: boolean
   userType?: boolean | Prisma.UserTypesDefaultArgs<ExtArgs>
+  groups?: boolean | Prisma.Users$groupsArgs<ExtArgs>
+  profesor?: boolean | Prisma.Users$profesorArgs<ExtArgs>
+  _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
 export type UsersSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   uid?: boolean
   userTypeId?: boolean
+  telNumber?: boolean
   name?: boolean
   lastName?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  finishedAt?: boolean
   userType?: boolean | Prisma.UserTypesDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
 export type UsersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   uid?: boolean
   userTypeId?: boolean
+  telNumber?: boolean
   name?: boolean
   lastName?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  finishedAt?: boolean
   userType?: boolean | Prisma.UserTypesDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
 export type UsersSelectScalar = {
   uid?: boolean
   userTypeId?: boolean
+  telNumber?: boolean
   name?: boolean
   lastName?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  finishedAt?: boolean
 }
 
-export type UsersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "userTypeId" | "name" | "lastName" | "createdAt" | "updatedAt", ExtArgs["result"]["users"]>
+export type UsersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "userTypeId" | "telNumber" | "name" | "lastName" | "isActive" | "createdAt" | "updatedAt" | "finishedAt", ExtArgs["result"]["users"]>
 export type UsersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   userType?: boolean | Prisma.UserTypesDefaultArgs<ExtArgs>
+  groups?: boolean | Prisma.Users$groupsArgs<ExtArgs>
+  profesor?: boolean | Prisma.Users$profesorArgs<ExtArgs>
+  _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UsersIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   userType?: boolean | Prisma.UserTypesDefaultArgs<ExtArgs>
@@ -523,14 +906,19 @@ export type $UsersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name: "Users"
   objects: {
     userType: Prisma.$UserTypesPayload<ExtArgs>
+    groups: Prisma.$GroupsPayload<ExtArgs>[]
+    profesor: Prisma.$GroupsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     uid: string
     userTypeId: string
+    telNumber: string
     name: string
     lastName: string
+    isActive: boolean
     createdAt: Date
     updatedAt: Date
+    finishedAt: Date | null
   }, ExtArgs["result"]["users"]>
   composites: {}
 }
@@ -926,6 +1314,8 @@ readonly fields: UsersFieldRefs;
 export interface Prisma__UsersClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   userType<T extends Prisma.UserTypesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserTypesDefaultArgs<ExtArgs>>): Prisma.Prisma__UserTypesClient<runtime.Types.Result.GetResult<Prisma.$UserTypesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  groups<T extends Prisma.Users$groupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Users$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  profesor<T extends Prisma.Users$profesorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Users$profesorArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -957,10 +1347,13 @@ export interface Prisma__UsersClient<T, Null = never, ExtArgs extends runtime.Ty
 export interface UsersFieldRefs {
   readonly uid: Prisma.FieldRef<"Users", 'String'>
   readonly userTypeId: Prisma.FieldRef<"Users", 'String'>
+  readonly telNumber: Prisma.FieldRef<"Users", 'String'>
   readonly name: Prisma.FieldRef<"Users", 'String'>
   readonly lastName: Prisma.FieldRef<"Users", 'String'>
+  readonly isActive: Prisma.FieldRef<"Users", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Users", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Users", 'DateTime'>
+  readonly finishedAt: Prisma.FieldRef<"Users", 'DateTime'>
 }
     
 
@@ -1354,6 +1747,54 @@ export type UsersDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * Users.groups
+ */
+export type Users$groupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Groups
+   */
+  select?: Prisma.GroupsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Groups
+   */
+  omit?: Prisma.GroupsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GroupsInclude<ExtArgs> | null
+  where?: Prisma.GroupsWhereInput
+  orderBy?: Prisma.GroupsOrderByWithRelationInput | Prisma.GroupsOrderByWithRelationInput[]
+  cursor?: Prisma.GroupsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GroupsScalarFieldEnum | Prisma.GroupsScalarFieldEnum[]
+}
+
+/**
+ * Users.profesor
+ */
+export type Users$profesorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Groups
+   */
+  select?: Prisma.GroupsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Groups
+   */
+  omit?: Prisma.GroupsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GroupsInclude<ExtArgs> | null
+  where?: Prisma.GroupsWhereInput
+  orderBy?: Prisma.GroupsOrderByWithRelationInput | Prisma.GroupsOrderByWithRelationInput[]
+  cursor?: Prisma.GroupsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GroupsScalarFieldEnum | Prisma.GroupsScalarFieldEnum[]
 }
 
 /**
