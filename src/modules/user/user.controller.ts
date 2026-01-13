@@ -3,14 +3,18 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
-  Param,
+  UseGuards,
   Get,
   Post,
   Put,
 } from '@nestjs/common';
+import { CurrentUser } from 'src/decorators/currentUser';
 import { UserService } from './user.service';
 import { User, UpdateUserDto } from './user.interface';
+import { JwtPayload } from 'src/interface/jwtPayload';
+import { AuthGuard } from 'src/middleware/jwt.guard';
 
+@UseGuards(AuthGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -27,15 +31,17 @@ export class UserController {
     return this.userService.getActiveUsers();
   }
 
-  @Get('read/:uid')
-  @HttpCode(HttpStatus.OK)
-  async getUser(@Param('uid') uid: string) {
-    return this.userService.getUser(uid);
+  @Get('read')
+  async getUser(@CurrentUser() user: JwtPayload) {
+    return this.userService.getUser(user.uid);
   }
 
-  @Put('update/:uid')
+  @Put('update')
   @HttpCode(HttpStatus.OK)
-  async updateUser(@Param('uid') uid: string, @Body() body: UpdateUserDto) {
-    return this.userService.updateUser(uid, body);
+  async updateUser(
+    @CurrentUser() user: JwtPayload,
+    @Body() body: UpdateUserDto,
+  ) {
+    return this.userService.updateUser(user.uid, body);
   }
 }
