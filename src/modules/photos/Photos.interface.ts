@@ -21,8 +21,8 @@ export interface PhotoParams {
 
 export interface PhotoResponse {
   uid: string;
-  name?: string;
-  url?: string;
+  name: string;
+  url: string;
 }
 
 export interface GetPhotoResponse {

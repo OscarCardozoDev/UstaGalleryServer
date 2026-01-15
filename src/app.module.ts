@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-//import { AuthModule } from 'src/modules/auth/auth.module';
-//import { UserModule } from 'src/modules/user/user.module';
+import { AuthModule } from 'src/modules/auth/auth.module';
+import { UserModule } from 'src/modules/user/user.module';
 import { PhotosModule } from 'src/modules/photos/Photos.module';
 import { ConfigModule } from '@nestjs/config';
 import configurationApp from 'config/configuration-app';
@@ -12,8 +12,8 @@ import configurationApp from 'config/configuration-app';
       load: [configurationApp],
       isGlobal: true,
     }),
-    //AuthModule,
-    //UserModule,
+    AuthModule,
+    UserModule,
     PhotosModule,
   ],
   controllers: [],

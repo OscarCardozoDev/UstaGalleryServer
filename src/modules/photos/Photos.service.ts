@@ -4,13 +4,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PhotoPayload, PhotoResponse } from './Photos.interface';
+import { PhotoPayload, PhotoResponse, PhotoParams } from './Photos.interface';
 
 @Injectable()
 export class PhotosService {
   constructor(private prismaService: PrismaService) {}
 
-  async setPhoto(data: PhotoPayload): Promise<PhotoResponse> {
+  async setPhoto(data: PhotoPayload): Promise<PhotoParams> {
     try {
       return await this.prismaService.photos.create({
         data,
@@ -39,9 +39,9 @@ export class PhotosService {
     }
   }
 
-  async getPhoto(photoId: string): Promise<PhotoResponse | null> {
+  async getPhoto(photoId: string): Promise<PhotoResponse> {
     try {
-      return await this.prismaService.photos.findUnique({
+      const photo = await this.prismaService.photos.findUnique({
         where: { uid: photoId },
         select: {
           uid: true,
@@ -49,6 +49,12 @@ export class PhotosService {
           url: true,
         },
       });
+
+      if (!photo) {
+        throw new NotFoundException('Photo not found');
+      }
+
+      return photo;
     } catch {
       throw new InternalServerErrorException('Error fetching photo');
     }

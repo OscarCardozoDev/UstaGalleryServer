@@ -6,7 +6,12 @@ const IMAGES_ROOT = path.resolve(process.cwd(), 'Images');
 export interface SavePhotoParams {
   fileBuffer: Buffer;
   fileName: string;
-  folderPath?: string;
+  folderPath: string;
+}
+
+export interface EditPhotoParams {
+  fileBuffer: Buffer;
+  folderPath: string;
 }
 
 export interface PhotoResult {
@@ -46,31 +51,17 @@ export const photoManagment = {
   /**
    * Edita (sobrescribe) una foto existente
    */
-  async edit({
-    fileBuffer,
-    fileName,
-    folderPath,
-  }: SavePhotoParams): Promise<PhotoResult> {
-    const targetDir = resolveFolder(folderPath);
-    const filePath = path.join(targetDir, fileName);
-
-    await fs.access(filePath);
-    await fs.writeFile(filePath, fileBuffer);
-
-    return {
-      name: fileName,
-      url: filePath,
-    };
+  async edit({ fileBuffer, folderPath }: EditPhotoParams): Promise<void> {
+    await fs.access(folderPath);
+    await fs.writeFile(folderPath, fileBuffer);
   },
 
   /**
    * Obtiene una foto y la devuelve en base64
    */
   async get(folderPath: string): Promise<GetPhotoResult | null> {
-    const targetDir = resolveFolder(folderPath);
-
     try {
-      const buffer = await fs.readFile(targetDir);
+      const buffer = await fs.readFile(folderPath);
 
       return {
         base64: buffer.toString('base64'),

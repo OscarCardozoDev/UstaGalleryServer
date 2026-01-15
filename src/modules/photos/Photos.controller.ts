@@ -25,7 +25,7 @@ export class PhotosController {
   // =========================
   // CREATE
   // =========================
-  @Post()
+  @Post('create')
   async createPhoto(@Body() body: CreatePhotoDto): Promise<PhotoResponse> {
     const { base64, name, folder } = body;
 
@@ -57,53 +57,56 @@ export class PhotosController {
     // 3️⃣ Devolver uid
     return {
       uid: photo.uid,
+      name,
+      url: fileResult.url,
     };
   }
 
   // =========================
   // UPDATE
   // =========================
-  @Put(':uid')
+  @Put('edit/:uid')
   async updatePhoto(
     @Param() params: PhotoParams,
     @Body() body: UpdatePhotoDto,
   ): Promise<PhotoResponse> {
     const { uid } = params;
-    const { base64, name, folder } = body;
+    const { base64, name } = body;
 
-    if (!base64 || !name || !folder) {
-      throw new BadRequestException('base64, name and folder are required');
+    if (!base64 || !name) {
+      throw new BadRequestException('base64 and name are required');
     }
 
     const buffer = Buffer.from(base64, 'base64');
 
     // Verificar existencia en DB
-    const existing = await this.photosService.getPhoto(uid);
-    if (!existing) {
+    const photo = await this.photosService.getPhoto(uid);
+    if (!photo) {
       throw new NotFoundException('Photo not found');
     }
 
     // Reemplazar archivo
-    const file = await photoManagment.edit({
+    await photoManagment.edit({
       fileBuffer: buffer,
-      fileName: name,
-      folderPath: folder,
+      folderPath: photo.url,
     });
 
     await this.photosService.putPhoto(uid, {
       name,
-      url: file.url,
+      url: photo.url,
     });
 
     return {
       uid,
+      name,
+      url: photo.url,
     };
   }
 
   // =========================
   // GET
   // =========================
-  @Get(':uid')
+  @Get('get/:uid')
   async getPhoto(@Param() params: PhotoParams): Promise<GetPhotoResponse> {
     const photo = await this.photosService.getPhoto(params.uid);
 
@@ -114,6 +117,7 @@ export class PhotosController {
     }
 
     const fileResult = await photoManagment.get(photo.url);
+    console.log(fileResult);
 
     if (!fileResult) {
       throw new NotFoundException('Image file not found');
