@@ -2,7 +2,7 @@
 /dist
 /node_modules
 /build
-/Images
+/src/generated
 
 # Logs
 logs
