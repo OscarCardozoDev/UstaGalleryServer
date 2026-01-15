@@ -25,21 +25,21 @@ export type AggregateUserTypes = {
 }
 
 export type UserTypesMinAggregateOutputType = {
-  id: string | null
+  uid: string | null
   name: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type UserTypesMaxAggregateOutputType = {
-  id: string | null
+  uid: string | null
   name: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type UserTypesCountAggregateOutputType = {
-  id: number
+  uid: number
   name: number
   createdAt: number
   updatedAt: number
@@ -48,21 +48,21 @@ export type UserTypesCountAggregateOutputType = {
 
 
 export type UserTypesMinAggregateInputType = {
-  id?: true
+  uid?: true
   name?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type UserTypesMaxAggregateInputType = {
-  id?: true
+  uid?: true
   name?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type UserTypesCountAggregateInputType = {
-  id?: true
+  uid?: true
   name?: true
   createdAt?: true
   updatedAt?: true
@@ -142,7 +142,7 @@ export type UserTypesGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 export type UserTypesGroupByOutputType = {
-  id: string
+  uid: string
   name: string
   createdAt: Date
   updatedAt: Date
@@ -170,34 +170,34 @@ export type UserTypesWhereInput = {
   AND?: Prisma.UserTypesWhereInput | Prisma.UserTypesWhereInput[]
   OR?: Prisma.UserTypesWhereInput[]
   NOT?: Prisma.UserTypesWhereInput | Prisma.UserTypesWhereInput[]
-  id?: Prisma.StringFilter<"UserTypes"> | string
+  uid?: Prisma.UuidFilter<"UserTypes"> | string
   name?: Prisma.StringFilter<"UserTypes"> | string
   createdAt?: Prisma.DateTimeFilter<"UserTypes"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserTypes"> | Date | string
-  Users?: Prisma.UsersListRelationFilter
+  users?: Prisma.UsersListRelationFilter
 }
 
 export type UserTypesOrderByWithRelationInput = {
-  id?: Prisma.SortOrder
+  uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  Users?: Prisma.UsersOrderByRelationAggregateInput
+  users?: Prisma.UsersOrderByRelationAggregateInput
 }
 
 export type UserTypesWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
+  uid?: string
   AND?: Prisma.UserTypesWhereInput | Prisma.UserTypesWhereInput[]
   OR?: Prisma.UserTypesWhereInput[]
   NOT?: Prisma.UserTypesWhereInput | Prisma.UserTypesWhereInput[]
   name?: Prisma.StringFilter<"UserTypes"> | string
   createdAt?: Prisma.DateTimeFilter<"UserTypes"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserTypes"> | Date | string
-  Users?: Prisma.UsersListRelationFilter
-}, "id">
+  users?: Prisma.UsersListRelationFilter
+}, "uid">
 
 export type UserTypesOrderByWithAggregationInput = {
-  id?: Prisma.SortOrder
+  uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -210,81 +210,81 @@ export type UserTypesScalarWhereWithAggregatesInput = {
   AND?: Prisma.UserTypesScalarWhereWithAggregatesInput | Prisma.UserTypesScalarWhereWithAggregatesInput[]
   OR?: Prisma.UserTypesScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserTypesScalarWhereWithAggregatesInput | Prisma.UserTypesScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"UserTypes"> | string
+  uid?: Prisma.UuidWithAggregatesFilter<"UserTypes"> | string
   name?: Prisma.StringWithAggregatesFilter<"UserTypes"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserTypes"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UserTypes"> | Date | string
 }
 
 export type UserTypesCreateInput = {
-  id?: string
+  uid?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  Users?: Prisma.UsersCreateNestedManyWithoutUserTypeInput
+  users?: Prisma.UsersCreateNestedManyWithoutUserTypeInput
 }
 
 export type UserTypesUncheckedCreateInput = {
-  id?: string
+  uid?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  Users?: Prisma.UsersUncheckedCreateNestedManyWithoutUserTypeInput
+  users?: Prisma.UsersUncheckedCreateNestedManyWithoutUserTypeInput
 }
 
 export type UserTypesUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  Users?: Prisma.UsersUpdateManyWithoutUserTypeNestedInput
+  users?: Prisma.UsersUpdateManyWithoutUserTypeNestedInput
 }
 
 export type UserTypesUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  Users?: Prisma.UsersUncheckedUpdateManyWithoutUserTypeNestedInput
+  users?: Prisma.UsersUncheckedUpdateManyWithoutUserTypeNestedInput
 }
 
 export type UserTypesCreateManyInput = {
-  id?: string
+  uid?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type UserTypesUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserTypesUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserTypesCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type UserTypesMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type UserTypesMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -293,6 +293,14 @@ export type UserTypesMinOrderByAggregateInput = {
 export type UserTypesScalarRelationFilter = {
   is?: Prisma.UserTypesWhereInput
   isNot?: Prisma.UserTypesWhereInput
+}
+
+export type StringFieldUpdateOperationsInput = {
+  set?: string
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
 }
 
 export type UserTypesCreateNestedOneWithoutUsersInput = {
@@ -310,14 +318,14 @@ export type UserTypesUpdateOneRequiredWithoutUsersNestedInput = {
 }
 
 export type UserTypesCreateWithoutUsersInput = {
-  id?: string
+  uid?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type UserTypesUncheckedCreateWithoutUsersInput = {
-  id?: string
+  uid?: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -340,14 +348,14 @@ export type UserTypesUpdateToOneWithWhereWithoutUsersInput = {
 }
 
 export type UserTypesUpdateWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserTypesUncheckedUpdateWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -359,11 +367,11 @@ export type UserTypesUncheckedUpdateWithoutUsersInput = {
  */
 
 export type UserTypesCountOutputType = {
-  Users: number
+  users: number
 }
 
 export type UserTypesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  Users?: boolean | UserTypesCountOutputTypeCountUsersArgs
+  users?: boolean | UserTypesCountOutputTypeCountUsersArgs
 }
 
 /**
@@ -385,38 +393,38 @@ export type UserTypesCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types
 
 
 export type UserTypesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
+  uid?: boolean
   name?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  Users?: boolean | Prisma.UserTypes$UsersArgs<ExtArgs>
+  users?: boolean | Prisma.UserTypes$usersArgs<ExtArgs>
   _count?: boolean | Prisma.UserTypesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userTypes"]>
 
 export type UserTypesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
+  uid?: boolean
   name?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["userTypes"]>
 
 export type UserTypesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
+  uid?: boolean
   name?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["userTypes"]>
 
 export type UserTypesSelectScalar = {
-  id?: boolean
+  uid?: boolean
   name?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserTypesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["userTypes"]>
+export type UserTypesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["userTypes"]>
 export type UserTypesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  Users?: boolean | Prisma.UserTypes$UsersArgs<ExtArgs>
+  users?: boolean | Prisma.UserTypes$usersArgs<ExtArgs>
   _count?: boolean | Prisma.UserTypesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserTypesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -425,10 +433,10 @@ export type UserTypesIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type $UserTypesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "UserTypes"
   objects: {
-    Users: Prisma.$UsersPayload<ExtArgs>[]
+    users: Prisma.$UsersPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
+    uid: string
     name: string
     createdAt: Date
     updatedAt: Date
@@ -515,8 +523,8 @@ export interface UserTypesDelegate<ExtArgs extends runtime.Types.Extensions.Inte
    * // Get first 10 UserTypes
    * const userTypes = await prisma.userTypes.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const userTypesWithIdOnly = await prisma.userTypes.findMany({ select: { id: true } })
+   * // Only select the `uid`
+   * const userTypesWithUidOnly = await prisma.userTypes.findMany({ select: { uid: true } })
    * 
    */
   findMany<T extends UserTypesFindManyArgs>(args?: Prisma.SelectSubset<T, UserTypesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserTypesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -560,9 +568,9 @@ export interface UserTypesDelegate<ExtArgs extends runtime.Types.Extensions.Inte
    *   ]
    * })
    * 
-   * // Create many UserTypes and only return the `id`
-   * const userTypesWithIdOnly = await prisma.userTypes.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many UserTypes and only return the `uid`
+   * const userTypesWithUidOnly = await prisma.userTypes.createManyAndReturn({
+   *   select: { uid: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -651,9 +659,9 @@ export interface UserTypesDelegate<ExtArgs extends runtime.Types.Extensions.Inte
    *   ]
    * })
    * 
-   * // Update zero or more UserTypes and only return the `id`
-   * const userTypesWithIdOnly = await prisma.userTypes.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more UserTypes and only return the `uid`
+   * const userTypesWithUidOnly = await prisma.userTypes.updateManyAndReturn({
+   *   select: { uid: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -826,7 +834,7 @@ readonly fields: UserTypesFieldRefs;
  */
 export interface Prisma__UserTypesClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  Users<T extends Prisma.UserTypes$UsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserTypes$UsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UsersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  users<T extends Prisma.UserTypes$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserTypes$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UsersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -856,7 +864,7 @@ export interface Prisma__UserTypesClient<T, Null = never, ExtArgs extends runtim
  * Fields of the UserTypes model
  */
 export interface UserTypesFieldRefs {
-  readonly id: Prisma.FieldRef<"UserTypes", 'String'>
+  readonly uid: Prisma.FieldRef<"UserTypes", 'String'>
   readonly name: Prisma.FieldRef<"UserTypes", 'String'>
   readonly createdAt: Prisma.FieldRef<"UserTypes", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UserTypes", 'DateTime'>
@@ -1248,9 +1256,9 @@ export type UserTypesDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * UserTypes.Users
+ * UserTypes.users
  */
-export type UserTypes$UsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type UserTypes$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Users
    */

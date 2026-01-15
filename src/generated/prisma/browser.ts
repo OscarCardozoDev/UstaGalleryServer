@@ -18,11 +18,6 @@ export { Prisma }
 export * as $Enums from './enums'
 export * from './enums';
 /**
- * Model Credentials
- * 
- */
-export type Credentials = Prisma.CredentialsModel
-/**
  * Model UserTypes
  * 
  */
@@ -32,3 +27,68 @@ export type UserTypes = Prisma.UserTypesModel
  * 
  */
 export type Users = Prisma.UsersModel
+/**
+ * Model Credentials
+ * 
+ */
+export type Credentials = Prisma.CredentialsModel
+/**
+ * Model Groups
+ * 
+ */
+export type Groups = Prisma.GroupsModel
+/**
+ * Model UsersGroups
+ * 
+ */
+export type UsersGroups = Prisma.UsersGroupsModel
+/**
+ * Model Products
+ * 
+ */
+export type Products = Prisma.ProductsModel
+/**
+ * Model Styles
+ * 
+ */
+export type Styles = Prisma.StylesModel
+/**
+ * Model ProductStyle
+ * 
+ */
+export type ProductStyle = Prisma.ProductStyleModel
+/**
+ * Model Photos
+ * 
+ */
+export type Photos = Prisma.PhotosModel
+/**
+ * Model ProductPhoto
+ * 
+ */
+export type ProductPhoto = Prisma.ProductPhotoModel
+/**
+ * Model Events
+ * 
+ */
+export type Events = Prisma.EventsModel
+/**
+ * Model EventProduct
+ * 
+ */
+export type EventProduct = Prisma.EventProductModel
+/**
+ * Model EventPhoto
+ * 
+ */
+export type EventPhoto = Prisma.EventPhotoModel
+/**
+ * Model UserProduct
+ * 
+ */
+export type UserProduct = Prisma.UserProductModel
+/**
+ * Model GroupEvent
+ * 
+ */
+export type GroupEvent = Prisma.GroupEventModel

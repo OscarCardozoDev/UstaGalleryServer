@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.1.0",
   "engineVersion": "ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba",
   "activeProvider": "postgresql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider     = \"prisma-client\"\n  output       = \"../src/generated/prisma\"\n  moduleFormat = \"cjs\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Credentials {\n  uid      String @id @default(uuid())\n  email    String @unique @db.VarChar(100)\n  password String @db.VarChar(16)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel UserTypes {\n  id    String  @id @default(uuid())\n  name  String  @db.VarChar(30)\n  Users Users[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Users {\n  uid        String    @id\n  userType   UserTypes @relation(fields: [userTypeId], references: [id])\n  userTypeId String\n  name       String    @db.VarChar(25)\n  lastName   String    @db.VarChar(25)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n",
+  "inlineSchema": "generator client {\n  provider     = \"prisma-client\"\n  output       = \"../src/generated/prisma\"\n  moduleFormat = \"cjs\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\n//////////////////////////////////////////////////////\n// USER TYPES\n//////////////////////////////////////////////////////\n\nmodel UserTypes {\n  uid  String @id @default(uuid()) @db.Uuid\n  name String @db.VarChar(30)\n\n  users Users[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\n//////////////////////////////////////////////////////\n// USERS\n//////////////////////////////////////////////////////\n\nmodel Users {\n  uid        String  @id @unique @db.Uuid\n  name       String  @db.VarChar(30)\n  lastName   String  @db.VarChar(30)\n  telNumber  String  @db.VarChar(12)\n  isActive   Boolean @default(true)\n  isProfesor Boolean @default(false)\n\n  userType   UserTypes @relation(fields: [userTypeId], references: [uid])\n  userTypeId String    @db.Uuid\n\n  groups        UsersGroups[]\n  products      UserProduct[]\n  profesorGroup Groups?       @relation(\"GroupProfesor\")\n\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n  finishAt  DateTime?\n}\n\nmodel Credentials {\n  uid      String @id @default(uuid()) @db.Uuid\n  mail     String @unique @db.VarChar(100)\n  password String @db.VarChar(250)\n\n  createdAt  DateTime  @default(now())\n  updatedAt  DateTime  @updatedAt\n  finishedAt DateTime? @updatedAt\n}\n\n//////////////////////////////////////////////////////\n// GROUPS\n//////////////////////////////////////////////////////\n\nmodel Groups {\n  uid  String @id @default(uuid()) @db.Uuid\n  name String @db.VarChar(100)\n\n  // Profesor del grupo\n  profesor   Users  @relation(\"GroupProfesor\", fields: [profesorId], references: [uid])\n  profesorId String @unique @db.Uuid\n\n  users    UsersGroups[]\n  products Products[]\n  events   GroupEvent[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel UsersGroups {\n  uid     String @id @default(uuid()) @db.Uuid\n  userId  String @db.Uuid\n  groupId String @db.Uuid\n\n  user  Users  @relation(fields: [userId], references: [uid])\n  group Groups @relation(fields: [groupId], references: [uid])\n\n  createdAt DateTime @default(now())\n\n  @@unique([userId, groupId])\n}\n\n//////////////////////////////////////////////////////\n// PRODUCTS\n//////////////////////////////////////////////////////\n\nmodel Products {\n  uid         String   @id @default(uuid()) @db.Uuid\n  name        String   @db.VarChar(30)\n  description String   @db.VarChar(300)\n  price       Decimal? @db.Decimal(8, 2)\n  isSoled     Boolean  @default(false)\n  madeAt      DateTime\n  groupId     String   @db.Uuid\n  imageId     String?  @db.Uuid\n\n  group Groups @relation(fields: [groupId], references: [uid])\n\n  styles  ProductStyle[]\n  photos  ProductPhoto[]\n  events  EventProduct[]\n  authors UserProduct[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\n//////////////////////////////////////////////////////\n// STYLES\n//////////////////////////////////////////////////////\n\nmodel Styles {\n  uid         String @id @default(uuid()) @db.Uuid\n  name        String @db.VarChar(30)\n  description String @db.VarChar(300)\n\n  products ProductStyle[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel ProductStyle {\n  uid       String @id @default(uuid()) @db.Uuid\n  productId String @db.Uuid\n  styleId   String @db.Uuid\n\n  product Products @relation(fields: [productId], references: [uid])\n  style   Styles   @relation(fields: [styleId], references: [uid])\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@unique([productId, styleId])\n}\n\n//////////////////////////////////////////////////////\n// PHOTOS\n//////////////////////////////////////////////////////\n\nmodel Photos {\n  uid  String @id @default(uuid()) @db.Uuid\n  name String @db.VarChar(30)\n  url  String @db.VarChar(300)\n\n  products ProductPhoto[]\n  events   EventPhoto[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel ProductPhoto {\n  uid       String @id @default(uuid()) @db.Uuid\n  productId String @db.Uuid\n  photoId   String @db.Uuid\n\n  product Products @relation(fields: [productId], references: [uid])\n  photo   Photos   @relation(fields: [photoId], references: [uid])\n\n  createdAt DateTime @default(now())\n\n  @@unique([productId, photoId])\n}\n\n//////////////////////////////////////////////////////\n// EVENTS\n//////////////////////////////////////////////////////\n\nmodel Events {\n  uid         String   @id @default(uuid()) @db.Uuid\n  name        String   @db.VarChar(30)\n  description String\n  date        DateTime\n\n  products EventProduct[]\n  photos   EventPhoto[]\n  groups   GroupEvent[]\n\n  createdAt DateTime @default(now())\n}\n\nmodel EventProduct {\n  uid       String @id @default(uuid()) @db.Uuid\n  productId String @db.Uuid\n  eventId   String @db.Uuid\n\n  product Products @relation(fields: [productId], references: [uid])\n  event   Events   @relation(fields: [eventId], references: [uid])\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@unique([productId, eventId])\n}\n\nmodel EventPhoto {\n  uid     String  @id @default(uuid()) @db.Uuid\n  eventId String  @db.Uuid\n  photoId String  @db.Uuid\n  isHero  Boolean @default(false)\n\n  event Events @relation(fields: [eventId], references: [uid])\n  photo Photos @relation(fields: [photoId], references: [uid])\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@unique([eventId, photoId])\n}\n\n//////////////////////////////////////////////////////\n// USERS ↔ PRODUCTS (AUTHOR)\n//////////////////////////////////////////////////////\n\nmodel UserProduct {\n  uid       String  @id @default(uuid()) @db.Uuid\n  userId    String  @db.Uuid\n  productId String  @db.Uuid\n  isAuthor  Boolean @default(false)\n\n  user    Users    @relation(fields: [userId], references: [uid])\n  product Products @relation(fields: [productId], references: [uid])\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@unique([userId, productId])\n}\n\n//////////////////////////////////////////////////////\n// GROUPS ↔ EVENTS\n//////////////////////////////////////////////////////\n\nmodel GroupEvent {\n  uid     String @id @default(uuid()) @db.Uuid\n  groupId String @db.Uuid\n  eventId String @db.Uuid\n\n  group Groups @relation(fields: [groupId], references: [uid])\n  event Events @relation(fields: [eventId], references: [uid])\n\n  createdAt DateTime @default(now())\n\n  @@unique([groupId, eventId])\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Credentials\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"UserTypes\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"Users\",\"kind\":\"object\",\"type\":\"Users\",\"relationName\":\"UserTypesToUsers\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Users\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userType\",\"kind\":\"object\",\"type\":\"UserTypes\",\"relationName\":\"UserTypesToUsers\"},{\"name\":\"userTypeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"UserTypes\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"Users\",\"relationName\":\"UserTypesToUsers\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Users\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"telNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"isProfesor\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"userType\",\"kind\":\"object\",\"type\":\"UserTypes\",\"relationName\":\"UserTypesToUsers\"},{\"name\":\"userTypeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"groups\",\"kind\":\"object\",\"type\":\"UsersGroups\",\"relationName\":\"UsersToUsersGroups\"},{\"name\":\"products\",\"kind\":\"object\",\"type\":\"UserProduct\",\"relationName\":\"UserProductToUsers\"},{\"name\":\"profesorGroup\",\"kind\":\"object\",\"type\":\"Groups\",\"relationName\":\"GroupProfesor\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"finishAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Credentials\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mail\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"finishedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Groups\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"profesor\",\"kind\":\"object\",\"type\":\"Users\",\"relationName\":\"GroupProfesor\"},{\"name\":\"profesorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"UsersGroups\",\"relationName\":\"GroupsToUsersGroups\"},{\"name\":\"products\",\"kind\":\"object\",\"type\":\"Products\",\"relationName\":\"GroupsToProducts\"},{\"name\":\"events\",\"kind\":\"object\",\"type\":\"GroupEvent\",\"relationName\":\"GroupEventToGroups\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"UsersGroups\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"groupId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"Users\",\"relationName\":\"UsersToUsersGroups\"},{\"name\":\"group\",\"kind\":\"object\",\"type\":\"Groups\",\"relationName\":\"GroupsToUsersGroups\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Products\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"isSoled\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"madeAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"groupId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"imageId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"group\",\"kind\":\"object\",\"type\":\"Groups\",\"relationName\":\"GroupsToProducts\"},{\"name\":\"styles\",\"kind\":\"object\",\"type\":\"ProductStyle\",\"relationName\":\"ProductStyleToProducts\"},{\"name\":\"photos\",\"kind\":\"object\",\"type\":\"ProductPhoto\",\"relationName\":\"ProductPhotoToProducts\"},{\"name\":\"events\",\"kind\":\"object\",\"type\":\"EventProduct\",\"relationName\":\"EventProductToProducts\"},{\"name\":\"authors\",\"kind\":\"object\",\"type\":\"UserProduct\",\"relationName\":\"ProductsToUserProduct\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Styles\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"products\",\"kind\":\"object\",\"type\":\"ProductStyle\",\"relationName\":\"ProductStyleToStyles\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"ProductStyle\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"productId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"styleId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"product\",\"kind\":\"object\",\"type\":\"Products\",\"relationName\":\"ProductStyleToProducts\"},{\"name\":\"style\",\"kind\":\"object\",\"type\":\"Styles\",\"relationName\":\"ProductStyleToStyles\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Photos\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"products\",\"kind\":\"object\",\"type\":\"ProductPhoto\",\"relationName\":\"PhotosToProductPhoto\"},{\"name\":\"events\",\"kind\":\"object\",\"type\":\"EventPhoto\",\"relationName\":\"EventPhotoToPhotos\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"ProductPhoto\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"productId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"photoId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"product\",\"kind\":\"object\",\"type\":\"Products\",\"relationName\":\"ProductPhotoToProducts\"},{\"name\":\"photo\",\"kind\":\"object\",\"type\":\"Photos\",\"relationName\":\"PhotosToProductPhoto\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Events\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"products\",\"kind\":\"object\",\"type\":\"EventProduct\",\"relationName\":\"EventProductToEvents\"},{\"name\":\"photos\",\"kind\":\"object\",\"type\":\"EventPhoto\",\"relationName\":\"EventPhotoToEvents\"},{\"name\":\"groups\",\"kind\":\"object\",\"type\":\"GroupEvent\",\"relationName\":\"EventsToGroupEvent\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"EventProduct\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"productId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"eventId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"product\",\"kind\":\"object\",\"type\":\"Products\",\"relationName\":\"EventProductToProducts\"},{\"name\":\"event\",\"kind\":\"object\",\"type\":\"Events\",\"relationName\":\"EventProductToEvents\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"EventPhoto\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"eventId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"photoId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isHero\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"event\",\"kind\":\"object\",\"type\":\"Events\",\"relationName\":\"EventPhotoToEvents\"},{\"name\":\"photo\",\"kind\":\"object\",\"type\":\"Photos\",\"relationName\":\"EventPhotoToPhotos\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"UserProduct\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"productId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isAuthor\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"Users\",\"relationName\":\"UserProductToUsers\"},{\"name\":\"product\",\"kind\":\"object\",\"type\":\"Products\",\"relationName\":\"ProductsToUserProduct\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"GroupEvent\":{\"fields\":[{\"name\":\"uid\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"groupId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"eventId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"group\",\"kind\":\"object\",\"type\":\"Groups\",\"relationName\":\"GroupEventToGroups\"},{\"name\":\"event\",\"kind\":\"object\",\"type\":\"Events\",\"relationName\":\"EventsToGroupEvent\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -58,8 +58,8 @@ export interface PrismaClientConstructor {
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Credentials
-   * const credentials = await prisma.credentials.findMany()
+   * // Fetch zero or more UserTypes
+   * const userTypes = await prisma.userTypes.findMany()
    * ```
    * 
    * Read more in our [docs](https://pris.ly/d/client).
@@ -80,8 +80,8 @@ export interface PrismaClientConstructor {
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Credentials
- * const credentials = await prisma.credentials.findMany()
+ * // Fetch zero or more UserTypes
+ * const userTypes = await prisma.userTypes.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -175,16 +175,6 @@ export interface PrismaClient<
   }>>
 
       /**
-   * `prisma.credentials`: Exposes CRUD operations for the **Credentials** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Credentials
-    * const credentials = await prisma.credentials.findMany()
-    * ```
-    */
-  get credentials(): Prisma.CredentialsDelegate<ExtArgs, { omit: OmitOpts }>;
-
-  /**
    * `prisma.userTypes`: Exposes CRUD operations for the **UserTypes** model.
     * Example usage:
     * ```ts
@@ -203,6 +193,136 @@ export interface PrismaClient<
     * ```
     */
   get users(): Prisma.UsersDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.credentials`: Exposes CRUD operations for the **Credentials** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Credentials
+    * const credentials = await prisma.credentials.findMany()
+    * ```
+    */
+  get credentials(): Prisma.CredentialsDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.groups`: Exposes CRUD operations for the **Groups** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Groups
+    * const groups = await prisma.groups.findMany()
+    * ```
+    */
+  get groups(): Prisma.GroupsDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.usersGroups`: Exposes CRUD operations for the **UsersGroups** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UsersGroups
+    * const usersGroups = await prisma.usersGroups.findMany()
+    * ```
+    */
+  get usersGroups(): Prisma.UsersGroupsDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.products`: Exposes CRUD operations for the **Products** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Products
+    * const products = await prisma.products.findMany()
+    * ```
+    */
+  get products(): Prisma.ProductsDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.styles`: Exposes CRUD operations for the **Styles** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Styles
+    * const styles = await prisma.styles.findMany()
+    * ```
+    */
+  get styles(): Prisma.StylesDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.productStyle`: Exposes CRUD operations for the **ProductStyle** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductStyles
+    * const productStyles = await prisma.productStyle.findMany()
+    * ```
+    */
+  get productStyle(): Prisma.ProductStyleDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.photos`: Exposes CRUD operations for the **Photos** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Photos
+    * const photos = await prisma.photos.findMany()
+    * ```
+    */
+  get photos(): Prisma.PhotosDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.productPhoto`: Exposes CRUD operations for the **ProductPhoto** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductPhotos
+    * const productPhotos = await prisma.productPhoto.findMany()
+    * ```
+    */
+  get productPhoto(): Prisma.ProductPhotoDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.events`: Exposes CRUD operations for the **Events** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Events
+    * const events = await prisma.events.findMany()
+    * ```
+    */
+  get events(): Prisma.EventsDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.eventProduct`: Exposes CRUD operations for the **EventProduct** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EventProducts
+    * const eventProducts = await prisma.eventProduct.findMany()
+    * ```
+    */
+  get eventProduct(): Prisma.EventProductDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.eventPhoto`: Exposes CRUD operations for the **EventPhoto** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EventPhotos
+    * const eventPhotos = await prisma.eventPhoto.findMany()
+    * ```
+    */
+  get eventPhoto(): Prisma.EventPhotoDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.userProduct`: Exposes CRUD operations for the **UserProduct** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserProducts
+    * const userProducts = await prisma.userProduct.findMany()
+    * ```
+    */
+  get userProduct(): Prisma.UserProductDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.groupEvent`: Exposes CRUD operations for the **GroupEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GroupEvents
+    * const groupEvents = await prisma.groupEvent.findMany()
+    * ```
+    */
+  get groupEvent(): Prisma.GroupEventDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

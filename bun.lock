@@ -11,7 +11,7 @@
         "@nestjs/jwt": "^11.0.2",
         "@nestjs/platform-express": "^11.0.1",
         "@prisma/adapter-pg": "^7.1.0",
-        "@prisma/client": "7.1.0",
+        "@prisma/client": "^7.1.0",
         "bcryptjs": "^3.0.3",
         "cross-env": "^10.1.0",
         "pg": "^8.16.3",
