@@ -49,7 +49,7 @@ model Users {
 
 model Credentials {
   uid        String     @id @default(uuid()) @db.Uuid
-  mail       String     @db.VarChar(100)
+  mail       String     @db.VarChar(100) @unique
   password   String     @db.VarChar(250)
 
   createdAt  DateTime   @default(now())

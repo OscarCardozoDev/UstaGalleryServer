@@ -8,8 +8,19 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Credentials'
 export type * from './models/UserTypes'
 export type * from './models/Users'
+export type * from './models/Credentials'
 export type * from './models/Groups'
+export type * from './models/UsersGroups'
+export type * from './models/Products'
+export type * from './models/Styles'
+export type * from './models/ProductStyle'
+export type * from './models/Photos'
+export type * from './models/ProductPhoto'
+export type * from './models/Events'
+export type * from './models/EventProduct'
+export type * from './models/EventPhoto'
+export type * from './models/UserProduct'
+export type * from './models/GroupEvent'
 export type * from './commonInputTypes'

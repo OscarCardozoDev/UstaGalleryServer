@@ -8,7 +8,7 @@ export interface User {
 }
 
 export interface userTypeId {
-  id: string;
+  uid: string;
   name: string;
 }
 

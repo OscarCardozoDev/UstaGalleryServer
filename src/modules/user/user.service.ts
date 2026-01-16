@@ -17,7 +17,7 @@ export class UserService {
         isActive: true,
         userType: {
           select: {
-            id: true,
+            uid: true,
             name: true,
           },
         },
@@ -35,7 +35,7 @@ export class UserService {
         lastName: user.lastName,
         telNumber: user.telNumber,
         userType: {
-          connect: { id: user.userType.id },
+          connect: { uid: user.userType.uid },
         },
       },
       select: { uid: true },
@@ -55,7 +55,7 @@ export class UserService {
         isActive: true,
         userType: {
           select: {
-            id: true,
+            uid: true,
             name: true,
           },
         },

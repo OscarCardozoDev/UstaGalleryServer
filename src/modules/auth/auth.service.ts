@@ -6,9 +6,9 @@ import { CreateCredentialDto, GetCredentialDto } from './auth.interface';
 export class AuthService {
   constructor(private prismaService: PrismaService) {}
 
-  async getCredentialByEmail(email: string): Promise<GetCredentialDto | null> {
+  async getCredentialByEmail(mail: string): Promise<GetCredentialDto | null> {
     return this.prismaService.credentials.findUnique({
-      where: { email },
+      where: { mail },
       select: {
         uid: true,
         password: true,
@@ -27,7 +27,11 @@ export class AuthService {
 
   async putPasswordByEmail(auth: CreateCredentialDto): Promise<void> {
     await this.prismaService.credentials.update({
+<<<<<<< HEAD
       where: { email: auth.email },
+=======
+      where: { mail: auth.mail },
+>>>>>>> feature/photo
       data: { password: auth.password },
     });
   }

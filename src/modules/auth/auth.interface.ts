@@ -1,5 +1,5 @@
 export interface CreateCredentialDto {
-  email: string;
+  mail: string;
   password: string;
 }
 

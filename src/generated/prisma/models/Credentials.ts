@@ -26,52 +26,58 @@ export type AggregateCredentials = {
 
 export type CredentialsMinAggregateOutputType = {
   uid: string | null
-  email: string | null
+  mail: string | null
   password: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  finishedAt: Date | null
 }
 
 export type CredentialsMaxAggregateOutputType = {
   uid: string | null
-  email: string | null
+  mail: string | null
   password: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  finishedAt: Date | null
 }
 
 export type CredentialsCountAggregateOutputType = {
   uid: number
-  email: number
+  mail: number
   password: number
   createdAt: number
   updatedAt: number
+  finishedAt: number
   _all: number
 }
 
 
 export type CredentialsMinAggregateInputType = {
   uid?: true
-  email?: true
+  mail?: true
   password?: true
   createdAt?: true
   updatedAt?: true
+  finishedAt?: true
 }
 
 export type CredentialsMaxAggregateInputType = {
   uid?: true
-  email?: true
+  mail?: true
   password?: true
   createdAt?: true
   updatedAt?: true
+  finishedAt?: true
 }
 
 export type CredentialsCountAggregateInputType = {
   uid?: true
-  email?: true
+  mail?: true
   password?: true
   createdAt?: true
   updatedAt?: true
+  finishedAt?: true
   _all?: true
 }
 
@@ -149,10 +155,11 @@ export type CredentialsGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 
 export type CredentialsGroupByOutputType = {
   uid: string
-  email: string
+  mail: string
   password: string
   createdAt: Date
   updatedAt: Date
+  finishedAt: Date | null
   _count: CredentialsCountAggregateOutputType | null
   _min: CredentialsMinAggregateOutputType | null
   _max: CredentialsMaxAggregateOutputType | null
@@ -177,38 +184,42 @@ export type CredentialsWhereInput = {
   AND?: Prisma.CredentialsWhereInput | Prisma.CredentialsWhereInput[]
   OR?: Prisma.CredentialsWhereInput[]
   NOT?: Prisma.CredentialsWhereInput | Prisma.CredentialsWhereInput[]
-  uid?: Prisma.StringFilter<"Credentials"> | string
-  email?: Prisma.StringFilter<"Credentials"> | string
+  uid?: Prisma.UuidFilter<"Credentials"> | string
+  mail?: Prisma.StringFilter<"Credentials"> | string
   password?: Prisma.StringFilter<"Credentials"> | string
   createdAt?: Prisma.DateTimeFilter<"Credentials"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Credentials"> | Date | string
+  finishedAt?: Prisma.DateTimeNullableFilter<"Credentials"> | Date | string | null
 }
 
 export type CredentialsOrderByWithRelationInput = {
   uid?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  mail?: Prisma.SortOrder
   password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type CredentialsWhereUniqueInput = Prisma.AtLeast<{
   uid?: string
-  email?: string
+  mail?: string
   AND?: Prisma.CredentialsWhereInput | Prisma.CredentialsWhereInput[]
   OR?: Prisma.CredentialsWhereInput[]
   NOT?: Prisma.CredentialsWhereInput | Prisma.CredentialsWhereInput[]
   password?: Prisma.StringFilter<"Credentials"> | string
   createdAt?: Prisma.DateTimeFilter<"Credentials"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Credentials"> | Date | string
-}, "uid" | "email">
+  finishedAt?: Prisma.DateTimeNullableFilter<"Credentials"> | Date | string | null
+}, "uid" | "mail">
 
 export type CredentialsOrderByWithAggregationInput = {
   uid?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  mail?: Prisma.SortOrder
   password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.CredentialsCountOrderByAggregateInput
   _max?: Prisma.CredentialsMaxOrderByAggregateInput
   _min?: Prisma.CredentialsMinOrderByAggregateInput
@@ -218,146 +229,154 @@ export type CredentialsScalarWhereWithAggregatesInput = {
   AND?: Prisma.CredentialsScalarWhereWithAggregatesInput | Prisma.CredentialsScalarWhereWithAggregatesInput[]
   OR?: Prisma.CredentialsScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CredentialsScalarWhereWithAggregatesInput | Prisma.CredentialsScalarWhereWithAggregatesInput[]
-  uid?: Prisma.StringWithAggregatesFilter<"Credentials"> | string
-  email?: Prisma.StringWithAggregatesFilter<"Credentials"> | string
+  uid?: Prisma.UuidWithAggregatesFilter<"Credentials"> | string
+  mail?: Prisma.StringWithAggregatesFilter<"Credentials"> | string
   password?: Prisma.StringWithAggregatesFilter<"Credentials"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Credentials"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Credentials"> | Date | string
+  finishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Credentials"> | Date | string | null
 }
 
 export type CredentialsCreateInput = {
   uid?: string
-  email: string
+  mail: string
   password: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  finishedAt?: Date | string | null
 }
 
 export type CredentialsUncheckedCreateInput = {
   uid?: string
-  email: string
+  mail: string
   password: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  finishedAt?: Date | string | null
 }
 
 export type CredentialsUpdateInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CredentialsUncheckedUpdateInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CredentialsCreateManyInput = {
   uid?: string
-  email: string
+  mail: string
   password: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  finishedAt?: Date | string | null
 }
 
 export type CredentialsUpdateManyMutationInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CredentialsUncheckedUpdateManyInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CredentialsCountOrderByAggregateInput = {
   uid?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  mail?: Prisma.SortOrder
   password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrder
 }
 
 export type CredentialsMaxOrderByAggregateInput = {
   uid?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  mail?: Prisma.SortOrder
   password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrder
 }
 
 export type CredentialsMinOrderByAggregateInput = {
   uid?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  mail?: Prisma.SortOrder
   password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type StringFieldUpdateOperationsInput = {
-  set?: string
-}
-
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
+  finishedAt?: Prisma.SortOrder
 }
 
 
 
 export type CredentialsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   uid?: boolean
-  email?: boolean
+  mail?: boolean
   password?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  finishedAt?: boolean
 }, ExtArgs["result"]["credentials"]>
 
 export type CredentialsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   uid?: boolean
-  email?: boolean
+  mail?: boolean
   password?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  finishedAt?: boolean
 }, ExtArgs["result"]["credentials"]>
 
 export type CredentialsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   uid?: boolean
-  email?: boolean
+  mail?: boolean
   password?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  finishedAt?: boolean
 }, ExtArgs["result"]["credentials"]>
 
 export type CredentialsSelectScalar = {
   uid?: boolean
-  email?: boolean
+  mail?: boolean
   password?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  finishedAt?: boolean
 }
 
-export type CredentialsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "email" | "password" | "createdAt" | "updatedAt", ExtArgs["result"]["credentials"]>
+export type CredentialsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "mail" | "password" | "createdAt" | "updatedAt" | "finishedAt", ExtArgs["result"]["credentials"]>
 
 export type $CredentialsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Credentials"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     uid: string
-    email: string
+    mail: string
     password: string
     createdAt: Date
     updatedAt: Date
+    finishedAt: Date | null
   }, ExtArgs["result"]["credentials"]>
   composites: {}
 }
@@ -782,10 +801,11 @@ export interface Prisma__CredentialsClient<T, Null = never, ExtArgs extends runt
  */
 export interface CredentialsFieldRefs {
   readonly uid: Prisma.FieldRef<"Credentials", 'String'>
-  readonly email: Prisma.FieldRef<"Credentials", 'String'>
+  readonly mail: Prisma.FieldRef<"Credentials", 'String'>
   readonly password: Prisma.FieldRef<"Credentials", 'String'>
   readonly createdAt: Prisma.FieldRef<"Credentials", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Credentials", 'DateTime'>
+  readonly finishedAt: Prisma.FieldRef<"Credentials", 'DateTime'>
 }
     
 

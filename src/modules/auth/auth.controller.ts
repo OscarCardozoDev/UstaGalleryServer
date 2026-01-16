@@ -19,7 +19,7 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() auth: CreateCredentialDto) {
-    const credential = await this.authService.getCredentialByEmail(auth.email);
+    const credential = await this.authService.getCredentialByEmail(auth.mail);
 
     if (!credential) {
       throw new HttpException('Email not found', 404);
