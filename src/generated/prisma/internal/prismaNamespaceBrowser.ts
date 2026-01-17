@@ -163,6 +163,7 @@ export const StylesScalarFieldEnum = {
   uid: 'uid',
   name: 'name',
   description: 'description',
+  groupId: 'groupId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

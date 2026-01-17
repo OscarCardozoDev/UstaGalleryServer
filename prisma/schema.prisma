@@ -72,6 +72,7 @@ model Groups {
   users      UsersGroups[]
   products   Products[]
   events     GroupEvent[]
+  styles     Styles[]
 
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
@@ -125,6 +126,9 @@ model Styles {
   description  String          @db.VarChar(300)
 
   products     ProductStyle[]
+
+  groupId      String          @db.Uuid
+  group        Groups          @relation(fields: [groupId], references: [uid])
 
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt

@@ -299,7 +299,6 @@ export type UsersScalarWhereWithAggregatesInput = {
 
 export type UsersCreateInput = {
   uid: string
-  telNumber: string
   name: string
   lastName: string
   telNumber: string
@@ -332,7 +331,6 @@ export type UsersUncheckedCreateInput = {
 
 export type UsersUpdateInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
-  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
@@ -378,7 +376,6 @@ export type UsersCreateManyInput = {
 
 export type UsersUpdateManyMutationInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
-  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
@@ -550,7 +547,6 @@ export type UsersUpdateOneRequiredWithoutProductsNestedInput = {
 
 export type UsersCreateWithoutUserTypeInput = {
   uid: string
-  telNumber: string
   name: string
   lastName: string
   telNumber: string
@@ -566,7 +562,6 @@ export type UsersCreateWithoutUserTypeInput = {
 
 export type UsersUncheckedCreateWithoutUserTypeInput = {
   uid: string
-  telNumber: string
   name: string
   lastName: string
   telNumber: string
@@ -852,7 +847,6 @@ export type UsersUncheckedUpdateWithoutProductsInput = {
 
 export type UsersCreateManyUserTypeInput = {
   uid: string
-  telNumber: string
   name: string
   lastName: string
   telNumber: string
@@ -865,7 +859,6 @@ export type UsersCreateManyUserTypeInput = {
 
 export type UsersUpdateWithoutUserTypeInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
-  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
@@ -881,7 +874,6 @@ export type UsersUpdateWithoutUserTypeInput = {
 
 export type UsersUncheckedUpdateWithoutUserTypeInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
-  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
@@ -897,7 +889,6 @@ export type UsersUncheckedUpdateWithoutUserTypeInput = {
 
 export type UsersUncheckedUpdateManyWithoutUserTypeInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
-  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
