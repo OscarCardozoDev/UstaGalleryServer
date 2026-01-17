@@ -27,11 +27,7 @@ export class AuthService {
 
   async putPasswordByEmail(auth: CreateCredentialDto): Promise<void> {
     await this.prismaService.credentials.update({
-<<<<<<< HEAD
-      where: { email: auth.email },
-=======
       where: { mail: auth.mail },
->>>>>>> feature/photo
       data: { password: auth.password },
     });
   }

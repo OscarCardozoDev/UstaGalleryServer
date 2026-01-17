@@ -1,32 +1,37 @@
-export interface Products {
-  uid: number;
+import { Decimal } from '@prisma/client/runtime/client';
+
+export interface SaveProductData {
   name: string;
   description: string;
-  madeAt: string;
+  price?: Decimal | null;
+  isSoled?: boolean;
+  madeAt: Date;
   groupId: string;
-  price?: number;
-  isSoled: boolean;
   imageId?: string;
-
-  createAt: Date;
-  updateAt: Date;
 }
 
-export interface ProductStyles {
-  uid: number;
-  name: string;
-}
-
-export interface Photos {
-  uid: number;
-  name: string;
-  url: string;
-}
-
-export interface Events {
-  uid: number;
+export class CreateProductDto {
   name: string;
   description: string;
-  date: Date;
-  url: string;
+  price?: Decimal;
+  madeAt: Date;
+  groupId: string;
+
+  // Imagen
+  base64?: string;
+  imageName?: string;
+  folder?: string;
+}
+
+export interface ProductParams {
+  uid: string;
+}
+
+export interface ProductResponse {
+  uid: string;
+  name: string;
+  description: string;
+  price?: Decimal | null;
+  isSoled: boolean;
+  madeAt: Date;
 }
