@@ -12,6 +12,7 @@ export class StylesService {
         uid: true,
         name: true,
         description: true,
+        groupId: true,
       },
     });
   }
@@ -23,6 +24,7 @@ export class StylesService {
         uid: true,
         name: true,
         description: true,
+        groupId: true,
       },
     });
 
@@ -39,6 +41,7 @@ export class StylesService {
         uid: style.uid,
         name: style.name,
         description: style.description,
+        groupId: style.groupId,
       },
       select: { uid: true },
     });
