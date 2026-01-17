@@ -28,6 +28,7 @@ export type StylesMinAggregateOutputType = {
   uid: string | null
   name: string | null
   description: string | null
+  groupId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -36,6 +37,7 @@ export type StylesMaxAggregateOutputType = {
   uid: string | null
   name: string | null
   description: string | null
+  groupId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,6 +46,7 @@ export type StylesCountAggregateOutputType = {
   uid: number
   name: number
   description: number
+  groupId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -54,6 +57,7 @@ export type StylesMinAggregateInputType = {
   uid?: true
   name?: true
   description?: true
+  groupId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -62,6 +66,7 @@ export type StylesMaxAggregateInputType = {
   uid?: true
   name?: true
   description?: true
+  groupId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -70,6 +75,7 @@ export type StylesCountAggregateInputType = {
   uid?: true
   name?: true
   description?: true
+  groupId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -151,6 +157,7 @@ export type StylesGroupByOutputType = {
   uid: string
   name: string
   description: string
+  groupId: string
   createdAt: Date
   updatedAt: Date
   _count: StylesCountAggregateOutputType | null
@@ -180,18 +187,22 @@ export type StylesWhereInput = {
   uid?: Prisma.UuidFilter<"Styles"> | string
   name?: Prisma.StringFilter<"Styles"> | string
   description?: Prisma.StringFilter<"Styles"> | string
+  groupId?: Prisma.UuidFilter<"Styles"> | string
   createdAt?: Prisma.DateTimeFilter<"Styles"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Styles"> | Date | string
   products?: Prisma.ProductStyleListRelationFilter
+  group?: Prisma.XOR<Prisma.GroupsScalarRelationFilter, Prisma.GroupsWhereInput>
 }
 
 export type StylesOrderByWithRelationInput = {
   uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   products?: Prisma.ProductStyleOrderByRelationAggregateInput
+  group?: Prisma.GroupsOrderByWithRelationInput
 }
 
 export type StylesWhereUniqueInput = Prisma.AtLeast<{
@@ -201,15 +212,18 @@ export type StylesWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.StylesWhereInput | Prisma.StylesWhereInput[]
   name?: Prisma.StringFilter<"Styles"> | string
   description?: Prisma.StringFilter<"Styles"> | string
+  groupId?: Prisma.UuidFilter<"Styles"> | string
   createdAt?: Prisma.DateTimeFilter<"Styles"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Styles"> | Date | string
   products?: Prisma.ProductStyleListRelationFilter
+  group?: Prisma.XOR<Prisma.GroupsScalarRelationFilter, Prisma.GroupsWhereInput>
 }, "uid">
 
 export type StylesOrderByWithAggregationInput = {
   uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.StylesCountOrderByAggregateInput
@@ -224,6 +238,7 @@ export type StylesScalarWhereWithAggregatesInput = {
   uid?: Prisma.UuidWithAggregatesFilter<"Styles"> | string
   name?: Prisma.StringWithAggregatesFilter<"Styles"> | string
   description?: Prisma.StringWithAggregatesFilter<"Styles"> | string
+  groupId?: Prisma.UuidWithAggregatesFilter<"Styles"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Styles"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Styles"> | Date | string
 }
@@ -235,12 +250,14 @@ export type StylesCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   products?: Prisma.ProductStyleCreateNestedManyWithoutStyleInput
+  group: Prisma.GroupsCreateNestedOneWithoutStylesInput
 }
 
 export type StylesUncheckedCreateInput = {
   uid?: string
   name: string
   description: string
+  groupId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   products?: Prisma.ProductStyleUncheckedCreateNestedManyWithoutStyleInput
@@ -253,12 +270,14 @@ export type StylesUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.ProductStyleUpdateManyWithoutStyleNestedInput
+  group?: Prisma.GroupsUpdateOneRequiredWithoutStylesNestedInput
 }
 
 export type StylesUncheckedUpdateInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.ProductStyleUncheckedUpdateManyWithoutStyleNestedInput
@@ -268,6 +287,7 @@ export type StylesCreateManyInput = {
   uid?: string
   name: string
   description: string
+  groupId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -284,14 +304,26 @@ export type StylesUncheckedUpdateManyInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StylesListRelationFilter = {
+  every?: Prisma.StylesWhereInput
+  some?: Prisma.StylesWhereInput
+  none?: Prisma.StylesWhereInput
+}
+
+export type StylesOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type StylesCountOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -300,6 +332,7 @@ export type StylesMaxOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -308,6 +341,7 @@ export type StylesMinOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -315,6 +349,48 @@ export type StylesMinOrderByAggregateInput = {
 export type StylesScalarRelationFilter = {
   is?: Prisma.StylesWhereInput
   isNot?: Prisma.StylesWhereInput
+}
+
+export type StylesCreateNestedManyWithoutGroupInput = {
+  create?: Prisma.XOR<Prisma.StylesCreateWithoutGroupInput, Prisma.StylesUncheckedCreateWithoutGroupInput> | Prisma.StylesCreateWithoutGroupInput[] | Prisma.StylesUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.StylesCreateOrConnectWithoutGroupInput | Prisma.StylesCreateOrConnectWithoutGroupInput[]
+  createMany?: Prisma.StylesCreateManyGroupInputEnvelope
+  connect?: Prisma.StylesWhereUniqueInput | Prisma.StylesWhereUniqueInput[]
+}
+
+export type StylesUncheckedCreateNestedManyWithoutGroupInput = {
+  create?: Prisma.XOR<Prisma.StylesCreateWithoutGroupInput, Prisma.StylesUncheckedCreateWithoutGroupInput> | Prisma.StylesCreateWithoutGroupInput[] | Prisma.StylesUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.StylesCreateOrConnectWithoutGroupInput | Prisma.StylesCreateOrConnectWithoutGroupInput[]
+  createMany?: Prisma.StylesCreateManyGroupInputEnvelope
+  connect?: Prisma.StylesWhereUniqueInput | Prisma.StylesWhereUniqueInput[]
+}
+
+export type StylesUpdateManyWithoutGroupNestedInput = {
+  create?: Prisma.XOR<Prisma.StylesCreateWithoutGroupInput, Prisma.StylesUncheckedCreateWithoutGroupInput> | Prisma.StylesCreateWithoutGroupInput[] | Prisma.StylesUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.StylesCreateOrConnectWithoutGroupInput | Prisma.StylesCreateOrConnectWithoutGroupInput[]
+  upsert?: Prisma.StylesUpsertWithWhereUniqueWithoutGroupInput | Prisma.StylesUpsertWithWhereUniqueWithoutGroupInput[]
+  createMany?: Prisma.StylesCreateManyGroupInputEnvelope
+  set?: Prisma.StylesWhereUniqueInput | Prisma.StylesWhereUniqueInput[]
+  disconnect?: Prisma.StylesWhereUniqueInput | Prisma.StylesWhereUniqueInput[]
+  delete?: Prisma.StylesWhereUniqueInput | Prisma.StylesWhereUniqueInput[]
+  connect?: Prisma.StylesWhereUniqueInput | Prisma.StylesWhereUniqueInput[]
+  update?: Prisma.StylesUpdateWithWhereUniqueWithoutGroupInput | Prisma.StylesUpdateWithWhereUniqueWithoutGroupInput[]
+  updateMany?: Prisma.StylesUpdateManyWithWhereWithoutGroupInput | Prisma.StylesUpdateManyWithWhereWithoutGroupInput[]
+  deleteMany?: Prisma.StylesScalarWhereInput | Prisma.StylesScalarWhereInput[]
+}
+
+export type StylesUncheckedUpdateManyWithoutGroupNestedInput = {
+  create?: Prisma.XOR<Prisma.StylesCreateWithoutGroupInput, Prisma.StylesUncheckedCreateWithoutGroupInput> | Prisma.StylesCreateWithoutGroupInput[] | Prisma.StylesUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.StylesCreateOrConnectWithoutGroupInput | Prisma.StylesCreateOrConnectWithoutGroupInput[]
+  upsert?: Prisma.StylesUpsertWithWhereUniqueWithoutGroupInput | Prisma.StylesUpsertWithWhereUniqueWithoutGroupInput[]
+  createMany?: Prisma.StylesCreateManyGroupInputEnvelope
+  set?: Prisma.StylesWhereUniqueInput | Prisma.StylesWhereUniqueInput[]
+  disconnect?: Prisma.StylesWhereUniqueInput | Prisma.StylesWhereUniqueInput[]
+  delete?: Prisma.StylesWhereUniqueInput | Prisma.StylesWhereUniqueInput[]
+  connect?: Prisma.StylesWhereUniqueInput | Prisma.StylesWhereUniqueInput[]
+  update?: Prisma.StylesUpdateWithWhereUniqueWithoutGroupInput | Prisma.StylesUpdateWithWhereUniqueWithoutGroupInput[]
+  updateMany?: Prisma.StylesUpdateManyWithWhereWithoutGroupInput | Prisma.StylesUpdateManyWithWhereWithoutGroupInput[]
+  deleteMany?: Prisma.StylesScalarWhereInput | Prisma.StylesScalarWhereInput[]
 }
 
 export type StylesCreateNestedOneWithoutProductsInput = {
@@ -331,18 +407,76 @@ export type StylesUpdateOneRequiredWithoutProductsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StylesUpdateToOneWithWhereWithoutProductsInput, Prisma.StylesUpdateWithoutProductsInput>, Prisma.StylesUncheckedUpdateWithoutProductsInput>
 }
 
+export type StylesCreateWithoutGroupInput = {
+  uid?: string
+  name: string
+  description: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  products?: Prisma.ProductStyleCreateNestedManyWithoutStyleInput
+}
+
+export type StylesUncheckedCreateWithoutGroupInput = {
+  uid?: string
+  name: string
+  description: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  products?: Prisma.ProductStyleUncheckedCreateNestedManyWithoutStyleInput
+}
+
+export type StylesCreateOrConnectWithoutGroupInput = {
+  where: Prisma.StylesWhereUniqueInput
+  create: Prisma.XOR<Prisma.StylesCreateWithoutGroupInput, Prisma.StylesUncheckedCreateWithoutGroupInput>
+}
+
+export type StylesCreateManyGroupInputEnvelope = {
+  data: Prisma.StylesCreateManyGroupInput | Prisma.StylesCreateManyGroupInput[]
+  skipDuplicates?: boolean
+}
+
+export type StylesUpsertWithWhereUniqueWithoutGroupInput = {
+  where: Prisma.StylesWhereUniqueInput
+  update: Prisma.XOR<Prisma.StylesUpdateWithoutGroupInput, Prisma.StylesUncheckedUpdateWithoutGroupInput>
+  create: Prisma.XOR<Prisma.StylesCreateWithoutGroupInput, Prisma.StylesUncheckedCreateWithoutGroupInput>
+}
+
+export type StylesUpdateWithWhereUniqueWithoutGroupInput = {
+  where: Prisma.StylesWhereUniqueInput
+  data: Prisma.XOR<Prisma.StylesUpdateWithoutGroupInput, Prisma.StylesUncheckedUpdateWithoutGroupInput>
+}
+
+export type StylesUpdateManyWithWhereWithoutGroupInput = {
+  where: Prisma.StylesScalarWhereInput
+  data: Prisma.XOR<Prisma.StylesUpdateManyMutationInput, Prisma.StylesUncheckedUpdateManyWithoutGroupInput>
+}
+
+export type StylesScalarWhereInput = {
+  AND?: Prisma.StylesScalarWhereInput | Prisma.StylesScalarWhereInput[]
+  OR?: Prisma.StylesScalarWhereInput[]
+  NOT?: Prisma.StylesScalarWhereInput | Prisma.StylesScalarWhereInput[]
+  uid?: Prisma.UuidFilter<"Styles"> | string
+  name?: Prisma.StringFilter<"Styles"> | string
+  description?: Prisma.StringFilter<"Styles"> | string
+  groupId?: Prisma.UuidFilter<"Styles"> | string
+  createdAt?: Prisma.DateTimeFilter<"Styles"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Styles"> | Date | string
+}
+
 export type StylesCreateWithoutProductsInput = {
   uid?: string
   name: string
   description: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  group: Prisma.GroupsCreateNestedOneWithoutStylesInput
 }
 
 export type StylesUncheckedCreateWithoutProductsInput = {
   uid?: string
   name: string
   description: string
+  groupId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -369,9 +503,45 @@ export type StylesUpdateWithoutProductsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  group?: Prisma.GroupsUpdateOneRequiredWithoutStylesNestedInput
 }
 
 export type StylesUncheckedUpdateWithoutProductsInput = {
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StylesCreateManyGroupInput = {
+  uid?: string
+  name: string
+  description: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type StylesUpdateWithoutGroupInput = {
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  products?: Prisma.ProductStyleUpdateManyWithoutStyleNestedInput
+}
+
+export type StylesUncheckedUpdateWithoutGroupInput = {
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  products?: Prisma.ProductStyleUncheckedUpdateManyWithoutStyleNestedInput
+}
+
+export type StylesUncheckedUpdateManyWithoutGroupInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
@@ -414,9 +584,11 @@ export type StylesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   uid?: boolean
   name?: boolean
   description?: boolean
+  groupId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   products?: boolean | Prisma.Styles$productsArgs<ExtArgs>
+  group?: boolean | Prisma.GroupsDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.StylesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["styles"]>
 
@@ -424,43 +596,55 @@ export type StylesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   uid?: boolean
   name?: boolean
   description?: boolean
+  groupId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  group?: boolean | Prisma.GroupsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["styles"]>
 
 export type StylesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   uid?: boolean
   name?: boolean
   description?: boolean
+  groupId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  group?: boolean | Prisma.GroupsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["styles"]>
 
 export type StylesSelectScalar = {
   uid?: boolean
   name?: boolean
   description?: boolean
+  groupId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type StylesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["styles"]>
+export type StylesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "name" | "description" | "groupId" | "createdAt" | "updatedAt", ExtArgs["result"]["styles"]>
 export type StylesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   products?: boolean | Prisma.Styles$productsArgs<ExtArgs>
+  group?: boolean | Prisma.GroupsDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.StylesCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type StylesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type StylesIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type StylesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  group?: boolean | Prisma.GroupsDefaultArgs<ExtArgs>
+}
+export type StylesIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  group?: boolean | Prisma.GroupsDefaultArgs<ExtArgs>
+}
 
 export type $StylesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Styles"
   objects: {
     products: Prisma.$ProductStylePayload<ExtArgs>[]
+    group: Prisma.$GroupsPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     uid: string
     name: string
     description: string
+    groupId: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["styles"]>
@@ -858,6 +1042,7 @@ readonly fields: StylesFieldRefs;
 export interface Prisma__StylesClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   products<T extends Prisma.Styles$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Styles$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductStylePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  group<T extends Prisma.GroupsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GroupsDefaultArgs<ExtArgs>>): Prisma.Prisma__GroupsClient<runtime.Types.Result.GetResult<Prisma.$GroupsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -890,6 +1075,7 @@ export interface StylesFieldRefs {
   readonly uid: Prisma.FieldRef<"Styles", 'String'>
   readonly name: Prisma.FieldRef<"Styles", 'String'>
   readonly description: Prisma.FieldRef<"Styles", 'String'>
+  readonly groupId: Prisma.FieldRef<"Styles", 'String'>
   readonly createdAt: Prisma.FieldRef<"Styles", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Styles", 'DateTime'>
 }
@@ -1141,6 +1327,10 @@ export type StylesCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    */
   data: Prisma.StylesCreateManyInput | Prisma.StylesCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StylesIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1211,6 +1401,10 @@ export type StylesUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many Styles to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StylesIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
