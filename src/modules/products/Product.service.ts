@@ -8,7 +8,7 @@ import {
   SaveProductData,
   ProductParams,
   ProductResponse,
-} from './Product.interface';
+} from './product.interface';
 
 @Injectable()
 export class ProductsService {
