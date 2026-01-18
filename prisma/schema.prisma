@@ -168,6 +168,7 @@ model ProductPhoto {
   uid        String    @id @default(uuid()) @db.Uuid
   productId  String    @db.Uuid
   photoId    String    @db.Uuid
+  isMain     Boolean   @default(false)
 
   product    Products @relation(fields: [productId], references: [uid])
   photo      Photos   @relation(fields: [photoId], references: [uid])

@@ -28,6 +28,7 @@ export type ProductPhotoMinAggregateOutputType = {
   uid: string | null
   productId: string | null
   photoId: string | null
+  isMain: boolean | null
   createdAt: Date | null
 }
 
@@ -35,6 +36,7 @@ export type ProductPhotoMaxAggregateOutputType = {
   uid: string | null
   productId: string | null
   photoId: string | null
+  isMain: boolean | null
   createdAt: Date | null
 }
 
@@ -42,6 +44,7 @@ export type ProductPhotoCountAggregateOutputType = {
   uid: number
   productId: number
   photoId: number
+  isMain: number
   createdAt: number
   _all: number
 }
@@ -51,6 +54,7 @@ export type ProductPhotoMinAggregateInputType = {
   uid?: true
   productId?: true
   photoId?: true
+  isMain?: true
   createdAt?: true
 }
 
@@ -58,6 +62,7 @@ export type ProductPhotoMaxAggregateInputType = {
   uid?: true
   productId?: true
   photoId?: true
+  isMain?: true
   createdAt?: true
 }
 
@@ -65,6 +70,7 @@ export type ProductPhotoCountAggregateInputType = {
   uid?: true
   productId?: true
   photoId?: true
+  isMain?: true
   createdAt?: true
   _all?: true
 }
@@ -145,6 +151,7 @@ export type ProductPhotoGroupByOutputType = {
   uid: string
   productId: string
   photoId: string
+  isMain: boolean
   createdAt: Date
   _count: ProductPhotoCountAggregateOutputType | null
   _min: ProductPhotoMinAggregateOutputType | null
@@ -173,6 +180,7 @@ export type ProductPhotoWhereInput = {
   uid?: Prisma.UuidFilter<"ProductPhoto"> | string
   productId?: Prisma.UuidFilter<"ProductPhoto"> | string
   photoId?: Prisma.UuidFilter<"ProductPhoto"> | string
+  isMain?: Prisma.BoolFilter<"ProductPhoto"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ProductPhoto"> | Date | string
   product?: Prisma.XOR<Prisma.ProductsScalarRelationFilter, Prisma.ProductsWhereInput>
   photo?: Prisma.XOR<Prisma.PhotosScalarRelationFilter, Prisma.PhotosWhereInput>
@@ -182,6 +190,7 @@ export type ProductPhotoOrderByWithRelationInput = {
   uid?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
+  isMain?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   product?: Prisma.ProductsOrderByWithRelationInput
   photo?: Prisma.PhotosOrderByWithRelationInput
@@ -195,6 +204,7 @@ export type ProductPhotoWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ProductPhotoWhereInput | Prisma.ProductPhotoWhereInput[]
   productId?: Prisma.UuidFilter<"ProductPhoto"> | string
   photoId?: Prisma.UuidFilter<"ProductPhoto"> | string
+  isMain?: Prisma.BoolFilter<"ProductPhoto"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ProductPhoto"> | Date | string
   product?: Prisma.XOR<Prisma.ProductsScalarRelationFilter, Prisma.ProductsWhereInput>
   photo?: Prisma.XOR<Prisma.PhotosScalarRelationFilter, Prisma.PhotosWhereInput>
@@ -204,6 +214,7 @@ export type ProductPhotoOrderByWithAggregationInput = {
   uid?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
+  isMain?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ProductPhotoCountOrderByAggregateInput
   _max?: Prisma.ProductPhotoMaxOrderByAggregateInput
@@ -217,11 +228,13 @@ export type ProductPhotoScalarWhereWithAggregatesInput = {
   uid?: Prisma.UuidWithAggregatesFilter<"ProductPhoto"> | string
   productId?: Prisma.UuidWithAggregatesFilter<"ProductPhoto"> | string
   photoId?: Prisma.UuidWithAggregatesFilter<"ProductPhoto"> | string
+  isMain?: Prisma.BoolWithAggregatesFilter<"ProductPhoto"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProductPhoto"> | Date | string
 }
 
 export type ProductPhotoCreateInput = {
   uid?: string
+  isMain?: boolean
   createdAt?: Date | string
   product: Prisma.ProductsCreateNestedOneWithoutPhotosInput
   photo: Prisma.PhotosCreateNestedOneWithoutProductsInput
@@ -231,11 +244,13 @@ export type ProductPhotoUncheckedCreateInput = {
   uid?: string
   productId: string
   photoId: string
+  isMain?: boolean
   createdAt?: Date | string
 }
 
 export type ProductPhotoUpdateInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
+  isMain?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   product?: Prisma.ProductsUpdateOneRequiredWithoutPhotosNestedInput
   photo?: Prisma.PhotosUpdateOneRequiredWithoutProductsNestedInput
@@ -245,6 +260,7 @@ export type ProductPhotoUncheckedUpdateInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.StringFieldUpdateOperationsInput | string
+  isMain?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -252,11 +268,13 @@ export type ProductPhotoCreateManyInput = {
   uid?: string
   productId: string
   photoId: string
+  isMain?: boolean
   createdAt?: Date | string
 }
 
 export type ProductPhotoUpdateManyMutationInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
+  isMain?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -264,6 +282,7 @@ export type ProductPhotoUncheckedUpdateManyInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.StringFieldUpdateOperationsInput | string
+  isMain?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -286,6 +305,7 @@ export type ProductPhotoCountOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
+  isMain?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -293,6 +313,7 @@ export type ProductPhotoMaxOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
+  isMain?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -300,6 +321,7 @@ export type ProductPhotoMinOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
+  isMain?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -389,6 +411,7 @@ export type ProductPhotoUncheckedUpdateManyWithoutPhotoNestedInput = {
 
 export type ProductPhotoCreateWithoutProductInput = {
   uid?: string
+  isMain?: boolean
   createdAt?: Date | string
   photo: Prisma.PhotosCreateNestedOneWithoutProductsInput
 }
@@ -396,6 +419,7 @@ export type ProductPhotoCreateWithoutProductInput = {
 export type ProductPhotoUncheckedCreateWithoutProductInput = {
   uid?: string
   photoId: string
+  isMain?: boolean
   createdAt?: Date | string
 }
 
@@ -432,11 +456,13 @@ export type ProductPhotoScalarWhereInput = {
   uid?: Prisma.UuidFilter<"ProductPhoto"> | string
   productId?: Prisma.UuidFilter<"ProductPhoto"> | string
   photoId?: Prisma.UuidFilter<"ProductPhoto"> | string
+  isMain?: Prisma.BoolFilter<"ProductPhoto"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ProductPhoto"> | Date | string
 }
 
 export type ProductPhotoCreateWithoutPhotoInput = {
   uid?: string
+  isMain?: boolean
   createdAt?: Date | string
   product: Prisma.ProductsCreateNestedOneWithoutPhotosInput
 }
@@ -444,6 +470,7 @@ export type ProductPhotoCreateWithoutPhotoInput = {
 export type ProductPhotoUncheckedCreateWithoutPhotoInput = {
   uid?: string
   productId: string
+  isMain?: boolean
   createdAt?: Date | string
 }
 
@@ -476,11 +503,13 @@ export type ProductPhotoUpdateManyWithWhereWithoutPhotoInput = {
 export type ProductPhotoCreateManyProductInput = {
   uid?: string
   photoId: string
+  isMain?: boolean
   createdAt?: Date | string
 }
 
 export type ProductPhotoUpdateWithoutProductInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
+  isMain?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   photo?: Prisma.PhotosUpdateOneRequiredWithoutProductsNestedInput
 }
@@ -488,23 +517,27 @@ export type ProductPhotoUpdateWithoutProductInput = {
 export type ProductPhotoUncheckedUpdateWithoutProductInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.StringFieldUpdateOperationsInput | string
+  isMain?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProductPhotoUncheckedUpdateManyWithoutProductInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.StringFieldUpdateOperationsInput | string
+  isMain?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProductPhotoCreateManyPhotoInput = {
   uid?: string
   productId: string
+  isMain?: boolean
   createdAt?: Date | string
 }
 
 export type ProductPhotoUpdateWithoutPhotoInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
+  isMain?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   product?: Prisma.ProductsUpdateOneRequiredWithoutPhotosNestedInput
 }
@@ -512,12 +545,14 @@ export type ProductPhotoUpdateWithoutPhotoInput = {
 export type ProductPhotoUncheckedUpdateWithoutPhotoInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.StringFieldUpdateOperationsInput | string
+  isMain?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProductPhotoUncheckedUpdateManyWithoutPhotoInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.StringFieldUpdateOperationsInput | string
+  isMain?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -527,6 +562,7 @@ export type ProductPhotoSelect<ExtArgs extends runtime.Types.Extensions.Internal
   uid?: boolean
   productId?: boolean
   photoId?: boolean
+  isMain?: boolean
   createdAt?: boolean
   product?: boolean | Prisma.ProductsDefaultArgs<ExtArgs>
   photo?: boolean | Prisma.PhotosDefaultArgs<ExtArgs>
@@ -536,6 +572,7 @@ export type ProductPhotoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   uid?: boolean
   productId?: boolean
   photoId?: boolean
+  isMain?: boolean
   createdAt?: boolean
   product?: boolean | Prisma.ProductsDefaultArgs<ExtArgs>
   photo?: boolean | Prisma.PhotosDefaultArgs<ExtArgs>
@@ -545,6 +582,7 @@ export type ProductPhotoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   uid?: boolean
   productId?: boolean
   photoId?: boolean
+  isMain?: boolean
   createdAt?: boolean
   product?: boolean | Prisma.ProductsDefaultArgs<ExtArgs>
   photo?: boolean | Prisma.PhotosDefaultArgs<ExtArgs>
@@ -554,10 +592,11 @@ export type ProductPhotoSelectScalar = {
   uid?: boolean
   productId?: boolean
   photoId?: boolean
+  isMain?: boolean
   createdAt?: boolean
 }
 
-export type ProductPhotoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "productId" | "photoId" | "createdAt", ExtArgs["result"]["productPhoto"]>
+export type ProductPhotoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "productId" | "photoId" | "isMain" | "createdAt", ExtArgs["result"]["productPhoto"]>
 export type ProductPhotoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product?: boolean | Prisma.ProductsDefaultArgs<ExtArgs>
   photo?: boolean | Prisma.PhotosDefaultArgs<ExtArgs>
@@ -581,6 +620,7 @@ export type $ProductPhotoPayload<ExtArgs extends runtime.Types.Extensions.Intern
     uid: string
     productId: string
     photoId: string
+    isMain: boolean
     createdAt: Date
   }, ExtArgs["result"]["productPhoto"]>
   composites: {}
@@ -1010,6 +1050,7 @@ export interface ProductPhotoFieldRefs {
   readonly uid: Prisma.FieldRef<"ProductPhoto", 'String'>
   readonly productId: Prisma.FieldRef<"ProductPhoto", 'String'>
   readonly photoId: Prisma.FieldRef<"ProductPhoto", 'String'>
+  readonly isMain: Prisma.FieldRef<"ProductPhoto", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"ProductPhoto", 'DateTime'>
 }
     

@@ -197,6 +197,7 @@ export const ProductPhotoScalarFieldEnum = {
   uid: 'uid',
   productId: 'productId',
   photoId: 'photoId',
+  isMain: 'isMain',
   createdAt: 'createdAt'
 } as const
 

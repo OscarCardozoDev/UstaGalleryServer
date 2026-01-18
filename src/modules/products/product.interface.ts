@@ -6,6 +6,7 @@ export interface SaveProductData {
   price?: Decimal | null;
   isSoled?: boolean;
   madeAt: Date;
+  authorId: string;
   groupId: string;
   imageId?: string;
 }
@@ -34,4 +35,24 @@ export interface ProductResponse {
   price?: Decimal | null;
   isSoled: boolean;
   madeAt: Date;
+}
+
+// ------------------------- CASOS DE USO ------------------------- //
+
+export interface CreateProductUseCase {
+  product: {
+    name: string;
+    description: string;
+    price?: Decimal;
+    madeAt: Date;
+    groupId: string;
+  };
+  authorId: string;
+  styles?: string[];
+  photo?: {
+    base64: string;
+    name: string;
+    folder: string;
+    isMain?: boolean;
+  };
 }
