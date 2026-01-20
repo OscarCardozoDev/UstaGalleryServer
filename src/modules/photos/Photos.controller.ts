@@ -1,21 +1,9 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Get,
-  NotFoundException,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
-import { photoManagment } from 'src/utils/photosManagment';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { PhotosService } from './Photos.service';
 import {
-  CreatePhotoDto,
-  UpdatePhotoDto,
+  CreatePhotoUseCase,
   PhotoParams,
-  PhotoResponse,
-  GetPhotoResponse,
+  UpdatePhotoUseCase,
 } from './Photos.interface';
 
 @Controller('photos')
@@ -26,40 +14,16 @@ export class PhotosController {
   // CREATE
   // =========================
   @Post('create')
-  async createPhoto(@Body() body: CreatePhotoDto): Promise<PhotoResponse> {
-    const { base64, name, folder } = body;
+  async createPhoto(@Body() body: CreatePhotoUseCase) {
+    return this.photosService.createPhotoUseCase(body);
+  }
 
-    if (!base64 || !name || !folder) {
-      throw new BadRequestException('base64, name and folder are required');
-    }
-
-    let buffer: Buffer;
-
-    try {
-      buffer = Buffer.from(base64, 'base64');
-    } catch {
-      throw new BadRequestException('Invalid base64 image');
-    }
-
-    // 1️⃣ Guardar archivo en filesystem
-    const fileResult = await photoManagment.save({
-      fileBuffer: buffer,
-      fileName: name,
-      folderPath: folder,
-    });
-
-    // 2️⃣ Guardar metadata en DB
-    const photo = await this.photosService.setPhoto({
-      name,
-      url: fileResult.url,
-    });
-
-    // 3️⃣ Devolver uid
-    return {
-      uid: photo.uid,
-      name,
-      url: fileResult.url,
-    };
+  // =========================
+  // GET
+  // =========================
+  @Get('get/:uid')
+  async getPhoto(@Param() params: PhotoParams) {
+    return this.photosService.getPhotoUseCase(params.uid);
   }
 
   // =========================
@@ -68,88 +32,8 @@ export class PhotosController {
   @Put('edit/:uid')
   async updatePhoto(
     @Param() params: PhotoParams,
-    @Body() body: UpdatePhotoDto,
-  ): Promise<PhotoResponse> {
-    const { uid } = params;
-    const { base64, name } = body;
-
-    if (!base64 || !name) {
-      throw new BadRequestException('base64 and name are required');
-    }
-
-    const buffer = Buffer.from(base64, 'base64');
-
-    // Verificar existencia en DB
-    const photo = await this.photosService.getPhoto(uid);
-    if (!photo) {
-      throw new NotFoundException('Photo not found');
-    }
-
-    // Reemplazar archivo
-    await photoManagment.edit({
-      fileBuffer: buffer,
-      folderPath: photo.url,
-    });
-
-    await this.photosService.putPhoto(uid, {
-      name,
-      url: photo.url,
-    });
-
-    return {
-      uid,
-      name,
-      url: photo.url,
-    };
+    @Body() body: UpdatePhotoUseCase,
+  ) {
+    return this.photosService.updatePhotoUseCase(params.uid, body);
   }
-
-  // =========================
-  // GET
-  // =========================
-  @Get('get/:uid')
-  async getPhoto(@Param() params: PhotoParams): Promise<GetPhotoResponse> {
-    const photo = await this.photosService.getPhoto(params.uid);
-
-    if (!photo) {
-      throw new NotFoundException('Photo not found');
-    } else if (!photo.name || !photo.url) {
-      throw new NotFoundException('Photo name or url not found, check DB');
-    }
-
-    const fileResult = await photoManagment.get(photo.url);
-    console.log(fileResult);
-
-    if (!fileResult) {
-      throw new NotFoundException('Image file not found');
-    }
-
-    return {
-      uid: photo.uid,
-      name: photo.name,
-      base64: fileResult.base64,
-    };
-  }
-
-  /* =========================
-  DELETE
-  @Delete(':uid')
-  async deletePhoto(@Param() params: PhotoParams): Promise<void> {
-    const photo = await this.photosService.getPhoto(params.uid);
-
-    if (!photo) {
-      throw new NotFoundException('Photo not found');
-    }
-
-    // Eliminar archivo físico
-    const fileName = photo.url.split('/').pop();
-    const folderPath = photo.url
-      .replace(`/${fileName}`, '')
-      .replace(/^Images\//, '');
-
-    await photoManagment.remove(fileName!, folderPath);
-
-    // Eliminar registro DB
-    await this.photosService.deletePhoto(params.uid);
-  }
-  ========================= */
 }
