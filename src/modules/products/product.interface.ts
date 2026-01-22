@@ -49,7 +49,7 @@ export interface CreateProductUseCase {
   };
   authorId: string;
   styles?: string[];
-  photo?: {
+  image?: {
     base64: string;
     name: string;
     folder: string;

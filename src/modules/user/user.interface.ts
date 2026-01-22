@@ -9,7 +9,7 @@ export interface User {
 
 export interface userTypeId {
   uid: string;
-  name: string;
+  name?: string;
 }
 
 export interface UserUidResult {

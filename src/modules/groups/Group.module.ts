@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { GroupController } from './Group.controller';
+import { GroupService } from './Group.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 
@@ -12,11 +12,11 @@ import { JwtModule } from '@nestjs/jwt';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('config.jwtSecret'),
-        signOptions: { expiresIn: '365d' },
+        signOptions: { expiresIn: '60s' },
       }),
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService],
+  controllers: [GroupController],
+  providers: [GroupService],
 })
-export class AuthModule {}
+export class GroupModule {}
