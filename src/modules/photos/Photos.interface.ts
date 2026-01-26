@@ -32,5 +32,4 @@ export interface CreatePhotoUseCase {
 
 export interface UpdatePhotoUseCase {
   base64: string;
-  name: string;
 }

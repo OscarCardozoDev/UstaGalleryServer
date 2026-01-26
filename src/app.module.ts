@@ -4,6 +4,7 @@ import { UserModule } from 'src/modules/user/user.module';
 import { PhotosModule } from 'src/modules/photos/Photos.module';
 import { StylesModule } from 'src/modules/styles/Styles.module';
 import { GroupModule } from 'src/modules/groups/Group.module';
+import { ProductModule } from 'src/modules/products/Product.module';
 import { ConfigModule } from '@nestjs/config';
 import configurationApp from 'config/configuration-app';
 
@@ -19,6 +20,7 @@ import configurationApp from 'config/configuration-app';
     PhotosModule,
     StylesModule,
     GroupModule,
+    ProductModule,
   ],
   controllers: [],
   providers: [],

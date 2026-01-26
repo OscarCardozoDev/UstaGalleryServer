@@ -1,58 +1,55 @@
-import { Decimal } from '@prisma/client/runtime/client';
-
-export interface SaveProductData {
-  name: string;
-  description: string;
-  price?: Decimal | null;
-  isSoled?: boolean;
-  madeAt: Date;
-  authorId: string;
-  groupId: string;
-  imageId?: string;
-}
-
-export class CreateProductDto {
-  name: string;
-  description: string;
-  price?: Decimal;
-  madeAt: Date;
-  groupId: string;
-
-  // Imagen
-  base64?: string;
-  imageName?: string;
-  folder?: string;
-}
+/* =========================
+ * PARAMS / OPTIONS
+ * ========================= */
 
 export interface ProductParams {
   uid: string;
 }
 
-export interface ProductResponse {
-  uid: string;
-  name: string;
-  description: string;
-  price?: Decimal | null;
-  isSoled: boolean;
-  madeAt: Date;
+export interface GetProductsOptions {
+  page?: number;
+  limit?: number;
 }
 
-// ------------------------- CASOS DE USO ------------------------- //
+/* =========================
+ * CASOS DE USO
+ * ========================= */
 
 export interface CreateProductUseCase {
   product: {
     name: string;
     description: string;
-    price?: Decimal;
+    price?: number;
     madeAt: Date;
+    isSold?: boolean;
     groupId: string;
   };
-  authorId: string;
+  authors: {
+    userId: string;
+    isAuthor: boolean;
+  }[];
   styles?: string[];
-  image?: {
+  images?: {
     base64: string;
     name: string;
     folder: string;
+    isMain?: boolean;
+  }[];
+}
+
+export interface UpdateProductUseCase {
+  productId: string;
+  data: {
+    name?: string;
+    description?: string;
+    price?: number;
+    madeAt?: Date;
+    groupId?: string;
+    isSoled?: boolean;
+  };
+  styles?: string[];
+  image?: {
+    base64: string;
     isMain?: boolean;
   };
 }

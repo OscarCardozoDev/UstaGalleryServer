@@ -1,112 +1,304 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateProductUseCase } from './product.interface';
-import { PhotosController } from 'src/modules/photos/Photos.controller';
-import { StylesService } from 'src/modules/styles/Styles.service';
+import { Decimal } from '@prisma/client/runtime/client';
+import {
+  CreateProductUseCase,
+  GetProductsOptions,
+  UpdateProductUseCase,
+} from './product.interface';
+import { PhotosService } from 'src/modules/photos/Photos.service';
 
 @Injectable()
-export class ProductsService {
+export class ProductService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly photosController: PhotosController,
-    private readonly stylesService: StylesService,
+    private readonly photosService: PhotosService,
   ) {}
 
-  /* ============================
-   * ORQUESTADOR
-   * ============================ */
-  async createProductUseCase(
-    data: CreateProductUseCase,
-  ): Promise<{ uid: string; photoUid?: string }> {
-    const { product, authorId, styles, image } = data;
+  /* =========================
+   * CREATE
+   * ========================= */
+  async createProductUseCase(data: CreateProductUseCase) {
+    const { product, styles, images, authors } = data;
 
-    const createdProduct = await this.saveProduct(product);
+    /**
+     * FASE 1️⃣ — Crear imágenes (fuera de transacción)
+     */
+    const photoResults: { uid: string; isMain: boolean }[] = [];
 
-    await this.createAuthorRelation(authorId, createdProduct.uid);
+    const savePhoto = async (
+      images: {
+        base64: string;
+        name: string;
+        folder: string;
+        isMain?: boolean;
+      }[],
+    ) => {
+      for (const image of images) {
+        const photo = await this.photosService.createPhotoUseCase({
+          base64: image.base64,
+          name: image.name,
+          folder: image.folder,
+        });
 
-    let photoUid: string | undefined;
+        photoResults.push({
+          uid: photo.uid,
+          isMain: image.isMain ?? false,
+        });
+      }
 
-    if (image) {
-      const photo = await this.savePhoto(image, createdProduct.uid, authorId);
-      photoUid = photo.uid;
-
-      await this.createProductPhotoRelation(createdProduct.uid, photo.uid);
-    }
-
-    if (styles?.length) {
-      await this.createProductStyleRelations(createdProduct.uid, styles);
-    }
-
-    return {
-      uid: createdProduct.uid,
-      photoUid,
+      /* Garantizar una sola imagen principal */
+      if (photoResults.length) {
+        const hasMain = photoResults.some((p) => p.isMain);
+        if (!hasMain) {
+          photoResults[0].isMain = true;
+        }
+      }
     };
-  }
 
-  /* ============================
-   * FUNCIONES ATÓMICAS
-   * ============================ */
+    /* Convertir price a Decimal */
+    const parsedProduct = {
+      ...product,
+      price:
+        product.price !== undefined ? new Decimal(product.price) : undefined,
+    };
 
-  private async saveProduct(product: CreateProductUseCase['product']) {
-    return this.prisma.products.create({
-      data: product,
-      select: { uid: true },
+    /**
+     * FASE 2️⃣ — Transacción
+     */
+    return this.prisma.$transaction(async (tx) => {
+      // 1️⃣ Producto
+      const createdProduct = await tx.products.create({
+        data: parsedProduct,
+        select: { uid: true },
+      });
+
+      // 2️⃣ Autores
+      if (authors?.length) {
+        await tx.userProduct.createMany({
+          data: authors.map((author) => ({
+            userId: author.userId,
+            productId: createdProduct.uid,
+            isAuthor: author.isAuthor ?? false,
+          })),
+          skipDuplicates: true,
+        });
+      }
+
+      // 3️⃣ Estilos
+      if (styles?.length) {
+        await tx.productStyle.createMany({
+          data: styles.map((styleId) => ({
+            productId: createdProduct.uid,
+            styleId,
+          })),
+          skipDuplicates: true,
+        });
+      }
+
+      // 4️⃣ Relación producto ↔ imágenes
+      if (images?.length) {
+        await savePhoto(images);
+        await tx.productPhoto.createMany({
+          data: photoResults.map((photo) => ({
+            productId: createdProduct.uid,
+            photoId: photo.uid,
+            isMain: photo.isMain,
+          })),
+        });
+      }
+
+      return {
+        uid: createdProduct.uid,
+        photos: photoResults.map((p) => ({
+          uid: p.uid,
+          isMain: p.isMain,
+        })),
+      };
     });
   }
 
-  private async createAuthorRelation(
-    userId: string,
-    productId: string,
-  ): Promise<void> {
-    await this.prisma.userProduct.create({
-      data: {
-        userId,
-        productId,
-        isAuthor: true,
-      },
-    });
-  }
+  /* =========================
+   * READ
+   * ========================= */
+  async getAll(options: GetProductsOptions = {}) {
+    const { page = 1, limit = 10 } = options;
 
-  private async savePhoto(
-    image: { base64: string; folder: string },
-    productId: string,
-    authorId: string,
-  ) {
-    const name = `${productId}_${authorId}`;
-
-    return this.photosController.createPhoto({
-      base64: image.base64,
-      name,
-      folder: image.folder,
-    });
-  }
-
-  private async createProductPhotoRelation(
-    productId: string,
-    photoId: string,
-  ): Promise<void> {
-    await this.prisma.productPhoto.create({
-      data: {
-        productId,
-        photoId,
-        isMain: true,
-      },
-    });
-  }
-
-  private async createProductStyleRelations(
-    productId: string,
-    styles: string[],
-  ): Promise<void> {
-    for (const styleId of styles) {
-      await this.stylesService.get(styleId);
-
-      await this.prisma.productStyle.create({
-        data: {
-          productId,
-          styleId,
+    return this.prisma.products.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        photos: {
+          select: {
+            photoId: true,
+            isMain: true,
+          },
         },
+      },
+    });
+  }
+
+  async getById(uid: string) {
+    const product = await this.prisma.products.findUnique({
+      where: { uid },
+      include: {
+        photos: {
+          select: {
+            photoId: true,
+            isMain: true,
+          },
+        },
+      },
+    });
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return product;
+  }
+
+  async getAllByGroup(groupId: string, options: GetProductsOptions = {}) {
+    const { page = 1, limit = 10 } = options;
+
+    return this.prisma.products.findMany({
+      where: { groupId },
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        photos: {
+          where: { isMain: true },
+          select: { photoId: true },
+        },
+      },
+    });
+  }
+
+  async getAllByAuthor(authorId: string, options: GetProductsOptions = {}) {
+    const { page = 1, limit = 10 } = options;
+
+    return this.prisma.products.findMany({
+      where: {
+        authors: {
+          some: { userId: authorId },
+        },
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        photos: {
+          where: { isMain: true },
+          select: { photoId: true },
+        },
+      },
+    });
+  }
+
+  /* =========================
+   * UPDATE
+   * ========================= */
+  async updateProductUseCase(data: UpdateProductUseCase) {
+    const { productId, data: updateData, image, styles } = data;
+
+    const product = await this.prisma.products.findUnique({
+      where: { uid: productId },
+      include: {
+        photos: {
+          select: {
+            uid: true,
+            photoId: true,
+            isMain: true,
+          },
+        },
+      },
+    });
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    /**
+     * FASE 1️⃣ — Imagen (fuera de transacción)
+     * Solo se reemplaza el binario
+     */
+    if (image) {
+      const mainPhoto = product.photos.find((p) => p.isMain);
+
+      if (!mainPhoto) {
+        throw new NotFoundException('Main product photo not found');
+      }
+
+      await this.photosService.updatePhotoUseCase(mainPhoto.photoId, {
+        base64: image.base64,
       });
     }
+
+    /* Convierte el precio de number a Decimal si está definido */
+    const parsedData = {
+      ...updateData,
+      price:
+        updateData.price !== undefined
+          ? new Decimal(updateData.price)
+          : undefined,
+    };
+
+    /**
+     * FASE 2️⃣ — Transacción DB
+     */
+    return this.prisma.$transaction(async (tx) => {
+      // 1️⃣ Update producto
+      await tx.products.update({
+        where: { uid: productId },
+        data: parsedData,
+      });
+
+      // 2️⃣ Update relación imagen (isMain)
+      if (image?.isMain !== undefined) {
+        await tx.productPhoto.updateMany({
+          where: { productId },
+          data: { isMain: false },
+        });
+
+        const mainPhoto = product.photos.find((p) => p.isMain);
+        if (mainPhoto) {
+          await tx.productPhoto.update({
+            where: { uid: mainPhoto.uid },
+            data: { isMain: image.isMain },
+          });
+        }
+      }
+
+      // 3️⃣ Estilos
+      if (styles) {
+        await tx.productStyle.deleteMany({
+          where: { productId },
+        });
+
+        if (styles.length) {
+          await tx.productStyle.createMany({
+            data: styles.map((styleId) => ({
+              productId,
+              styleId,
+            })),
+            skipDuplicates: true,
+          });
+        }
+      }
+
+      return { uid: productId };
+    });
   }
+
+  /* =========================
+   * DELETE
+   * ========================= 
+  async deleteProduct(productId: string) {
+    return this.prisma.products.delete({
+      where: { uid: productId },
+    });
+  }
+  */
 }

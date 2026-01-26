@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
-import { PhotosController } from './Photos.controller';
-import { PhotosService } from './Photos.service';
+import { ProductController } from './Product.controller';
+import { ProductService } from './Product.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
+import { PhotosModule } from 'src/modules/photos/Photos.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     PrismaModule,
+    PhotosModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
@@ -16,8 +18,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
       }),
     }),
   ],
-  controllers: [PhotosController],
-  providers: [PhotosService],
-  exports: [PhotosService],
+  controllers: [ProductController],
+  providers: [ProductService],
 })
-export class PhotosModule {}
+export class ProductModule {}
