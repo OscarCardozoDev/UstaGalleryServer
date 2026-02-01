@@ -1,3 +1,6 @@
+import { Transform } from 'class-transformer';
+import { IsOptional } from 'class-validator';
+
 /* =========================
  * PARAMS / OPTIONS
  * ========================= */
@@ -6,9 +9,14 @@ export interface ProductParams {
   uid: string;
 }
 
-export interface GetProductsOptions {
-  page?: number;
-  limit?: number;
+export class GetProductsOptions {
+  @IsOptional()
+  @Transform(({ value }) => Number(value))
+  page?: number = 1;
+
+  @IsOptional()
+  @Transform(({ value }) => Number(value))
+  limit?: number = 10;
 }
 
 /* =========================
@@ -21,7 +29,7 @@ export interface CreateProductUseCase {
     description: string;
     price?: number;
     madeAt: Date;
-    isSold?: boolean;
+    isSolded?: boolean;
     groupId: string;
   };
   authors: {
@@ -45,7 +53,7 @@ export interface UpdateProductUseCase {
     price?: number;
     madeAt?: Date;
     groupId?: string;
-    isSoled?: boolean;
+    isSolded?: boolean;
   };
   styles?: string[];
   image?: {

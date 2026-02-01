@@ -100,7 +100,8 @@ model Products {
   name         String          @db.VarChar(30)
   description  String          @db.VarChar(300)
   price        Decimal?        @db.Decimal(8,2)
-  isSoled      Boolean         @default(false)
+  isSolded      Boolean         @default(false)
+  isReviewed   Boolean         @default(false)
   madeAt       DateTime
   groupId      String          @db.Uuid
   imageId      String?         @db.Uuid

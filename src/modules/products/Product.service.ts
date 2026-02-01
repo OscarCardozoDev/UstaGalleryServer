@@ -5,7 +5,7 @@ import {
   CreateProductUseCase,
   GetProductsOptions,
   UpdateProductUseCase,
-} from './product.interface';
+} from './Product.interface';
 import { PhotosService } from 'src/modules/photos/Photos.service';
 
 @Injectable()
@@ -122,6 +122,7 @@ export class ProductService {
    * READ
    * ========================= */
   async getAll(options: GetProductsOptions = {}) {
+    console.log(options);
     const { page = 1, limit = 10 } = options;
 
     return this.prisma.products.findMany({

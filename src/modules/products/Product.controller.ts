@@ -9,7 +9,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ProductService } from './Product.service';
-import { ProductParams, GetProductsOptions } from './product.interface';
+import { ProductParams, GetProductsOptions } from './Product.interface';
 
 @Controller('products')
 export class ProductController {
@@ -27,7 +27,7 @@ export class ProductController {
       price?: number;
       madeAt: Date;
       groupId: string;
-      isSold?: boolean;
+      isSolded?: boolean;
       styles?: string[];
       authors: {
         userId: string;
@@ -48,7 +48,7 @@ export class ProductController {
         price: body.price,
         madeAt: body.madeAt,
         groupId: body.groupId,
-        isSold: body.isSold,
+        isSolded: body.isSolded,
       },
       authors: body.authors,
       styles: body.styles,
@@ -113,7 +113,7 @@ export class ProductController {
       price?: number;
       madeAt?: Date;
       groupId?: string;
-      isSoled?: boolean;
+      isSolded?: boolean;
       styles?: string[];
       base64?: string;
       isMain?: boolean;
@@ -127,7 +127,7 @@ export class ProductController {
         price: body.price,
         madeAt: body.madeAt,
         groupId: body.groupId,
-        isSoled: body.isSoled,
+        isSolded: body.isSolded,
       },
       styles: body.styles,
       image: body.base64
