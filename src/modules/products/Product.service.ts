@@ -122,7 +122,6 @@ export class ProductService {
    * READ
    * ========================= */
   async getAll(options: GetProductsOptions = {}) {
-    console.log(options);
     const { page = 1, limit = 10 } = options;
 
     return this.prisma.products.findMany({
@@ -134,6 +133,26 @@ export class ProductService {
           select: {
             photoId: true,
             isMain: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getGalleryHome(options: GetProductsOptions = {}) {
+    const { page = 1, limit = 10 } = options;
+
+    return this.prisma.products.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+      select: {
+        uid: true,
+        name: true,
+        photos: {
+          where: { isMain: true },
+          select: {
+            photoId: true,
           },
         },
       },

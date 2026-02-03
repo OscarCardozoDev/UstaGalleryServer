@@ -101,6 +101,14 @@ export class ProductController {
   }
 
   // =========================
+  // GET FOR GALLERY HOME
+  // =========================
+  @Get('getGalleryHome')
+  async getGalleryHome(@Query() query: GetProductsOptions) {
+    return this.productsService.getGalleryHome(query);
+  }
+
+  // =========================
   // UPDATE
   // =========================
   @Put('update/:uid')
