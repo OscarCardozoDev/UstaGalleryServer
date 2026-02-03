@@ -1,40 +1,55 @@
 import { promises as fs } from 'fs';
 import * as path from 'path';
 
-const IMAGES_ROOT = path.resolve(process.cwd(), 'Images');
+/**
+ * Carpeta raíz de imágenes públicas
+ * Coincide con ServeStaticModule
+ */
+const IMAGES_ROOT = path.join(process.cwd(), 'public', 'images');
 
 export interface SavePhotoParams {
   fileBuffer: Buffer;
   fileName: string;
-  folderPath: string;
+  folderPath?: string; // ej: "productos/artes"
 }
 
 export interface EditPhotoParams {
   fileBuffer: Buffer;
-  folderPath: string;
+  folderPath?: string;
 }
 
 export interface PhotoResult {
   name: string;
-  url: string;
+  url: string; // URL pública
 }
 
 export interface GetPhotoResult {
   base64: string;
 }
 
-function resolveFolder(folderPath?: string): string {
-  return folderPath ? path.join(IMAGES_ROOT, folderPath) : IMAGES_ROOT;
+/**
+ * Resuelve una ruta física dentro de public/images
+ */
+function resolveFolder(folderPath = ''): string {
+  return path.join(IMAGES_ROOT, folderPath);
+}
+
+/**
+ * Convierte ruta relativa en URL pública
+ */
+function buildPublicUrl(folderPath = '', fileName: string): string {
+  const cleanPath = folderPath.replace(/\\/g, '/');
+  return `/images/${cleanPath}/${fileName}`.replace(/\/+/g, '/');
 }
 
 export const photoManagment = {
   /**
-   * Guarda una foto en Images/(path)/
+   * Guarda una foto en public/images/(path)
    */
   async save({
     fileBuffer,
     fileName,
-    folderPath,
+    folderPath = '',
   }: SavePhotoParams): Promise<PhotoResult> {
     const targetDir = resolveFolder(folderPath);
     const filePath = path.join(targetDir, fileName);
@@ -44,24 +59,29 @@ export const photoManagment = {
 
     return {
       name: fileName,
-      url: filePath,
+      url: buildPublicUrl(folderPath, fileName),
     };
   },
 
   /**
-   * Edita (sobrescribe) una foto existente
+   * Sobrescribe una foto existente
    */
   async edit({ fileBuffer, folderPath }: EditPhotoParams): Promise<void> {
+    if (!folderPath) {
+      throw new Error('folderPath is required');
+    }
+
     await fs.access(folderPath);
     await fs.writeFile(folderPath, fileBuffer);
   },
 
   /**
-   * Obtiene una foto y la devuelve en base64
+   * Obtiene una foto y la devuelve en base64 (solo si la necesitas)
    */
-  async get(folderPath: string): Promise<GetPhotoResult | null> {
+  async get(fileName: string, folderPath = ''): Promise<GetPhotoResult | null> {
     try {
-      const buffer = await fs.readFile(folderPath);
+      const filePath = path.join(resolveFolder(folderPath), fileName);
+      const buffer = await fs.readFile(filePath);
 
       return {
         base64: buffer.toString('base64'),
@@ -74,10 +94,8 @@ export const photoManagment = {
   /**
    * Elimina una foto
    */
-  async remove(fileName: string, folderPath?: string): Promise<void> {
-    const targetDir = resolveFolder(folderPath);
-    const filePath = path.join(targetDir, fileName);
-
+  async remove(fileName: string, folderPath = ''): Promise<void> {
+    const filePath = path.join(resolveFolder(folderPath), fileName);
     await fs.unlink(filePath);
   },
 };

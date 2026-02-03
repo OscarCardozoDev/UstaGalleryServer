@@ -155,7 +155,7 @@ model ProductStyle {
 
 model Photos {
   uid        String         @id @default(uuid()) @db.Uuid
-  name       String         @db.VarChar(30)
+  name       String         @db.VarChar(100)
   url        String         @db.VarChar(300)
 
   products   ProductPhoto[]

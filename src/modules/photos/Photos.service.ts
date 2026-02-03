@@ -5,100 +5,123 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { photoManagment } from 'src/utils/photosManagment';
-import { CreatePhotoUseCase, UpdatePhotoUseCase } from './Photos.interface';
+import { v4 as uuidv4 } from 'uuid';
+
+import {
+  CreatePhotoUseCase,
+  UpdatePhotoUseCase,
+  PhotoResponse,
+} from './Photos.interface';
 
 @Injectable()
 export class PhotosService {
   constructor(private readonly prisma: PrismaService) {}
 
-  /* =========================
-   * CREATE
-   * ========================= */
-  async createPhotoUseCase(data: CreatePhotoUseCase) {
-    const { base64, name, folder } = data;
+  // ───────────────────────────────────────────────────────────────
+  // Helpers
+  // ───────────────────────────────────────────────────────────────
 
-    let buffer: Buffer;
-    try {
-      buffer = Buffer.from(base64, 'base64');
-    } catch {
-      throw new BadRequestException('Invalid base64 image');
+  private base64ToBuffer(base64: string): {
+    buffer: Buffer;
+    extension: string;
+  } {
+    const match = base64.match(/^data:image\/(\w+);base64,(.+)$/);
+
+    if (!match) {
+      throw new BadRequestException('Invalid base64 image format');
     }
 
-    // 1️⃣ Guardar archivo
+    const [, extension, data] = match;
+
+    return {
+      buffer: Buffer.from(data, 'base64'),
+      extension,
+    };
+  }
+
+  // ───────────────────────────────────────────────────────────────
+  // CREATE
+  // ───────────────────────────────────────────────────────────────
+
+  async createPhotoUseCase(params: CreatePhotoUseCase): Promise<PhotoResponse> {
+    console.log(params);
+    const { base64, name, folder } = params;
+
+    const { buffer, extension } = this.base64ToBuffer(base64);
+
+    const fileName = name.includes('.') ? name : `${uuidv4()}.${extension}`;
+
     const fileResult = await photoManagment.save({
       fileBuffer: buffer,
-      fileName: name,
+      fileName,
       folderPath: folder,
     });
 
-    // 2️⃣ Guardar metadata
     const photo = await this.prisma.photos.create({
       data: {
-        name,
+        name: fileName,
         url: fileResult.url,
       },
-      select: { uid: true, name: true, url: true },
     });
-
-    return photo;
-  }
-
-  /* =========================
-   * GET
-   * ========================= */
-  async getPhotoUseCase(uid: string) {
-    const photo = await this.prisma.photos.findUnique({
-      where: { uid },
-    });
-
-    if (!photo || !photo.url) {
-      throw new NotFoundException('Photo not found');
-    }
-
-    const fileResult = await photoManagment.get(photo.url);
-
-    if (!fileResult) {
-      throw new NotFoundException('Image file not found');
-    }
 
     return {
       uid: photo.uid,
       name: photo.name,
-      base64: fileResult.base64,
+      url: photo.url,
     };
   }
 
-  /* =========================
-   * UPDATE
-   * ========================= */
-  async updatePhotoUseCase(uid: string, data: UpdatePhotoUseCase) {
-    const { base64 } = data;
+  // ───────────────────────────────────────────────────────────────
+  // UPDATE
+  // ───────────────────────────────────────────────────────────────
 
-    let buffer: Buffer;
-    try {
-      buffer = Buffer.from(base64, 'base64');
-    } catch {
-      throw new BadRequestException('Invalid base64 image');
-    }
-
+  async updatePhotoUseCase(
+    photoId: string,
+    params: UpdatePhotoUseCase,
+  ): Promise<PhotoResponse> {
     const photo = await this.prisma.photos.findUnique({
-      where: { uid },
+      where: { uid: photoId },
     });
 
-    if (!photo || !photo.url) {
+    if (!photo) {
       throw new NotFoundException('Photo not found');
     }
 
-    // Reemplazar archivo
+    const { buffer } = this.base64ToBuffer(params.base64);
+
     await photoManagment.edit({
       fileBuffer: buffer,
       folderPath: photo.url,
     });
 
     return {
-      uid,
+      uid: photo.uid,
       name: photo.name,
       url: photo.url,
     };
+  }
+
+  // ───────────────────────────────────────────────────────────────
+  // DELETE
+  // ───────────────────────────────────────────────────────────────
+
+  async deletePhotoUseCase(photoId: string): Promise<void> {
+    const photo = await this.prisma.photos.findUnique({
+      where: { uid: photoId },
+    });
+
+    if (!photo) {
+      throw new NotFoundException('Photo not found');
+    }
+
+    const [, , ...parts] = photo.url!.split('/');
+    const fileName = parts.pop()!;
+    const folderPath = parts.join('/');
+
+    await photoManagment.remove(fileName, folderPath);
+
+    await this.prisma.photos.delete({
+      where: { uid: photoId },
+    });
   }
 }
