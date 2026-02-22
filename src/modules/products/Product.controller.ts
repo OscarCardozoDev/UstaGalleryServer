@@ -8,39 +8,23 @@ import {
   Query,
   NotFoundException,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ProductService } from './Product.service';
-import { ProductParams, GetProductsOptions } from './Product.interface';
+import {
+  CreateProductDto,
+  UpdateProductDto,
+  GetProductsDto,
+  ProductParamsDto,
+} from './Product.dto';
 
+@ApiTags('products')
 @Controller('products')
 export class ProductController {
   constructor(private readonly productsService: ProductService) {}
 
-  // =========================
-  // CREATE
-  // =========================
   @Post('create')
-  async create(
-    @Body()
-    body: {
-      name: string;
-      description: string;
-      price?: number;
-      madeAt: Date;
-      groupId: string;
-      isSolded?: boolean;
-      styles?: string[];
-      authors: {
-        userId: string;
-        isAuthor: boolean;
-      }[];
-      images?: {
-        base64: string;
-        name: string;
-        folder: string;
-        isMain?: boolean;
-      }[];
-    },
-  ) {
+  @ApiOperation({ summary: 'Crear una obra' })
+  async create(@Body() body: CreateProductDto) {
     return this.productsService.createProductUseCase({
       product: {
         name: body.name,
@@ -56,76 +40,49 @@ export class ProductController {
     });
   }
 
-  // =========================
-  // GET ALL (paginado)
-  // =========================
   @Get('getAll')
-  async getAll(@Query() query: GetProductsOptions) {
+  @ApiOperation({ summary: 'Obtener todas las obras paginadas' })
+  async getAll(@Query() query: GetProductsDto) {
     return this.productsService.getAll(query);
   }
 
-  // =========================
-  // GET BY ID
-  // =========================
   @Get('get/:uid')
-  async getById(@Param() params: ProductParams) {
+  @ApiOperation({ summary: 'Obtener obra por ID' })
+  async getById(@Param() params: ProductParamsDto) {
     const product = await this.productsService.getById(params.uid);
-
-    if (!product) {
-      throw new NotFoundException('Product not found');
-    }
-
+    if (!product) throw new NotFoundException('Product not found');
     return product;
   }
 
-  // =========================
-  // GET BY GROUP
-  // =========================
   @Get('getGroup/:uid')
+  @ApiOperation({ summary: 'Obtener obras por grupo' })
   async getAllByGroup(
     @Param('uid') groupId: string,
-    @Query() query: GetProductsOptions,
+    @Query() query: GetProductsDto,
   ) {
     return this.productsService.getAllByGroup(groupId, query);
   }
 
-  // =========================
-  // GET BY AUTHOR
-  // =========================
   @Get('getAuthor/:uid')
+  @ApiOperation({ summary: 'Obtener obras por autor' })
   async getAllByAuthor(
     @Param('uid') authorId: string,
-    @Query() query: GetProductsOptions,
+    @Query() query: GetProductsDto,
   ) {
     return this.productsService.getAllByAuthor(authorId, query);
   }
 
-  // =========================
-  // GET FOR GALLERY HOME
-  // =========================
   @Get('getGalleryHome')
-  async getGalleryHome(@Query() query: GetProductsOptions) {
+  @ApiOperation({ summary: 'Obtener obras para galería home' })
+  async getGalleryHome(@Query() query: GetProductsDto) {
     return this.productsService.getGalleryHome(query);
   }
 
-  // =========================
-  // UPDATE
-  // =========================
   @Put('update/:uid')
+  @ApiOperation({ summary: 'Actualizar una obra' })
   async update(
-    @Param() params: ProductParams,
-    @Body()
-    body: {
-      name?: string;
-      description?: string;
-      price?: number;
-      madeAt?: Date;
-      groupId?: string;
-      isSolded?: boolean;
-      styles?: string[];
-      base64?: string;
-      isMain?: boolean;
-    },
+    @Param() params: ProductParamsDto,
+    @Body() body: UpdateProductDto,
   ) {
     return this.productsService.updateProductUseCase({
       productId: params.uid,
@@ -139,10 +96,7 @@ export class ProductController {
       },
       styles: body.styles,
       image: body.base64
-        ? {
-            base64: body.base64,
-            isMain: body.isMain,
-          }
+        ? { base64: body.base64, isMain: body.isMain }
         : undefined,
     });
   }

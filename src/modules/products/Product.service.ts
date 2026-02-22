@@ -131,8 +131,13 @@ export class ProductService {
       include: {
         photos: {
           select: {
-            photoId: true,
-            isMain: true,
+            photo: {
+              select: {
+                uid: true,
+                name: true,
+                url: true,
+              },
+            },
           },
         },
       },
@@ -152,7 +157,13 @@ export class ProductService {
         photos: {
           where: { isMain: true },
           select: {
-            photoId: true,
+            photo: {
+              select: {
+                uid: true,
+                name: true,
+                url: true,
+              },
+            },
           },
         },
       },
@@ -165,7 +176,13 @@ export class ProductService {
       include: {
         photos: {
           select: {
-            photoId: true,
+            photo: {
+              select: {
+                uid: true,
+                name: true,
+                url: true,
+              },
+            },
             isMain: true,
           },
         },
@@ -189,8 +206,16 @@ export class ProductService {
       orderBy: { createdAt: 'desc' },
       include: {
         photos: {
-          where: { isMain: true },
-          select: { photoId: true },
+          select: {
+            photo: {
+              select: {
+                uid: true,
+                name: true,
+                url: true,
+              },
+            },
+            isMain: true,
+          },
         },
       },
     });
@@ -211,7 +236,15 @@ export class ProductService {
       include: {
         photos: {
           where: { isMain: true },
-          select: { photoId: true },
+          select: {
+            photo: {
+              select: {
+                uid: true,
+                name: true,
+                url: true,
+              },
+            },
+          },
         },
       },
     });
