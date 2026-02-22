@@ -44,7 +44,6 @@ export class PhotosService {
   // ───────────────────────────────────────────────────────────────
 
   async createPhotoUseCase(params: CreatePhotoUseCase): Promise<PhotoResponse> {
-    console.log(params);
     const { base64, name, folder } = params;
 
     const { buffer, extension } = this.base64ToBuffer(base64);
@@ -63,6 +62,25 @@ export class PhotosService {
         url: fileResult.url,
       },
     });
+
+    return {
+      uid: photo.uid,
+      name: photo.name,
+      url: photo.url,
+    };
+  }
+
+  /* =========================
+   * GET
+   * ========================= */
+  async getPhotoUseCase(uid: string) {
+    const photo = await this.prisma.photos.findUnique({
+      where: { uid },
+    });
+
+    if (!photo || !photo.url) {
+      throw new NotFoundException('Photo not found');
+    }
 
     return {
       uid: photo.uid,

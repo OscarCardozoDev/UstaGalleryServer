@@ -17,6 +17,18 @@ export class StylesService {
     });
   }
 
+  async getAllByGroup(groupId: string): Promise<Style[]> {
+    return this.prismaService.styles.findMany({
+      where: { groupId },
+      select: {
+        uid: true,
+        name: true,
+        description: true,
+        groupId: true,
+      },
+    });
+  }
+
   async get(uid: string): Promise<Style> {
     const style = await this.prismaService.styles.findUnique({
       where: { uid },

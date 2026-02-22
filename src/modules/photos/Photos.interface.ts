@@ -17,7 +17,7 @@ export interface PhotoResponse {
 export interface GetPhotoResponse {
   uid: string;
   name: string;
-  base64: string;
+  url: string;
 }
 
 /* =========================

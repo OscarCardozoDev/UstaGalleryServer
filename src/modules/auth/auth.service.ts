@@ -7,13 +7,30 @@ export class AuthService {
   constructor(private prismaService: PrismaService) {}
 
   async getCredentialByEmail(mail: string): Promise<GetCredentialDto | null> {
-    return this.prismaService.credentials.findUnique({
+    const credential = await this.prismaService.credentials.findUnique({
       where: { mail },
       select: {
         uid: true,
         password: true,
       },
     });
+
+    if (!credential) {
+      return null;
+    }
+
+    const hasProfile = await this.prismaService.users.findUnique({
+      where: { uid: credential.uid },
+    });
+    const hasGroup = await this.prismaService.usersGroups.findFirst({
+      where: { userId: credential.uid },
+    });
+
+    return {
+      ...credential,
+      hasProfile: Boolean(hasProfile),
+      hasGroup: Boolean(hasGroup),
+    };
   }
 
   async setCredentialData(auth: CreateCredentialDto): Promise<{ uid: string }> {

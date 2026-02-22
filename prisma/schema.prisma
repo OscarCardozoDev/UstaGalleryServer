@@ -9,6 +9,23 @@ datasource db {
 }
 
 //////////////////////////////////////////////////////
+// ENUMS
+//////////////////////////////////////////////////////
+enum Category {
+  ARTES
+  TEATRO
+  DANZAS
+  MUSICA
+  CANTO
+}
+
+enum ProductStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+//////////////////////////////////////////////////////
 // USER TYPES
 //////////////////////////////////////////////////////
 
@@ -27,34 +44,44 @@ model UserTypes {
 //////////////////////////////////////////////////////
 
 model Users {
-  uid          String        @id @unique @db.Uuid
-  name         String        @db.VarChar(30)
-  lastName     String        @db.VarChar(30)
-  telNumber    String        @db.VarChar(12)
-  isActive     Boolean       @default(true)
-  isProfesor   Boolean       @default(false)
+  uid         String    @id @unique @db.Uuid
+  name        String    @db.VarChar(30)
+  lastName    String    @db.VarChar(30)
+  username    String    @db.VarChar(30) @unique
+  description String?   @db.VarChar(500)
+  
+  gender      String    @db.VarChar(3)
+  idCard      String    @db.VarChar(12) @unique
+  degree      String    @db.VarChar(120)
+  semester    String    @db.VarChar(2)
+  telNumber   String    @db.VarChar(12)
+  
+  isActive    Boolean   @default(true)
+  isProfesor  Boolean   @default(false)
 
-  userType     UserTypes     @relation(fields: [userTypeId], references: [uid])
-  userTypeId   String        @db.Uuid
+  // RELACIONES
+  userType    UserTypes @relation(fields: [userTypeId], references: [uid])
+  userTypeId  String    @db.Uuid
+  photo       Photos?   @relation("UserPhoto", fields: [photoId], references: [uid])
+  photoId     String?   @unique @db.Uuid
 
-  groups        UsersGroups[]
-  products      UserProduct[]
-  profesorGroup Groups? @relation("GroupProfesor")
+  groups      UsersGroups[]
+  products    UserProduct[]
+  managedGroups Groups[]  @relation("GroupProfesor")
 
-
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   finishAt     DateTime?
 }
 
 model Credentials {
-  uid        String     @id @default(uuid()) @db.Uuid
-  mail       String     @db.VarChar(100) @unique
-  password   String     @db.VarChar(250)
+  uid        String   @id @default(uuid()) @db.Uuid
+  mail       String   @db.VarChar(100) @unique
+  password   String   @db.VarChar(250)
 
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  finishedAt DateTime?  @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  finishedAt DateTime?
 }
 
 //////////////////////////////////////////////////////
@@ -62,20 +89,22 @@ model Credentials {
 //////////////////////////////////////////////////////
 
 model Groups {
-  uid        String        @id @default(uuid()) @db.Uuid
-  name       String        @db.VarChar(100)
+  uid         String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(100) // Ej: "Danza Folclórica"
+  category    Category @default(ARTES)
+  isActive    Boolean  @default(true)
 
-  // Profesor del grupo
-  profesor     Users   @relation("GroupProfesor", fields: [profesorId], references: [uid])
-  profesorId   String  @unique @db.Uuid
+  // Profesor (Sin @unique para permitir 1 profesor -> N grupos)
+  profesor    Users    @relation("GroupProfesor", fields: [profesorId], references: [uid])
+  profesorId  String   @db.Uuid
 
-  users      UsersGroups[]
-  products   Products[]
-  events     GroupEvent[]
-  styles     Styles[]
+  users       UsersGroups[]
+  products    Products[]
+  events      GroupEvent[]
+  styles      Styles[]
 
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model UsersGroups {
@@ -96,25 +125,28 @@ model UsersGroups {
 //////////////////////////////////////////////////////
 
 model Products {
-  uid          String          @id @default(uuid()) @db.Uuid
-  name         String          @db.VarChar(30)
-  description  String          @db.VarChar(300)
-  price        Decimal?        @db.Decimal(8,2)
-  isSolded      Boolean         @default(false)
-  isReviewed   Boolean         @default(false)
-  madeAt       DateTime
-  groupId      String          @db.Uuid
-  imageId      String?         @db.Uuid
+  uid          String        @id @default(uuid()) @db.Uuid
+  name         String        @db.VarChar(100)
+  description  String        @db.VarChar(500)
+  
+  status       ProductStatus @default(PENDING)
+  feedback     String?       @db.VarChar(300)
+  isActive     Boolean       @default(true)
 
-  group        Groups          @relation(fields: [groupId], references: [uid])
+  price        Decimal?      @db.Decimal(10,2)
+  isSold       Boolean       @default(false)
+  madeAt       DateTime
+  
+  groupId      String        @db.Uuid
+  group        Groups        @relation(fields: [groupId], references: [uid])
 
   styles       ProductStyle[]
   photos       ProductPhoto[]
   events       EventProduct[]
   authors      UserProduct[]
 
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
 //////////////////////////////////////////////////////
@@ -125,6 +157,7 @@ model Styles {
   uid          String          @id @default(uuid()) @db.Uuid
   name         String          @db.VarChar(30)
   description  String          @db.VarChar(300)
+  isActive     Boolean       @default(true)
 
   products     ProductStyle[]
 
@@ -160,6 +193,7 @@ model Photos {
 
   products   ProductPhoto[]
   events     EventPhoto[]
+  user       Users?         @relation("UserPhoto")
 
   createdAt  DateTime       @default(now())
   updatedAt  DateTime       @updatedAt
@@ -188,6 +222,7 @@ model Events {
   name         String          @db.VarChar(30)
   description  String
   date         DateTime
+  isActive     Boolean       @default(true)
 
   products     EventProduct[]
   photos       EventPhoto[]

@@ -28,6 +28,7 @@ export type StylesMinAggregateOutputType = {
   uid: string | null
   name: string | null
   description: string | null
+  isActive: boolean | null
   groupId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -37,6 +38,7 @@ export type StylesMaxAggregateOutputType = {
   uid: string | null
   name: string | null
   description: string | null
+  isActive: boolean | null
   groupId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -46,6 +48,7 @@ export type StylesCountAggregateOutputType = {
   uid: number
   name: number
   description: number
+  isActive: number
   groupId: number
   createdAt: number
   updatedAt: number
@@ -57,6 +60,7 @@ export type StylesMinAggregateInputType = {
   uid?: true
   name?: true
   description?: true
+  isActive?: true
   groupId?: true
   createdAt?: true
   updatedAt?: true
@@ -66,6 +70,7 @@ export type StylesMaxAggregateInputType = {
   uid?: true
   name?: true
   description?: true
+  isActive?: true
   groupId?: true
   createdAt?: true
   updatedAt?: true
@@ -75,6 +80,7 @@ export type StylesCountAggregateInputType = {
   uid?: true
   name?: true
   description?: true
+  isActive?: true
   groupId?: true
   createdAt?: true
   updatedAt?: true
@@ -157,6 +163,7 @@ export type StylesGroupByOutputType = {
   uid: string
   name: string
   description: string
+  isActive: boolean
   groupId: string
   createdAt: Date
   updatedAt: Date
@@ -187,6 +194,7 @@ export type StylesWhereInput = {
   uid?: Prisma.UuidFilter<"Styles"> | string
   name?: Prisma.StringFilter<"Styles"> | string
   description?: Prisma.StringFilter<"Styles"> | string
+  isActive?: Prisma.BoolFilter<"Styles"> | boolean
   groupId?: Prisma.UuidFilter<"Styles"> | string
   createdAt?: Prisma.DateTimeFilter<"Styles"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Styles"> | Date | string
@@ -198,6 +206,7 @@ export type StylesOrderByWithRelationInput = {
   uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -212,6 +221,7 @@ export type StylesWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.StylesWhereInput | Prisma.StylesWhereInput[]
   name?: Prisma.StringFilter<"Styles"> | string
   description?: Prisma.StringFilter<"Styles"> | string
+  isActive?: Prisma.BoolFilter<"Styles"> | boolean
   groupId?: Prisma.UuidFilter<"Styles"> | string
   createdAt?: Prisma.DateTimeFilter<"Styles"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Styles"> | Date | string
@@ -223,6 +233,7 @@ export type StylesOrderByWithAggregationInput = {
   uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -238,6 +249,7 @@ export type StylesScalarWhereWithAggregatesInput = {
   uid?: Prisma.UuidWithAggregatesFilter<"Styles"> | string
   name?: Prisma.StringWithAggregatesFilter<"Styles"> | string
   description?: Prisma.StringWithAggregatesFilter<"Styles"> | string
+  isActive?: Prisma.BoolWithAggregatesFilter<"Styles"> | boolean
   groupId?: Prisma.UuidWithAggregatesFilter<"Styles"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Styles"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Styles"> | Date | string
@@ -247,6 +259,7 @@ export type StylesCreateInput = {
   uid?: string
   name: string
   description: string
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   products?: Prisma.ProductStyleCreateNestedManyWithoutStyleInput
@@ -257,6 +270,7 @@ export type StylesUncheckedCreateInput = {
   uid?: string
   name: string
   description: string
+  isActive?: boolean
   groupId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -267,6 +281,7 @@ export type StylesUpdateInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.ProductStyleUpdateManyWithoutStyleNestedInput
@@ -277,6 +292,7 @@ export type StylesUncheckedUpdateInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   groupId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -287,6 +303,7 @@ export type StylesCreateManyInput = {
   uid?: string
   name: string
   description: string
+  isActive?: boolean
   groupId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -296,6 +313,7 @@ export type StylesUpdateManyMutationInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -304,6 +322,7 @@ export type StylesUncheckedUpdateManyInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   groupId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -323,6 +342,7 @@ export type StylesCountOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -332,6 +352,7 @@ export type StylesMaxOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -341,6 +362,7 @@ export type StylesMinOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   groupId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -411,6 +433,7 @@ export type StylesCreateWithoutGroupInput = {
   uid?: string
   name: string
   description: string
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   products?: Prisma.ProductStyleCreateNestedManyWithoutStyleInput
@@ -420,6 +443,7 @@ export type StylesUncheckedCreateWithoutGroupInput = {
   uid?: string
   name: string
   description: string
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   products?: Prisma.ProductStyleUncheckedCreateNestedManyWithoutStyleInput
@@ -458,6 +482,7 @@ export type StylesScalarWhereInput = {
   uid?: Prisma.UuidFilter<"Styles"> | string
   name?: Prisma.StringFilter<"Styles"> | string
   description?: Prisma.StringFilter<"Styles"> | string
+  isActive?: Prisma.BoolFilter<"Styles"> | boolean
   groupId?: Prisma.UuidFilter<"Styles"> | string
   createdAt?: Prisma.DateTimeFilter<"Styles"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Styles"> | Date | string
@@ -467,6 +492,7 @@ export type StylesCreateWithoutProductsInput = {
   uid?: string
   name: string
   description: string
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   group: Prisma.GroupsCreateNestedOneWithoutStylesInput
@@ -476,6 +502,7 @@ export type StylesUncheckedCreateWithoutProductsInput = {
   uid?: string
   name: string
   description: string
+  isActive?: boolean
   groupId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -501,6 +528,7 @@ export type StylesUpdateWithoutProductsInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   group?: Prisma.GroupsUpdateOneRequiredWithoutStylesNestedInput
@@ -510,6 +538,7 @@ export type StylesUncheckedUpdateWithoutProductsInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   groupId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -519,6 +548,7 @@ export type StylesCreateManyGroupInput = {
   uid?: string
   name: string
   description: string
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -527,6 +557,7 @@ export type StylesUpdateWithoutGroupInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.ProductStyleUpdateManyWithoutStyleNestedInput
@@ -536,6 +567,7 @@ export type StylesUncheckedUpdateWithoutGroupInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.ProductStyleUncheckedUpdateManyWithoutStyleNestedInput
@@ -545,6 +577,7 @@ export type StylesUncheckedUpdateManyWithoutGroupInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -584,6 +617,7 @@ export type StylesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   uid?: boolean
   name?: boolean
   description?: boolean
+  isActive?: boolean
   groupId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -596,6 +630,7 @@ export type StylesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   uid?: boolean
   name?: boolean
   description?: boolean
+  isActive?: boolean
   groupId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -606,6 +641,7 @@ export type StylesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   uid?: boolean
   name?: boolean
   description?: boolean
+  isActive?: boolean
   groupId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -616,12 +652,13 @@ export type StylesSelectScalar = {
   uid?: boolean
   name?: boolean
   description?: boolean
+  isActive?: boolean
   groupId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type StylesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "name" | "description" | "groupId" | "createdAt" | "updatedAt", ExtArgs["result"]["styles"]>
+export type StylesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "name" | "description" | "isActive" | "groupId" | "createdAt" | "updatedAt", ExtArgs["result"]["styles"]>
 export type StylesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   products?: boolean | Prisma.Styles$productsArgs<ExtArgs>
   group?: boolean | Prisma.GroupsDefaultArgs<ExtArgs>
@@ -644,6 +681,7 @@ export type $StylesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     uid: string
     name: string
     description: string
+    isActive: boolean
     groupId: string
     createdAt: Date
     updatedAt: Date
@@ -1075,6 +1113,7 @@ export interface StylesFieldRefs {
   readonly uid: Prisma.FieldRef<"Styles", 'String'>
   readonly name: Prisma.FieldRef<"Styles", 'String'>
   readonly description: Prisma.FieldRef<"Styles", 'String'>
+  readonly isActive: Prisma.FieldRef<"Styles", 'Boolean'>
   readonly groupId: Prisma.FieldRef<"Styles", 'String'>
   readonly createdAt: Prisma.FieldRef<"Styles", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Styles", 'DateTime'>

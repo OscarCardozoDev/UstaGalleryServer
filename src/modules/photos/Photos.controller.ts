@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Param, Get, Post, Put } from '@nestjs/common';
 import { PhotosService } from './Photos.service';
 import {
   CreatePhotoUseCase,
@@ -9,6 +9,14 @@ import {
 @Controller('photos')
 export class PhotosController {
   constructor(private readonly photosService: PhotosService) {}
+
+  // =========================
+  // GET
+  // =========================
+  @Get('get/:uid')
+  async getPhoto(@Param() params: PhotoParams) {
+    return this.photosService.getPhotoUseCase(params.uid);
+  }
 
   // =========================
   // CREATE

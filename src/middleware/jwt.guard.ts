@@ -7,8 +7,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { Request } from 'express';
-import { JwtPayload, AuthenticatedRequest } from 'src/interface/jwtPayload';
+import { AuthenticatedRequest, JwtPayload } from 'src/interface/jwtPayload';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -18,7 +17,7 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const jwtSecret = this.configService.get<string>('JWT_SECRET');
+    const jwtSecret = this.configService.get<string>('config.jwtSecret');
 
     if (!jwtSecret) {
       throw new InternalServerErrorException('JWT_SECRET is not defined');
@@ -26,10 +25,10 @@ export class AuthGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
 
-    const token = this.extractTokenFromHeader(request);
+    const token = this.extractTokenFromCookies(request);
 
     if (!token) {
-      throw new UnauthorizedException('Missing Bearer token');
+      throw new UnauthorizedException('Missing authentication cookie');
     }
 
     try {
@@ -37,18 +36,16 @@ export class AuthGuard implements CanActivate {
         secret: jwtSecret,
       });
 
-      request.user = payload; // ✔ tipado
+      request.user = payload; // ✔ uid disponible
       return true;
     } catch {
       throw new UnauthorizedException('Invalid or expired token');
     }
   }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const authorization = request.headers.authorization;
-    if (!authorization) return undefined;
-
-    const [type, token] = authorization.split(' ');
-    return type === 'Bearer' ? token : undefined;
+  private extractTokenFromCookies(
+    request: AuthenticatedRequest,
+  ): string | undefined {
+    return request.cookies?.access_token;
   }
 }

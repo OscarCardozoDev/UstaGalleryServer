@@ -38,6 +38,11 @@ export interface UpdateGroupUseCase {
   };
 }
 
+export interface AddStudentToGroupsUseCase {
+  userId: string;
+  groupIds: string[];
+}
+
 export interface AddStudentToGroupUseCase {
   groupId: string;
   userId: string;

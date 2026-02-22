@@ -11,6 +11,7 @@ import {
   AddStudentToGroupUseCase,
   UpdateStudentsByGroupUseCase,
   DeleteStudentByGroupUseCase,
+  AddStudentToGroupsUseCase,
 } from './Group.interface';
 
 @Injectable()
@@ -66,10 +67,9 @@ export class GroupService {
       skip: (page - 1) * limit,
       take: limit,
       orderBy: { createdAt: 'desc' },
-      include: {
-        profesor: {
-          select: { uid: true, name: true },
-        },
+      select: {
+        uid: true,
+        name: true,
       },
     });
   }
@@ -168,6 +168,69 @@ export class GroupService {
   }
 
   /* =========================
+   * ADD NEW STUDENT TO DIFFERENT GROUPS
+   * ========================= */
+
+  async addStudentToGroups(data: AddStudentToGroupsUseCase) {
+    const { userId, groupIds } = data;
+
+    // Validar que existan los grupos
+    const groups = await this.prisma.groups.findMany({
+      where: { uid: { in: groupIds } },
+      select: { uid: true },
+    });
+
+    if (groups.length !== groupIds.length) {
+      const foundIds = groups.map((g) => g.uid);
+      const missing = groupIds.filter((id) => !foundIds.includes(id));
+      throw new NotFoundException(`Groups not found: ${missing.join(', ')}`);
+    }
+
+    // Validar que exista el usuario
+    const user = await this.prisma.users.findUnique({
+      where: { uid: userId },
+      select: { uid: true },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User not found: ${userId}`);
+    }
+
+    // Intentar agregar a todos los grupos
+    const results = await Promise.allSettled(
+      groupIds.map((groupId) =>
+        this.prisma.usersGroups.create({
+          data: { groupId, userId },
+          select: { uid: true, groupId: true },
+        }),
+      ),
+    );
+
+    // Separar éxitos y fallos
+    const created = results
+      .filter((r): r is PromiseFulfilledResult<any> => r.status === 'fulfilled')
+      .map((r) => r.value);
+
+    const failed = results
+      .filter((r): r is PromiseRejectedResult => r.status === 'rejected')
+      .map((r, index) => ({
+        groupId: groupIds[index],
+        reason: 'Already belongs to this group',
+      }));
+
+    return {
+      success: true,
+      userId,
+      created: created.length,
+      failed: failed.length,
+      details: {
+        created,
+        failed,
+      },
+    };
+  }
+
+  /* =========================
    * GET ALL STUDENTS BY GROUP
    * ========================= */
   async getAllStudentsByGroup(groupId: string) {
@@ -178,6 +241,7 @@ export class GroupService {
           select: {
             uid: true,
             name: true,
+            lastName: true,
           },
         },
       },

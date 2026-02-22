@@ -29,6 +29,7 @@ export type EventsMinAggregateOutputType = {
   name: string | null
   description: string | null
   date: Date | null
+  isActive: boolean | null
   createdAt: Date | null
 }
 
@@ -37,6 +38,7 @@ export type EventsMaxAggregateOutputType = {
   name: string | null
   description: string | null
   date: Date | null
+  isActive: boolean | null
   createdAt: Date | null
 }
 
@@ -45,6 +47,7 @@ export type EventsCountAggregateOutputType = {
   name: number
   description: number
   date: number
+  isActive: number
   createdAt: number
   _all: number
 }
@@ -55,6 +58,7 @@ export type EventsMinAggregateInputType = {
   name?: true
   description?: true
   date?: true
+  isActive?: true
   createdAt?: true
 }
 
@@ -63,6 +67,7 @@ export type EventsMaxAggregateInputType = {
   name?: true
   description?: true
   date?: true
+  isActive?: true
   createdAt?: true
 }
 
@@ -71,6 +76,7 @@ export type EventsCountAggregateInputType = {
   name?: true
   description?: true
   date?: true
+  isActive?: true
   createdAt?: true
   _all?: true
 }
@@ -152,6 +158,7 @@ export type EventsGroupByOutputType = {
   name: string
   description: string
   date: Date
+  isActive: boolean
   createdAt: Date
   _count: EventsCountAggregateOutputType | null
   _min: EventsMinAggregateOutputType | null
@@ -181,6 +188,7 @@ export type EventsWhereInput = {
   name?: Prisma.StringFilter<"Events"> | string
   description?: Prisma.StringFilter<"Events"> | string
   date?: Prisma.DateTimeFilter<"Events"> | Date | string
+  isActive?: Prisma.BoolFilter<"Events"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Events"> | Date | string
   products?: Prisma.EventProductListRelationFilter
   photos?: Prisma.EventPhotoListRelationFilter
@@ -192,6 +200,7 @@ export type EventsOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   date?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   products?: Prisma.EventProductOrderByRelationAggregateInput
   photos?: Prisma.EventPhotoOrderByRelationAggregateInput
@@ -206,6 +215,7 @@ export type EventsWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Events"> | string
   description?: Prisma.StringFilter<"Events"> | string
   date?: Prisma.DateTimeFilter<"Events"> | Date | string
+  isActive?: Prisma.BoolFilter<"Events"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Events"> | Date | string
   products?: Prisma.EventProductListRelationFilter
   photos?: Prisma.EventPhotoListRelationFilter
@@ -217,6 +227,7 @@ export type EventsOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   date?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.EventsCountOrderByAggregateInput
   _max?: Prisma.EventsMaxOrderByAggregateInput
@@ -231,6 +242,7 @@ export type EventsScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Events"> | string
   description?: Prisma.StringWithAggregatesFilter<"Events"> | string
   date?: Prisma.DateTimeWithAggregatesFilter<"Events"> | Date | string
+  isActive?: Prisma.BoolWithAggregatesFilter<"Events"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Events"> | Date | string
 }
 
@@ -239,6 +251,7 @@ export type EventsCreateInput = {
   name: string
   description: string
   date: Date | string
+  isActive?: boolean
   createdAt?: Date | string
   products?: Prisma.EventProductCreateNestedManyWithoutEventInput
   photos?: Prisma.EventPhotoCreateNestedManyWithoutEventInput
@@ -250,6 +263,7 @@ export type EventsUncheckedCreateInput = {
   name: string
   description: string
   date: Date | string
+  isActive?: boolean
   createdAt?: Date | string
   products?: Prisma.EventProductUncheckedCreateNestedManyWithoutEventInput
   photos?: Prisma.EventPhotoUncheckedCreateNestedManyWithoutEventInput
@@ -261,6 +275,7 @@ export type EventsUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.EventProductUpdateManyWithoutEventNestedInput
   photos?: Prisma.EventPhotoUpdateManyWithoutEventNestedInput
@@ -272,6 +287,7 @@ export type EventsUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.EventProductUncheckedUpdateManyWithoutEventNestedInput
   photos?: Prisma.EventPhotoUncheckedUpdateManyWithoutEventNestedInput
@@ -283,6 +299,7 @@ export type EventsCreateManyInput = {
   name: string
   description: string
   date: Date | string
+  isActive?: boolean
   createdAt?: Date | string
 }
 
@@ -291,6 +308,7 @@ export type EventsUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -299,6 +317,7 @@ export type EventsUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -307,6 +326,7 @@ export type EventsCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   date?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -315,6 +335,7 @@ export type EventsMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   date?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -323,6 +344,7 @@ export type EventsMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   date?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -378,6 +400,7 @@ export type EventsCreateWithoutProductsInput = {
   name: string
   description: string
   date: Date | string
+  isActive?: boolean
   createdAt?: Date | string
   photos?: Prisma.EventPhotoCreateNestedManyWithoutEventInput
   groups?: Prisma.GroupEventCreateNestedManyWithoutEventInput
@@ -388,6 +411,7 @@ export type EventsUncheckedCreateWithoutProductsInput = {
   name: string
   description: string
   date: Date | string
+  isActive?: boolean
   createdAt?: Date | string
   photos?: Prisma.EventPhotoUncheckedCreateNestedManyWithoutEventInput
   groups?: Prisma.GroupEventUncheckedCreateNestedManyWithoutEventInput
@@ -414,6 +438,7 @@ export type EventsUpdateWithoutProductsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   photos?: Prisma.EventPhotoUpdateManyWithoutEventNestedInput
   groups?: Prisma.GroupEventUpdateManyWithoutEventNestedInput
@@ -424,6 +449,7 @@ export type EventsUncheckedUpdateWithoutProductsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   photos?: Prisma.EventPhotoUncheckedUpdateManyWithoutEventNestedInput
   groups?: Prisma.GroupEventUncheckedUpdateManyWithoutEventNestedInput
@@ -434,6 +460,7 @@ export type EventsCreateWithoutPhotosInput = {
   name: string
   description: string
   date: Date | string
+  isActive?: boolean
   createdAt?: Date | string
   products?: Prisma.EventProductCreateNestedManyWithoutEventInput
   groups?: Prisma.GroupEventCreateNestedManyWithoutEventInput
@@ -444,6 +471,7 @@ export type EventsUncheckedCreateWithoutPhotosInput = {
   name: string
   description: string
   date: Date | string
+  isActive?: boolean
   createdAt?: Date | string
   products?: Prisma.EventProductUncheckedCreateNestedManyWithoutEventInput
   groups?: Prisma.GroupEventUncheckedCreateNestedManyWithoutEventInput
@@ -470,6 +498,7 @@ export type EventsUpdateWithoutPhotosInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.EventProductUpdateManyWithoutEventNestedInput
   groups?: Prisma.GroupEventUpdateManyWithoutEventNestedInput
@@ -480,6 +509,7 @@ export type EventsUncheckedUpdateWithoutPhotosInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.EventProductUncheckedUpdateManyWithoutEventNestedInput
   groups?: Prisma.GroupEventUncheckedUpdateManyWithoutEventNestedInput
@@ -490,6 +520,7 @@ export type EventsCreateWithoutGroupsInput = {
   name: string
   description: string
   date: Date | string
+  isActive?: boolean
   createdAt?: Date | string
   products?: Prisma.EventProductCreateNestedManyWithoutEventInput
   photos?: Prisma.EventPhotoCreateNestedManyWithoutEventInput
@@ -500,6 +531,7 @@ export type EventsUncheckedCreateWithoutGroupsInput = {
   name: string
   description: string
   date: Date | string
+  isActive?: boolean
   createdAt?: Date | string
   products?: Prisma.EventProductUncheckedCreateNestedManyWithoutEventInput
   photos?: Prisma.EventPhotoUncheckedCreateNestedManyWithoutEventInput
@@ -526,6 +558,7 @@ export type EventsUpdateWithoutGroupsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.EventProductUpdateManyWithoutEventNestedInput
   photos?: Prisma.EventPhotoUpdateManyWithoutEventNestedInput
@@ -536,6 +569,7 @@ export type EventsUncheckedUpdateWithoutGroupsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.EventProductUncheckedUpdateManyWithoutEventNestedInput
   photos?: Prisma.EventPhotoUncheckedUpdateManyWithoutEventNestedInput
@@ -595,6 +629,7 @@ export type EventsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name?: boolean
   description?: boolean
   date?: boolean
+  isActive?: boolean
   createdAt?: boolean
   products?: boolean | Prisma.Events$productsArgs<ExtArgs>
   photos?: boolean | Prisma.Events$photosArgs<ExtArgs>
@@ -607,6 +642,7 @@ export type EventsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   name?: boolean
   description?: boolean
   date?: boolean
+  isActive?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["events"]>
 
@@ -615,6 +651,7 @@ export type EventsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   name?: boolean
   description?: boolean
   date?: boolean
+  isActive?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["events"]>
 
@@ -623,10 +660,11 @@ export type EventsSelectScalar = {
   name?: boolean
   description?: boolean
   date?: boolean
+  isActive?: boolean
   createdAt?: boolean
 }
 
-export type EventsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "name" | "description" | "date" | "createdAt", ExtArgs["result"]["events"]>
+export type EventsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "name" | "description" | "date" | "isActive" | "createdAt", ExtArgs["result"]["events"]>
 export type EventsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   products?: boolean | Prisma.Events$productsArgs<ExtArgs>
   photos?: boolean | Prisma.Events$photosArgs<ExtArgs>
@@ -648,6 +686,7 @@ export type $EventsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     name: string
     description: string
     date: Date
+    isActive: boolean
     createdAt: Date
   }, ExtArgs["result"]["events"]>
   composites: {}
@@ -1079,6 +1118,7 @@ export interface EventsFieldRefs {
   readonly name: Prisma.FieldRef<"Events", 'String'>
   readonly description: Prisma.FieldRef<"Events", 'String'>
   readonly date: Prisma.FieldRef<"Events", 'DateTime'>
+  readonly isActive: Prisma.FieldRef<"Events", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Events", 'DateTime'>
 }
     

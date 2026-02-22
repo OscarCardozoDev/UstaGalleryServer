@@ -1,23 +1,77 @@
 export interface User {
   uid: string;
-  userType: userTypeId;
   name: string;
   lastName: string;
+  username: string;
+  description?: string | null;
+  gender: string;
+  idCard: string;
+  degree: string;
+  semester: string;
   telNumber: string;
   isActive: boolean;
+  isProfesor: boolean;
+  userTypeId: string;
+  photoId?: string | null;
 }
 
-export interface userTypeId {
+export interface UserWithRelations extends User {
+  userType?: {
+    uid: string;
+    name?: string;
+  } | null;
+  photo?: {
+    uid: string;
+    url?: string;
+  } | null;
+  groups?:
+    | {
+        group: {
+          uid: string;
+          name?: string;
+        };
+      }[]
+    | null;
+}
+
+export interface CreateUserUseCase {
   uid: string;
+  user: {
+    name: string;
+    lastName: string;
+    username: string;
+    description?: string;
+    gender: string;
+    idCard: string;
+    degree: string;
+    semester: string;
+    telNumber: string;
+    isProfesor?: boolean;
+    userTypeId: string;
+  };
+  photo?: {
+    base64: string;
+    name: string;
+    folder: string;
+  };
+}
+
+export interface UpdateUserDto {
   name?: string;
+  lastName?: string;
+  username?: string;
+  description?: string;
+  gender?: string;
+  degree?: string;
+  semester?: string;
+  telNumber?: string;
+  isProfesor?: boolean;
+  userTypeId?: string;
 }
 
 export interface UserUidResult {
   uid: string;
-}
-
-export class UpdateUserDto {
-  name?: string;
-  lastName?: string;
-  telNumber?: string;
+  photo?: {
+    uid: string;
+  };
 }

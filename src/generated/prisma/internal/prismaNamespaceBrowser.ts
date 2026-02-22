@@ -98,10 +98,17 @@ export const UsersScalarFieldEnum = {
   uid: 'uid',
   name: 'name',
   lastName: 'lastName',
+  username: 'username',
+  description: 'description',
+  gender: 'gender',
+  idCard: 'idCard',
+  degree: 'degree',
+  semester: 'semester',
   telNumber: 'telNumber',
   isActive: 'isActive',
   isProfesor: 'isProfesor',
   userTypeId: 'userTypeId',
+  photoId: 'photoId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   finishAt: 'finishAt'
@@ -125,6 +132,8 @@ export type CredentialsScalarFieldEnum = (typeof CredentialsScalarFieldEnum)[key
 export const GroupsScalarFieldEnum = {
   uid: 'uid',
   name: 'name',
+  category: 'category',
+  isActive: 'isActive',
   profesorId: 'profesorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -147,12 +156,13 @@ export const ProductsScalarFieldEnum = {
   uid: 'uid',
   name: 'name',
   description: 'description',
+  status: 'status',
+  feedback: 'feedback',
+  isActive: 'isActive',
   price: 'price',
-  isSolded: 'isSolded',
-  isReviewed: 'isReviewed',
+  isSold: 'isSold',
   madeAt: 'madeAt',
   groupId: 'groupId',
-  imageId: 'imageId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -164,6 +174,7 @@ export const StylesScalarFieldEnum = {
   uid: 'uid',
   name: 'name',
   description: 'description',
+  isActive: 'isActive',
   groupId: 'groupId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -210,6 +221,7 @@ export const EventsScalarFieldEnum = {
   name: 'name',
   description: 'description',
   date: 'date',
+  isActive: 'isActive',
   createdAt: 'createdAt'
 } as const
 

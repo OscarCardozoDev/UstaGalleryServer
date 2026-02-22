@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Users" ALTER COLUMN "degree" SET DATA TYPE VARCHAR(120)[];

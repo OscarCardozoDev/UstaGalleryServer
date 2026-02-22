@@ -6,4 +6,6 @@ export interface CreateCredentialDto {
 export interface GetCredentialDto {
   uid: string;
   password: string;
+  hasProfile?: boolean;
+  hasGroup?: boolean;
 }
