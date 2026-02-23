@@ -3,16 +3,12 @@
  * ========================= */
 
 export interface GroupParams {
-  uid: string;
+  uid: string; // ← solo una declaración
 }
 
 export interface GetGroupsOptions {
   page?: number;
   limit?: number;
-}
-
-export interface GroupParams {
-  groupId: string;
 }
 
 export interface GroupStudentParams {
@@ -27,7 +23,7 @@ export interface GroupStudentParams {
 export interface CreateGroupUseCase {
   name: string;
   profesorId: string;
-  users?: string[]; // alumnos iniciales (opcional)
+  users?: string[];
 }
 
 export interface UpdateGroupUseCase {
