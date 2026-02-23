@@ -8,54 +8,290 @@ datasource db {
   provider = "postgresql"
 }
 
-model Credentials {
-  uid        String     @id @default(uuid())
-  email      String     @unique @db.VarChar(100) 
-  password   String     @db.Text
-
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+//////////////////////////////////////////////////////
+// ENUMS
+//////////////////////////////////////////////////////
+enum Category {
+  ARTES
+  TEATRO
+  DANZAS
+  MUSICA
+  CANTO
 }
 
+enum ProductStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+//////////////////////////////////////////////////////
+// USER TYPES
+//////////////////////////////////////////////////////
 
 model UserTypes {
-  id          String     @id @default(uuid())
-  name        String     @db.VarChar(30)
-  Users       Users[]
+  uid        String   @id @default(uuid()) @db.Uuid
+  name       String   @db.VarChar(30)
 
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  users      Users[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
+//////////////////////////////////////////////////////
+// USERS
+//////////////////////////////////////////////////////
 
 model Users {
-  uid              String     @id
-  userType         UserTypes  @relation(fields: [userTypeId], references: [id])
-  userTypeId       String
-  telNumber        String     @db.VarChar(12)
-  name             String     @db.VarChar(25)
-  lastName         String     @db.VarChar(25)
-  isActive         Boolean    @default(true)
+  uid         String    @id @unique @db.Uuid
+  name        String    @db.VarChar(30)
+  lastName    String    @db.VarChar(30)
+  username    String    @db.VarChar(30) @unique
+  description String?   @db.VarChar(500)
+  
+  gender      String    @db.VarChar(3)
+  idCard      String    @db.VarChar(12) @unique
+  degree      String    @db.VarChar(120)
+  semester    String    @db.VarChar(2)
+  telNumber   String    @db.VarChar(12)
+  
+  isActive    Boolean   @default(true)
+  isProfesor  Boolean   @default(false)
 
-  // Relaciones
-  groups           Groups[]   @relation("GroupMembers")
-  profesor         Groups[]   @relation("GroupProfesor")
- 
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
-  finishedAt       DateTime?
+  // RELACIONES
+  userType    UserTypes @relation(fields: [userTypeId], references: [uid])
+  userTypeId  String    @db.Uuid
+  photo       Photos?   @relation("UserPhoto", fields: [photoId], references: [uid])
+  photoId     String?   @unique @db.Uuid
+
+  groups      UsersGroups[]
+  products    UserProduct[]
+  managedGroups Groups[]  @relation("GroupProfesor")
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  finishAt     DateTime?
 }
 
+model Credentials {
+  uid        String   @id @default(uuid()) @db.Uuid
+  mail       String   @db.VarChar(100) @unique
+  password   String   @db.VarChar(250)
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  finishedAt DateTime?
+}
+
+//////////////////////////////////////////////////////
+// GROUPS
+//////////////////////////////////////////////////////
+
 model Groups {
-  id           String   @id @default(uuid())
-  name         String   @db.VarChar(30)
+  uid         String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(100) // Ej: "Danza Folclórica"
+  category    Category @default(ARTES)
+  isActive    Boolean  @default(true)
 
-  // Profesor del grupo
-  profesor     Users   @relation("GroupProfesor", fields: [profesorId], references: [uid])
-  profesorId   String
+  // Profesor (Sin @unique para permitir 1 profesor -> N grupos)
+  profesor    Users    @relation("GroupProfesor", fields: [profesorId], references: [uid])
+  profesorId  String   @db.Uuid
 
-  // Estudiantes del grupo
-  members      Users[] @relation("GroupMembers")
+  users       UsersGroups[]
+  products    Products[]
+  events      GroupEvent[]
+  styles      Styles[]
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model UsersGroups {
+  uid       String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  groupId   String   @db.Uuid
+
+  user      Users    @relation(fields: [userId], references: [uid])
+  group     Groups   @relation(fields: [groupId], references: [uid])
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, groupId])
+}
+
+//////////////////////////////////////////////////////
+// PRODUCTS
+//////////////////////////////////////////////////////
+
+model Products {
+  uid          String        @id @default(uuid()) @db.Uuid
+  name         String        @db.VarChar(100)
+  description  String        @db.VarChar(500)
+  
+  status       ProductStatus @default(PENDING)
+  feedback     String?       @db.VarChar(300)
+  isActive     Boolean       @default(true)
+
+  price        Decimal?      @db.Decimal(10,2)
+  isSold       Boolean       @default(false)
+  madeAt       DateTime
+  
+  groupId      String        @db.Uuid
+  group        Groups        @relation(fields: [groupId], references: [uid])
+
+  styles       ProductStyle[]
+  photos       ProductPhoto[]
+  events       EventProduct[]
+  authors      UserProduct[]
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+//////////////////////////////////////////////////////
+// STYLES
+//////////////////////////////////////////////////////
+
+model Styles {
+  uid          String          @id @default(uuid()) @db.Uuid
+  name         String          @db.VarChar(30)
+  description  String          @db.VarChar(300)
+  isActive     Boolean       @default(true)
+
+  products     ProductStyle[]
+
+  groupId      String          @db.Uuid
+  group        Groups          @relation(fields: [groupId], references: [uid])
+
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+}
+
+model ProductStyle {
+  uid        String   @id @default(uuid()) @db.Uuid
+  productId  String   @db.Uuid
+  styleId    String   @db.Uuid
+
+  product    Products @relation(fields: [productId], references: [uid])
+  style      Styles   @relation(fields: [styleId], references: [uid])
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([productId, styleId])
+}
+
+//////////////////////////////////////////////////////
+// PHOTOS
+//////////////////////////////////////////////////////
+
+model Photos {
+  uid        String         @id @default(uuid()) @db.Uuid
+  name       String         @db.VarChar(100)
+  url        String         @db.VarChar(300)
+
+  products   ProductPhoto[]
+  events     EventPhoto[]
+  user       Users?         @relation("UserPhoto")
+
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+}
+
+model ProductPhoto {
+  uid        String    @id @default(uuid()) @db.Uuid
+  productId  String    @db.Uuid
+  photoId    String    @db.Uuid
+  isMain     Boolean   @default(false)
+
+  product    Products @relation(fields: [productId], references: [uid])
+  photo      Photos   @relation(fields: [photoId], references: [uid])
+
+  createdAt  DateTime  @default(now())
+
+  @@unique([productId, photoId])
+}
+
+//////////////////////////////////////////////////////
+// EVENTS
+//////////////////////////////////////////////////////
+
+model Events {
+  uid          String          @id @default(uuid()) @db.Uuid
+  name         String          @db.VarChar(30)
+  description  String
+  date         DateTime
+  isActive     Boolean       @default(true)
+
+  products     EventProduct[]
+  photos       EventPhoto[]
+  groups       GroupEvent[]
+
+  createdAt    DateTime        @default(now())
+}
+
+model EventProduct {
+  uid        String    @id @default(uuid()) @db.Uuid
+  productId  String    @db.Uuid
+  eventId    String    @db.Uuid
+
+  product    Products @relation(fields: [productId], references: [uid])
+  event      Events   @relation(fields: [eventId], references: [uid])
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([productId, eventId])
+}
+
+model EventPhoto {
+  uid        String   @id @default(uuid()) @db.Uuid
+  eventId    String   @db.Uuid
+  photoId    String   @db.Uuid
+  isHero     Boolean  @default(false)
+
+  event      Events  @relation(fields: [eventId], references: [uid])
+  photo      Photos  @relation(fields: [photoId], references: [uid])
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([eventId, photoId])
+}
+
+//////////////////////////////////////////////////////
+// USERS ↔ PRODUCTS (AUTHOR)
+//////////////////////////////////////////////////////
+
+model UserProduct {
+  uid        String    @id @default(uuid()) @db.Uuid
+  userId     String    @db.Uuid
+  productId  String    @db.Uuid
+  isAuthor   Boolean   @default(false)
+
+  user       Users     @relation(fields: [userId], references: [uid])
+  product    Products  @relation(fields: [productId], references: [uid])
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([userId, productId])
+}
+
+//////////////////////////////////////////////////////
+// GROUPS ↔ EVENTS
+//////////////////////////////////////////////////////
+
+model GroupEvent {
+  uid        String   @id @default(uuid()) @db.Uuid
+  groupId    String   @db.Uuid
+  eventId    String   @db.Uuid
+
+  group      Groups   @relation(fields: [groupId], references: [uid])
+  event      Events   @relation(fields: [eventId], references: [uid])
+
+  createdAt  DateTime @default(now())
+
+  @@unique([groupId, eventId])
 }

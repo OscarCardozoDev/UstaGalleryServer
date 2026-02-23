@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
-import { PrismaModule } from '../prisma/prisma.module';
+import { GroupController } from './Group.controller';
+import { GroupService } from './Group.service';
+import { PrismaModule } from 'src/prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
@@ -16,7 +16,7 @@ import { JwtModule } from '@nestjs/jwt';
       }),
     }),
   ],
-  controllers: [UserController],
-  providers: [UserService],
+  controllers: [GroupController],
+  providers: [GroupService],
 })
-export class UserModule {}
+export class GroupModule {}

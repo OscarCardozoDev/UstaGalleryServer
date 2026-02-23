@@ -51,10 +51,21 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Credentials: 'Credentials',
   UserTypes: 'UserTypes',
   Users: 'Users',
-  Groups: 'Groups'
+  Credentials: 'Credentials',
+  Groups: 'Groups',
+  UsersGroups: 'UsersGroups',
+  Products: 'Products',
+  Styles: 'Styles',
+  ProductStyle: 'ProductStyle',
+  Photos: 'Photos',
+  ProductPhoto: 'ProductPhoto',
+  Events: 'Events',
+  EventProduct: 'EventProduct',
+  EventPhoto: 'EventPhoto',
+  UserProduct: 'UserProduct',
+  GroupEvent: 'GroupEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -73,19 +84,8 @@ export const TransactionIsolationLevel = {
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const CredentialsScalarFieldEnum = {
-  uid: 'uid',
-  email: 'email',
-  password: 'password',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CredentialsScalarFieldEnum = (typeof CredentialsScalarFieldEnum)[keyof typeof CredentialsScalarFieldEnum]
-
-
 export const UserTypesScalarFieldEnum = {
-  id: 'id',
+  uid: 'uid',
   name: 'name',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -96,28 +96,181 @@ export type UserTypesScalarFieldEnum = (typeof UserTypesScalarFieldEnum)[keyof t
 
 export const UsersScalarFieldEnum = {
   uid: 'uid',
-  userTypeId: 'userTypeId',
-  telNumber: 'telNumber',
   name: 'name',
   lastName: 'lastName',
+  username: 'username',
+  description: 'description',
+  gender: 'gender',
+  idCard: 'idCard',
+  degree: 'degree',
+  semester: 'semester',
+  telNumber: 'telNumber',
   isActive: 'isActive',
+  isProfesor: 'isProfesor',
+  userTypeId: 'userTypeId',
+  photoId: 'photoId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  finishedAt: 'finishedAt'
+  finishAt: 'finishAt'
 } as const
 
 export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
 
 
+export const CredentialsScalarFieldEnum = {
+  uid: 'uid',
+  mail: 'mail',
+  password: 'password',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  finishedAt: 'finishedAt'
+} as const
+
+export type CredentialsScalarFieldEnum = (typeof CredentialsScalarFieldEnum)[keyof typeof CredentialsScalarFieldEnum]
+
+
 export const GroupsScalarFieldEnum = {
-  id: 'id',
+  uid: 'uid',
   name: 'name',
+  category: 'category',
+  isActive: 'isActive',
   profesorId: 'profesorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type GroupsScalarFieldEnum = (typeof GroupsScalarFieldEnum)[keyof typeof GroupsScalarFieldEnum]
+
+
+export const UsersGroupsScalarFieldEnum = {
+  uid: 'uid',
+  userId: 'userId',
+  groupId: 'groupId',
+  createdAt: 'createdAt'
+} as const
+
+export type UsersGroupsScalarFieldEnum = (typeof UsersGroupsScalarFieldEnum)[keyof typeof UsersGroupsScalarFieldEnum]
+
+
+export const ProductsScalarFieldEnum = {
+  uid: 'uid',
+  name: 'name',
+  description: 'description',
+  status: 'status',
+  feedback: 'feedback',
+  isActive: 'isActive',
+  price: 'price',
+  isSold: 'isSold',
+  madeAt: 'madeAt',
+  groupId: 'groupId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductsScalarFieldEnum = (typeof ProductsScalarFieldEnum)[keyof typeof ProductsScalarFieldEnum]
+
+
+export const StylesScalarFieldEnum = {
+  uid: 'uid',
+  name: 'name',
+  description: 'description',
+  isActive: 'isActive',
+  groupId: 'groupId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StylesScalarFieldEnum = (typeof StylesScalarFieldEnum)[keyof typeof StylesScalarFieldEnum]
+
+
+export const ProductStyleScalarFieldEnum = {
+  uid: 'uid',
+  productId: 'productId',
+  styleId: 'styleId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProductStyleScalarFieldEnum = (typeof ProductStyleScalarFieldEnum)[keyof typeof ProductStyleScalarFieldEnum]
+
+
+export const PhotosScalarFieldEnum = {
+  uid: 'uid',
+  name: 'name',
+  url: 'url',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PhotosScalarFieldEnum = (typeof PhotosScalarFieldEnum)[keyof typeof PhotosScalarFieldEnum]
+
+
+export const ProductPhotoScalarFieldEnum = {
+  uid: 'uid',
+  productId: 'productId',
+  photoId: 'photoId',
+  isMain: 'isMain',
+  createdAt: 'createdAt'
+} as const
+
+export type ProductPhotoScalarFieldEnum = (typeof ProductPhotoScalarFieldEnum)[keyof typeof ProductPhotoScalarFieldEnum]
+
+
+export const EventsScalarFieldEnum = {
+  uid: 'uid',
+  name: 'name',
+  description: 'description',
+  date: 'date',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+} as const
+
+export type EventsScalarFieldEnum = (typeof EventsScalarFieldEnum)[keyof typeof EventsScalarFieldEnum]
+
+
+export const EventProductScalarFieldEnum = {
+  uid: 'uid',
+  productId: 'productId',
+  eventId: 'eventId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EventProductScalarFieldEnum = (typeof EventProductScalarFieldEnum)[keyof typeof EventProductScalarFieldEnum]
+
+
+export const EventPhotoScalarFieldEnum = {
+  uid: 'uid',
+  eventId: 'eventId',
+  photoId: 'photoId',
+  isHero: 'isHero',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EventPhotoScalarFieldEnum = (typeof EventPhotoScalarFieldEnum)[keyof typeof EventPhotoScalarFieldEnum]
+
+
+export const UserProductScalarFieldEnum = {
+  uid: 'uid',
+  userId: 'userId',
+  productId: 'productId',
+  isAuthor: 'isAuthor',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserProductScalarFieldEnum = (typeof UserProductScalarFieldEnum)[keyof typeof UserProductScalarFieldEnum]
+
+
+export const GroupEventScalarFieldEnum = {
+  uid: 'uid',
+  groupId: 'groupId',
+  eventId: 'eventId',
+  createdAt: 'createdAt'
+} as const
+
+export type GroupEventScalarFieldEnum = (typeof GroupEventScalarFieldEnum)[keyof typeof GroupEventScalarFieldEnum]
 
 
 export const SortOrder = {

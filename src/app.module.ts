@@ -1,7 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from 'src/modules/auth/auth.module';
+import { UserModule } from 'src/modules/user/User.module';
+import { PhotosModule } from 'src/modules/photos/Photos.module';
+import { StylesModule } from 'src/modules/styles/Styles.module';
+import { GroupModule } from 'src/modules/groups/Group.module';
+import { ProductModule } from 'src/modules/products/Product.module';
+import { join } from 'path';
+
 import configurationApp from 'config/configuration-app';
 
 @Module({
@@ -11,8 +18,19 @@ import configurationApp from 'config/configuration-app';
       load: [configurationApp],
       isGlobal: true,
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'public', 'images'),
+      serveRoot: '/images',
+      serveStaticOptions: {
+        index: false,
+      },
+    }),
     AuthModule,
     UserModule,
+    PhotosModule,
+    StylesModule,
+    GroupModule,
+    ProductModule,
   ],
   controllers: [],
   providers: [],
