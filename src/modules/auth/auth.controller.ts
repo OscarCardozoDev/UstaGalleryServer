@@ -6,13 +6,15 @@ import {
   HttpException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { hashText, verifyText } from 'src/utils/crypto.util';
-import type { CreateCredentialDto } from './auth.interface';
+import { CreateCredentialDto } from './auth.dto';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -22,6 +24,7 @@ export class AuthController {
   ) {}
 
   @Post('login')
+  @ApiOperation({ summary: 'Iniciar sesión' })
   async login(
     @Body() auth: CreateCredentialDto,
     @Res({ passthrough: true }) res: Response,
@@ -39,9 +42,7 @@ export class AuthController {
       throw new UnauthorizedException('Password not match');
     }
 
-    const token = await this.jwtService.signAsync({
-      uid: credential.uid,
-    });
+    const token = await this.jwtService.signAsync({ uid: credential.uid });
 
     res.cookie('access_token', token, {
       httpOnly: true,
@@ -58,6 +59,7 @@ export class AuthController {
   }
 
   @Post('register')
+  @ApiOperation({ summary: 'Registrar usuario' })
   async register(
     @Body() auth: CreateCredentialDto,
     @Res({ passthrough: true }) res: Response,
@@ -65,11 +67,10 @@ export class AuthController {
     auth.password = await hashText(auth.password);
 
     const { uid } = await this.authService.setCredentialData(auth);
-
-    const token = await this.jwtService.signAsync({ uid });
-
     const isProduction =
       this.configService.get<string>('config.nodeEnv') === 'production';
+
+    const token = await this.jwtService.signAsync({ uid });
 
     res.cookie('access_token', token, {
       httpOnly: true,
@@ -82,6 +83,7 @@ export class AuthController {
   }
 
   @Post('logout')
+  @ApiOperation({ summary: 'Cerrar sesión' })
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('access_token');
     return { message: 'Logged out' };

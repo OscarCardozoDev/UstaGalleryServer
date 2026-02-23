@@ -13,6 +13,7 @@ import {
 import { StylesService } from './Styles.service';
 import { Style, UpdateStyleDto } from './Styles.interface';
 import { AuthGuard } from 'src/middleware/jwt.guard';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @Controller('styles')
 export class StylesController {
@@ -37,6 +38,7 @@ export class StylesController {
   }
 
   @UseGuards(AuthGuard)
+  @Roles('admin', 'professor')
   @Post('create')
   @HttpCode(HttpStatus.CREATED)
   async createStyle(@Body() body: Style) {
@@ -44,6 +46,7 @@ export class StylesController {
   }
 
   @UseGuards(AuthGuard)
+  @Roles('admin', 'professor')
   @Put('update/:uid')
   @HttpCode(HttpStatus.OK)
   async updateStyle(@Param('uid') uid: string, @Body() body: UpdateStyleDto) {
