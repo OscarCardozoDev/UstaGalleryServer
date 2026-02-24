@@ -10,52 +10,61 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { StylesService } from './Styles.service';
-import { Style, UpdateStyleDto } from './Styles.interface';
+import { CreateStyleDto, UpdateStyleDto } from './Styles.dto';
 import { AuthGuard } from 'src/middleware/jwt.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 
+@ApiTags('styles')
 @Controller('styles')
 export class StylesController {
   constructor(private readonly stylesService: StylesService) {}
 
   @Get('all')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Obtener todos los estilos' })
   async getAllStyles() {
     return this.stylesService.getAll();
   }
 
   @Get('all/:groupId')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Obtener estilos por grupo' })
   async getAllByGroup(@Param('groupId') groupId: string) {
     return this.stylesService.getAllByGroup(groupId);
   }
 
   @Get('get/:uid')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Obtener estilo por UID' })
   async getById(@Param('uid') uid: string) {
     return this.stylesService.get(uid);
   }
 
+  @Post('create')
   @UseGuards(AuthGuard)
   @Roles('admin', 'professor')
-  @Post('create')
   @HttpCode(HttpStatus.CREATED)
-  async createStyle(@Body() body: Style) {
+  @ApiOperation({ summary: 'Crear estilo' })
+  async createStyle(@Body() body: CreateStyleDto) {
     return this.stylesService.create(body);
   }
 
+  @Put('update/:uid')
   @UseGuards(AuthGuard)
   @Roles('admin', 'professor')
-  @Put('update/:uid')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Actualizar estilo' })
   async updateStyle(@Param('uid') uid: string, @Body() body: UpdateStyleDto) {
     return this.stylesService.update(uid, body);
   }
 
-  @UseGuards(AuthGuard)
   @Delete('delete/:uid')
+  @UseGuards(AuthGuard)
+  @Roles('admin')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Eliminar estilo' })
   async deleteStyle(@Param('uid') uid: string) {
     return this.stylesService.delete(uid);
   }

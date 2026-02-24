@@ -1,6 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Style, StyleUidResult, UpdateStyleDto } from './Styles.interface';
+import {
+  Style,
+  StyleUidResult,
+  CreateStyleUseCase,
+  UpdateStyleUseCase,
+} from './Styles.interface';
 
 @Injectable()
 export class StylesService {
@@ -8,52 +13,34 @@ export class StylesService {
 
   async getAll(): Promise<Style[]> {
     return this.prismaService.styles.findMany({
-      select: {
-        uid: true,
-        name: true,
-        description: true,
-        groupId: true,
-      },
+      select: { uid: true, name: true, description: true, groupId: true },
     });
   }
 
   async getAllByGroup(groupId: string): Promise<Style[]> {
     return this.prismaService.styles.findMany({
       where: { groupId },
-      select: {
-        uid: true,
-        name: true,
-        description: true,
-        groupId: true,
-      },
+      select: { uid: true, name: true, description: true, groupId: true },
     });
   }
 
   async get(uid: string): Promise<Style> {
     const style = await this.prismaService.styles.findUnique({
       where: { uid },
-      select: {
-        uid: true,
-        name: true,
-        description: true,
-        groupId: true,
-      },
+      select: { uid: true, name: true, description: true, groupId: true },
     });
 
-    if (!style) {
-      throw new NotFoundException(`Style with uid ${uid} not found`);
-    }
-
+    if (!style) throw new NotFoundException(`Style with uid ${uid} not found`);
     return style;
   }
 
-  async create(style: Style): Promise<StyleUidResult> {
+  async create(style: CreateStyleUseCase): Promise<StyleUidResult> {
     const created = await this.prismaService.styles.create({
       data: {
-        uid: style.uid,
         name: style.name,
         description: style.description,
         groupId: style.groupId,
+        // uid lo genera Prisma automáticamente
       },
       select: { uid: true },
     });
@@ -61,12 +48,13 @@ export class StylesService {
     return { uid: created.uid };
   }
 
-  async update(uid: string, style: UpdateStyleDto): Promise<StyleUidResult> {
-    const data = {
-      ...Object.fromEntries(
-        Object.entries(style).filter(([, v]) => v !== undefined),
-      ),
-    };
+  async update(
+    uid: string,
+    style: UpdateStyleUseCase,
+  ): Promise<StyleUidResult> {
+    const data = Object.fromEntries(
+      Object.entries(style).filter(([, v]) => v !== undefined),
+    );
 
     const updated = await this.prismaService.styles.update({
       where: { uid },
@@ -78,7 +66,7 @@ export class StylesService {
   }
 
   async delete(uid: string): Promise<StyleUidResult> {
-    await this.get(uid); // valida existencia
+    await this.get(uid);
 
     const deleted = await this.prismaService.styles.delete({
       where: { uid },
