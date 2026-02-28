@@ -1,41 +1,48 @@
-// product.dto.ts
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { IsOptional } from 'class-validator';
-
-// ─── Reutilizables ───────────────────────────────────────────
+import { Transform, Type } from 'class-transformer';
+import {
+  IsOptional,
+  IsString,
+  IsNumber,
+  IsBoolean,
+  IsArray,
+  ValidateNested,
+} from 'class-validator';
 
 export class ProductAuthorDto {
   @ApiProperty({ example: 'aa35ee0c-f81a-4739-aa4c-af4cdfa820d3' })
+  @IsString()
   userId: string;
 
   @ApiProperty({ example: true })
+  @IsBoolean()
   isAuthor: boolean;
 }
 
 export class ProductImageDto {
   @ApiProperty({ example: '/9j/4AAQSkZJRgAB...' })
+  @IsString()
   base64: string;
 
   @ApiProperty({ example: 'obra.jpeg' })
+  @IsString()
   name: string;
 
   @ApiProperty({ example: 'products' })
+  @IsString()
   folder: string;
 
   @ApiPropertyOptional({ example: true })
+  @IsOptional()
+  @IsBoolean()
   isMain?: boolean;
 }
 
-// ─── Params ──────────────────────────────────────────────────
-
 export class ProductParamsDto {
   @ApiProperty({ example: 'b4fa2024-0da5-49a9-bc29-2417515e118c' })
+  @IsString()
   uid: string;
 }
-
-// ─── Query ───────────────────────────────────────────────────
-// Reemplaza GetProductsOptions de Product.interface.ts
 
 export class GetProductsDto {
   @ApiPropertyOptional({ example: 1, default: 1 })
@@ -49,68 +56,97 @@ export class GetProductsDto {
   limit?: number = 10;
 }
 
-// ─── Create ──────────────────────────────────────────────────
-// Reemplaza el @Body() inline del controller
-
 export class CreateProductDto {
   @ApiProperty({ example: 'Mi hermosa novia' })
+  @IsString()
   name: string;
 
   @ApiProperty({ example: 'Obra hecha en acuarela' })
+  @IsString()
   description: string;
 
   @ApiPropertyOptional({ example: 99999 })
+  @IsOptional()
+  @IsNumber()
   price?: number;
 
   @ApiProperty({ example: '2025-07-29' })
-  madeAt: Date;
+  @IsString()
+  madeAt: string;
 
   @ApiProperty({ example: 'b4fa2024-0da5-49a9-bc29-2417515e118c' })
+  @IsString()
   groupId: string;
 
   @ApiPropertyOptional({ example: false })
-  isSolded?: boolean;
+  @IsOptional()
+  @IsBoolean()
+  isSold?: boolean;
 
   @ApiProperty({ type: [ProductAuthorDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ProductAuthorDto)
   authors: ProductAuthorDto[];
 
-  @ApiPropertyOptional({
-    type: [String],
-    example: ['Expresionismo', 'Surrealismo'],
-  })
+  @ApiPropertyOptional({ type: [String], example: ['Expresionismo'] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
   styles?: string[];
 
   @ApiPropertyOptional({ type: [ProductImageDto] })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ProductImageDto)
   images?: ProductImageDto[];
 }
 
-// ─── Update ──────────────────────────────────────────────────
-
 export class UpdateProductDto {
   @ApiPropertyOptional({ example: 'Nuevo nombre' })
+  @IsOptional()
+  @IsString()
   name?: string;
 
   @ApiPropertyOptional({ example: 'Nueva descripción' })
+  @IsOptional()
+  @IsString()
   description?: string;
 
   @ApiPropertyOptional({ example: 50000 })
+  @IsOptional()
+  @IsNumber()
   price?: number;
 
   @ApiPropertyOptional({ example: '2025-07-29' })
-  madeAt?: Date;
+  @IsOptional()
+  @IsString()
+  madeAt?: string;
 
-  @ApiPropertyOptional({ example: 'b4fa2024-0da5-49a9-bc29-2417515e118c' })
+  @ApiPropertyOptional({ example: 'uuid-del-grupo' })
+  @IsOptional()
+  @IsString()
   groupId?: string;
 
   @ApiPropertyOptional({ example: false })
-  isSolded?: boolean;
+  @IsOptional()
+  @IsBoolean()
+  isSold?: boolean;
 
   @ApiPropertyOptional({ type: [String] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
   styles?: string[];
 
   @ApiPropertyOptional({ example: '/9j/4AAQSkZJRgAB...' })
+  @IsOptional()
+  @IsString()
   base64?: string;
 
   @ApiPropertyOptional({ example: true })
+  @IsOptional()
+  @IsBoolean()
   isMain?: boolean;
 }
