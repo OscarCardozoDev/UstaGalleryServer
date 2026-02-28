@@ -1,13 +1,7 @@
-/* =========================
- * PARAMS
- * ========================= */
 export interface PhotoParams {
   uid: string;
 }
 
-/* =========================
- * RESPONSES
- * ========================= */
 export interface PhotoResponse {
   uid: string;
   name: string;
@@ -19,10 +13,6 @@ export interface GetPhotoResponse {
   name: string;
   url: string;
 }
-
-/* =========================
- * CASOS DE USO
- * ========================= */
 
 export interface CreatePhotoUseCase {
   base64: string;

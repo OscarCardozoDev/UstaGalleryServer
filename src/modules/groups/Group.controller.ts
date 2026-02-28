@@ -10,44 +10,43 @@ import {
   Query,
   NotFoundException,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { CurrentUser } from 'src/decorators/currentUser';
 import { GroupService } from './Group.service';
-import {
-  GroupParams,
-  GetGroupsOptions,
-  CreateGroupUseCase,
-} from './Group.interface';
 import { AuthGuard } from 'src/middleware/jwt.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import {
+  GroupParamsDto,
+  GetGroupsDto,
+  CreateGroupDto,
+  UpdateGroupDto,
+  AddStudentDto,
+  DeleteStudentDto,
+  UpdateStudentsDto,
+} from './Group.dto';
 
+@ApiTags('groups')
+@UseGuards(AuthGuard)
 @Controller('groups')
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
-  /* =========================
-   * CREATE
-   * ========================= */
   @Post('create')
-  @UseGuards(AuthGuard)
-  async create(
-    @Body()
-    createGroupUseCase: CreateGroupUseCase,
-  ) {
-    return this.groupService.createGroupUseCase(createGroupUseCase);
+  @Roles('admin')
+  @ApiOperation({ summary: 'Crear grupo' })
+  async create(@Body() body: CreateGroupDto) {
+    return this.groupService.createGroupUseCase(body);
   }
 
-  /* =========================
-   * GET ALL
-   * ========================= */
   @Get('get')
-  async getAll(@Query() query: GetGroupsOptions) {
+  @ApiOperation({ summary: 'Obtener todos los grupos' })
+  async getAll(@Query() query: GetGroupsDto) {
     return this.groupService.getAll(query);
   }
 
-  /* =========================
-   * GET BY ID
-   * ========================= */
   @Get('get/:uid')
-  async getById(@Param() params: GroupParams) {
+  @ApiOperation({ summary: 'Obtener grupo por UID' })
+  async getById(@Param() params: GroupParamsDto) {
     const group = await this.groupService.getById(params.uid);
 
     if (!group) {
@@ -57,20 +56,10 @@ export class GroupController {
     return group;
   }
 
-  /* =========================
-   * UPDATE
-   * ========================= */
   @Put('update/:uid')
-  @UseGuards(AuthGuard)
-  async update(
-    @Param() params: GroupParams,
-    @Body()
-    body: {
-      name?: string;
-      profesorId?: string;
-      users?: string[];
-    },
-  ) {
+  @Roles('admin')
+  @ApiOperation({ summary: 'Actualizar grupo' })
+  async update(@Param() params: GroupParamsDto, @Body() body: UpdateGroupDto) {
     return this.groupService.updateGroupUseCase({
       groupId: params.uid,
       data: {
@@ -80,52 +69,41 @@ export class GroupController {
     });
   }
 
-  /* =========================
-   * DELETE
-   * ========================= */
   @Delete('delete/:uid')
-  @UseGuards(AuthGuard)
-  async delete(@Param() params: GroupParams) {
+  @Roles('admin')
+  @ApiOperation({ summary: 'Eliminar grupo' })
+  async delete(@Param() params: GroupParamsDto) {
     await this.groupService.deleteGroup(params.uid);
     return { success: true };
   }
 
-  /* --------------------------------------- Student Uses Cases For Groups --------------------------------------- */
-
-  /* =========================
-   * ADD STUDENT TO GROUP(S)
-   * ========================= */
   @Post('student/add')
-  @UseGuards(AuthGuard)
+  @Roles('admin', 'professor')
+  @ApiOperation({ summary: 'Agregar estudiante a grupo(s)' })
   async addStudent(
     @CurrentUser('uid') uid: string,
-    @Body() body: { userId?: string; groupIds: string[] },
+    @Body() body: AddStudentDto,
   ) {
     const userId = body.userId ?? uid;
-
     return this.groupService.addStudentToGroups({
       userId,
       groupIds: body.groupIds,
     });
   }
 
-  /* =========================
-   * GET ALL STUDENTS
-   * ========================= */
   @Get('student/get/:groupId')
-  @UseGuards(AuthGuard)
+  @Roles('admin', 'professor')
+  @ApiOperation({ summary: 'Obtener estudiantes de un grupo' })
   async getAllStudents(@Param('groupId') groupId: string) {
     return this.groupService.getAllStudentsByGroup(groupId);
   }
 
-  /* =========================
-   * DELETE ONE STUDENT
-   * ========================= */
   @Delete('student/delete/:groupId')
-  @UseGuards(AuthGuard)
+  @Roles('admin', 'professor')
+  @ApiOperation({ summary: 'Eliminar un estudiante del grupo' })
   async deleteStudent(
     @Param('groupId') groupId: string,
-    @Body() body: { userId: string },
+    @Body() body: DeleteStudentDto,
   ) {
     await this.groupService.deleteOneStudentByGroup({
       groupId,
@@ -134,24 +112,20 @@ export class GroupController {
     return { success: true };
   }
 
-  /* =========================
-   * DELETE ALL STUDENTS
-   * ========================= */
   @Delete('student/deleteAll/:groupId')
-  @UseGuards(AuthGuard)
+  @Roles('admin')
+  @ApiOperation({ summary: 'Eliminar todos los estudiantes del grupo' })
   async deleteAllStudents(@Param('groupId') groupId: string) {
     await this.groupService.deleteStudentsByGroup(groupId);
     return { success: true };
   }
 
-  /* =========================
-   * UPDATE STUDENT LIST
-   * ========================= */
   @Put('student/update/:groupId')
-  @UseGuards(AuthGuard)
+  @Roles('admin', 'professor')
+  @ApiOperation({ summary: 'Actualizar lista de estudiantes del grupo' })
   async updateStudents(
     @Param('groupId') groupId: string,
-    @Body() body: { users: string[] },
+    @Body() body: UpdateStudentsDto,
   ) {
     return this.groupService.updateStudentsByGroup({
       groupId,

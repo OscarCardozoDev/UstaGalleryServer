@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { photoManagment } from 'src/utils/photosManagment';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,15 +23,18 @@ export class PhotosService {
   } {
     const match = base64.match(/^data:image\/(\w+);base64,(.+)$/);
 
-    if (!match) {
-      throw new BadRequestException('Invalid base64 image format');
+    if (match) {
+      const [, extension, data] = match;
+      return {
+        buffer: Buffer.from(data, 'base64'),
+        extension,
+      };
     }
 
-    const [, extension, data] = match;
-
+    // Sin prefijo — asume jpeg por defecto
     return {
-      buffer: Buffer.from(data, 'base64'),
-      extension,
+      buffer: Buffer.from(base64, 'base64'),
+      extension: 'jpeg',
     };
   }
 

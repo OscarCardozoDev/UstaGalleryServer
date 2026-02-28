@@ -2,11 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PhotosService } from 'src/modules/photos/Photos.service';
 import {
+  CreateUserUseCase,
   UserWithRelations,
-  UpdateUserDto,
   UserUidResult,
-} from './user.interface';
-import type { CreateUserUseCase } from './user.interface';
+} from './User.interface';
+import { UpdateUserDto } from './User.dto';
 
 @Injectable()
 export class UserService {

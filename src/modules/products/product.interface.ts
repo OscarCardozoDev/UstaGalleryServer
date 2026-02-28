@@ -29,7 +29,7 @@ export interface CreateProductUseCase {
     description: string;
     price?: number;
     madeAt: Date;
-    isSolded?: boolean;
+    isSold?: boolean;
     groupId: string;
   };
   authors: {
@@ -53,7 +53,7 @@ export interface UpdateProductUseCase {
     price?: number;
     madeAt?: Date;
     groupId?: string;
-    isSolded?: boolean;
+    isSold?: boolean;
   };
   styles?: string[];
   image?: {

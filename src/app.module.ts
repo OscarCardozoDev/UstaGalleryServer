@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from 'src/modules/auth/auth.module';
-import { UserModule } from 'src/modules/user/user.module';
+import { UserModule } from 'src/modules/user/User.module';
 import { PhotosModule } from 'src/modules/photos/Photos.module';
 import { StylesModule } from 'src/modules/styles/Styles.module';
 import { GroupModule } from 'src/modules/groups/Group.module';

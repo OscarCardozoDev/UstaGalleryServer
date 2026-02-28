@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
+import { UserController } from './User.controller';
+import { UserService } from './User.service';
 import { PhotosModule } from 'src/modules/photos/Photos.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
@@ -14,7 +14,7 @@ import { JwtModule } from '@nestjs/jwt';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('config.jwtSecret'),
-        signOptions: { expiresIn: '60s' },
+        signOptions: { expiresIn: '24h' },
       }),
     }),
   ],

@@ -1,9 +1,4 @@
-export interface CreateCredentialDto {
-  mail: string;
-  password: string;
-}
-
-export interface GetCredentialDto {
+export interface GetCredentialResult {
   uid: string;
   password: string;
   hasProfile?: boolean;

@@ -16,22 +16,9 @@ export interface User {
 }
 
 export interface UserWithRelations extends User {
-  userType?: {
-    uid: string;
-    name?: string;
-  } | null;
-  photo?: {
-    uid: string;
-    url?: string;
-  } | null;
-  groups?:
-    | {
-        group: {
-          uid: string;
-          name?: string;
-        };
-      }[]
-    | null;
+  userType?: { uid: string; name?: string } | null;
+  photo?: { uid: string; url?: string } | null;
+  groups?: { group: { uid: string; name?: string } }[] | null;
 }
 
 export interface CreateUserUseCase {
@@ -56,7 +43,7 @@ export interface CreateUserUseCase {
   };
 }
 
-export interface UpdateUserDto {
+export interface UpdateUserUseCase {
   name?: string;
   lastName?: string;
   username?: string;
@@ -71,7 +58,5 @@ export interface UpdateUserDto {
 
 export interface UserUidResult {
   uid: string;
-  photo?: {
-    uid: string;
-  };
+  photo?: { uid: string };
 }

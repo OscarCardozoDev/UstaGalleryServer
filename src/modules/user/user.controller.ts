@@ -10,64 +10,70 @@ import {
   Patch,
   Param,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { CurrentUser } from 'src/decorators/currentUser';
-import { UserService } from './user.service';
-import { CreateUserUseCase, UpdateUserDto } from './user.interface';
+import { UserService } from './User.service';
+import { CreateUserDto, UpdateUserDto, UpdateUserPhotoDto } from './User.dto';
 import { JwtPayload } from 'src/interface/jwtPayload';
 import { AuthGuard } from 'src/middleware/jwt.guard';
+import { Roles } from 'src/decorators/roles.decorator';
 
+@ApiTags('user')
 @UseGuards(AuthGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  /**
-   * Crear usuario con foto opcional
-   */
-  @UseGuards(AuthGuard)
   @Post('create')
+  @ApiOperation({ summary: 'Crear perfil de usuario' })
   @HttpCode(HttpStatus.CREATED)
   async createUser(
-    @Body() body: CreateUserUseCase,
+    @Body() body: CreateUserDto,
     @CurrentUser('uid') uid: string,
   ) {
     return this.userService.createUserUseCase({
-      ...body,
-      uid: uid,
+      uid,
+      user: {
+        name: body.name,
+        lastName: body.lastName,
+        username: body.username,
+        description: body.description,
+        gender: body.gender,
+        idCard: body.idCard,
+        degree: body.degree,
+        semester: body.semester,
+        telNumber: body.telNumber,
+        isProfesor: body.isProfesor,
+        userTypeId: body.userTypeId,
+      },
+      photo: body.photo,
     });
   }
 
-  /**
-   * Obtener todos los usuarios activos
-   */
   @Get('allActive')
+  @ApiOperation({ summary: 'Obtener todos los usuarios activos' })
+  @Roles('admin', 'professor')
   @HttpCode(HttpStatus.OK)
   async getActiveUsers() {
     return this.userService.getActiveUsers();
   }
 
-  /**
-   * Obtener usuario actual (del token JWT)
-   */
   @Get('me')
+  @ApiOperation({ summary: 'Obtener usuario actual' })
   @HttpCode(HttpStatus.OK)
   async getCurrentUser(@CurrentUser() user: JwtPayload) {
     return this.userService.getUser(user.uid);
   }
 
-  /**
-   * Obtener usuario por UID
-   */
   @Get(':uid')
+  @ApiOperation({ summary: 'Obtener usuario por UID' })
   @HttpCode(HttpStatus.OK)
   async getUser(@Param('uid') uid: string) {
     return this.userService.getUser(uid);
   }
 
-  /**
-   * Actualizar datos del usuario actual
-   */
   @Put('update')
+  @ApiOperation({ summary: 'Actualizar usuario actual' })
   @HttpCode(HttpStatus.OK)
   async updateCurrentUser(
     @CurrentUser() user: JwtPayload,
@@ -76,61 +82,53 @@ export class UserController {
     return this.userService.updateUser(user.uid, body);
   }
 
-  /**
-   * Actualizar datos de un usuario específico (admin)
-   */
   @Put(':uid')
+  @ApiOperation({ summary: 'Actualizar usuario por UID (admin)' })
+  @Roles('admin')
   @HttpCode(HttpStatus.OK)
   async updateUser(@Param('uid') uid: string, @Body() body: UpdateUserDto) {
     return this.userService.updateUser(uid, body);
   }
 
-  /**
-   * Actualizar foto del usuario actual
-   */
   @Patch('photo')
+  @ApiOperation({ summary: 'Actualizar foto del usuario actual' })
   @HttpCode(HttpStatus.OK)
   async updateCurrentUserPhoto(
     @CurrentUser() user: JwtPayload,
-    @Body() body: { base64: string; name: string; folder: string },
+    @Body() body: UpdateUserPhotoDto,
   ) {
     return this.userService.updateUserPhoto(user.uid, body);
   }
 
-  /**
-   * Actualizar foto de un usuario específico (admin)
-   */
   @Patch(':uid/photo')
+  @ApiOperation({ summary: 'Actualizar foto de usuario por UID (admin)' })
+  @Roles('admin')
   @HttpCode(HttpStatus.OK)
   async updateUserPhoto(
     @Param('uid') uid: string,
-    @Body() body: { base64: string; name: string; folder: string },
+    @Body() body: UpdateUserPhotoDto,
   ) {
     return this.userService.updateUserPhoto(uid, body);
   }
 
-  /**
-   * Desactivar usuario actual (soft delete)
-   */
   @Patch('desactivate')
+  @ApiOperation({ summary: 'Desactivar usuario actual' })
   @HttpCode(HttpStatus.OK)
   async deactivateCurrentUser(@CurrentUser() user: JwtPayload) {
     return this.userService.deactivateUser(user.uid);
   }
 
-  /**
-   * Desactivar usuario específico (admin)
-   */
   @Patch(':uid/desactivate')
+  @ApiOperation({ summary: 'Desactivar usuario por UID (admin)' })
+  @Roles('admin')
   @HttpCode(HttpStatus.OK)
   async deactivateUser(@Param('uid') uid: string) {
     return this.userService.deactivateUser(uid);
   }
 
-  /**
-   * Reactivar usuario
-   */
   @Patch(':uid/reactivate')
+  @ApiOperation({ summary: 'Reactivar usuario (admin)' })
+  @Roles('admin')
   @HttpCode(HttpStatus.OK)
   async reactivateUser(@Param('uid') uid: string) {
     return this.userService.reactivateUser(uid);
