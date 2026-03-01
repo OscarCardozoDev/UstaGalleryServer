@@ -5,6 +5,7 @@ import {
   CreateProductUseCase,
   GetProductsOptions,
   UpdateProductUseCase,
+  UpdateStatusUseCase,
 } from './Product.interface';
 import { PhotosService } from 'src/modules/photos/Photos.service';
 
@@ -151,6 +152,7 @@ export class ProductService {
       skip: (page - 1) * limit,
       take: limit,
       orderBy: { createdAt: 'desc' },
+      where: { isActive: true, status: 'APPROVED' },
       select: {
         uid: true,
         name: true,
@@ -342,6 +344,20 @@ export class ProductService {
       }
 
       return { uid: productId };
+    });
+  }
+
+  async updateStatus(data: UpdateStatusUseCase) {
+    return this.prisma.products.update({
+      where: { uid: data.uid },
+      data: { status: data.status, feedback: data.feedback ?? null },
+    });
+  }
+
+  async approveMany(productIds: string[]) {
+    return this.prisma.products.updateMany({
+      where: { uid: { in: productIds }, status: 'PENDING' },
+      data: { status: 'APPROVED' },
     });
   }
 

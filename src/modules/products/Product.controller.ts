@@ -3,15 +3,20 @@ import {
   Get,
   Post,
   Put,
+  Patch,
   Body,
   Param,
   Query,
   NotFoundException,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { Roles } from 'src/decorators/roles.decorator';
 import { ProductService } from './Product.service';
 import {
   CreateProductDto,
+  ApproveManyDto,
+  UpdateProductStatusDto,
   UpdateProductDto,
   GetProductsDto,
   ProductParamsDto,
@@ -22,8 +27,11 @@ import {
 export class ProductController {
   constructor(private readonly productsService: ProductService) {}
 
+  // ─── CREATE ───────────────────────────────────────────────────────────────
+
   @Post('create')
   @ApiOperation({ summary: 'Crear una obra' })
+  @Roles('student', 'professor')
   async create(@Body() body: CreateProductDto) {
     return this.productsService.createProductUseCase({
       product: {
@@ -40,18 +48,19 @@ export class ProductController {
     });
   }
 
+  // ─── READ ─────────────────────────────────────────────────────────────────
+
   @Get('getAll')
   @ApiOperation({ summary: 'Obtener todas las obras paginadas' })
+  @Roles('professor')
   async getAll(@Query() query: GetProductsDto) {
     return this.productsService.getAll(query);
   }
 
-  @Get('get/:uid')
-  @ApiOperation({ summary: 'Obtener obra por ID' })
-  async getById(@Param() params: ProductParamsDto) {
-    const product = await this.productsService.getById(params.uid);
-    if (!product) throw new NotFoundException('Product not found');
-    return product;
+  @Get('getGalleryHome')
+  @ApiOperation({ summary: 'Obtener obras para galería home' })
+  async getGalleryHome(@Query() query: GetProductsDto) {
+    return this.productsService.getGalleryHome(query);
   }
 
   @Get('getGroup/:uid')
@@ -72,13 +81,39 @@ export class ProductController {
     return this.productsService.getAllByAuthor(authorId, query);
   }
 
-  @Get('getGalleryHome')
-  @ApiOperation({ summary: 'Obtener obras para galería home' })
-  async getGalleryHome(@Query() query: GetProductsDto) {
-    return this.productsService.getGalleryHome(query);
+  @Get('get/:uid')
+  @ApiOperation({ summary: 'Obtener obra por ID' })
+  async getById(@Param() params: ProductParamsDto) {
+    const product = await this.productsService.getById(params.uid);
+    if (!product) throw new NotFoundException('Product not found');
+    return product;
+  }
+
+  // ─── UPDATE ───────────────────────────────────────────────────────────────
+
+  @Put('approveMany')
+  @Roles('professor')
+  @ApiOperation({ summary: 'Aprobar varias obras seleccionadas a la vez' })
+  approveManyProducts(@Body() dto: ApproveManyDto) {
+    return this.productsService.approveMany(dto.productIds);
+  }
+
+  @Patch('status/:uid')
+  @Roles('professor')
+  @ApiOperation({ summary: 'Aprobar o negar una obra individual' })
+  updateProductStatus(
+    @Param('uid', new ParseUUIDPipe()) uid: string,
+    @Body() dto: UpdateProductStatusDto,
+  ) {
+    return this.productsService.updateStatus({
+      uid,
+      status: dto.status,
+      feedback: dto.feedback,
+    });
   }
 
   @Put('update/:uid')
+  @Roles('student', 'professor')
   @ApiOperation({ summary: 'Actualizar una obra' })
   async update(
     @Param() params: ProductParamsDto,

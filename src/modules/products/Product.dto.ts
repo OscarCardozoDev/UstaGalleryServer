@@ -6,8 +6,12 @@ import {
   IsNumber,
   IsBoolean,
   IsArray,
+  IsEnum,
+  MaxLength,
+  ValidateIf,
   ValidateNested,
 } from 'class-validator';
+import { ProductStatus } from './Product.interface';
 
 export class ProductAuthorDto {
   @ApiProperty({ example: 'aa35ee0c-f81a-4739-aa4c-af4cdfa820d3' })
@@ -101,6 +105,39 @@ export class CreateProductDto {
   @ValidateNested({ each: true })
   @Type(() => ProductImageDto)
   images?: ProductImageDto[];
+}
+
+// ─── Actualizar status de UNA obra (aprobar o negar) ─────────────────────────
+// El uid viene del @Param, no del body.
+// feedback es requerido solo cuando status === 'REJECTED'.
+
+export class UpdateProductStatusDto {
+  @ApiProperty({ enum: ProductStatus, example: ProductStatus.APPROVED })
+  @IsEnum(ProductStatus)
+  status: ProductStatus;
+
+  @ApiPropertyOptional({ example: 'La resolución de la imagen es muy baja.' })
+  @ValidateIf((o) => o.status === ProductStatus.REJECTED)
+  @IsString()
+  @MaxLength(300)
+  feedback: string;
+}
+
+// ─── Aprobar VARIAS obras a la vez ───────────────────────────────────────────
+// No necesita status: siempre es APPROVED.
+// El frontend manda solo los UIDs seleccionados.
+
+export class ApproveManyDto {
+  @ApiProperty({
+    type: [String],
+    example: [
+      'aa35ee0c-f81a-4739-aa4c-af4cdfa820d3',
+      'b4fa2024-0da5-49a9-bc29-2417515e118c',
+    ],
+  })
+  @IsArray()
+  @IsString({ each: true })
+  productIds: string[];
 }
 
 export class UpdateProductDto {
