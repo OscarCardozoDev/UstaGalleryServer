@@ -9,6 +9,12 @@ export interface ProductParams {
   uid: string;
 }
 
+export enum ProductStatus {
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  PENDING = 'PENDING',
+}
+
 export class GetProductsOptions {
   @IsOptional()
   @Transform(({ value }) => Number(value))
@@ -60,4 +66,10 @@ export interface UpdateProductUseCase {
     base64: string;
     isMain?: boolean;
   };
+}
+
+export interface UpdateStatusUseCase {
+  uid: string;
+  status: ProductStatus;
+  feedback?: string;
 }
