@@ -92,7 +92,6 @@ export class GroupController {
   }
 
   @Get('student/get/:groupId')
-  @Roles('admin', 'professor')
   @ApiOperation({ summary: 'Obtener estudiantes de un grupo' })
   async getAllStudents(@Param('groupId') groupId: string) {
     return this.groupService.getAllStudentsByGroup(groupId);

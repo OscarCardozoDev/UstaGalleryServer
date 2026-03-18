@@ -130,8 +130,20 @@ export class ProductService {
       take: limit,
       orderBy: { createdAt: 'desc' },
       include: {
+        authors: {
+          select: {
+            isAuthor: true,
+            user: {
+              select: {
+                name: true,
+                lastName: true,
+              },
+            },
+          },
+        },
         photos: {
           select: {
+            isMain: true,
             photo: {
               select: {
                 uid: true,
@@ -176,6 +188,12 @@ export class ProductService {
     const product = await this.prisma.products.findUnique({
       where: { uid },
       include: {
+        authors: {
+          select: {
+            isAuthor: true,
+            userId: true,
+          },
+        },
         photos: {
           select: {
             photo: {
@@ -219,6 +237,12 @@ export class ProductService {
             isMain: true,
           },
         },
+        authors: {
+          select: {
+            isAuthor: true,
+            userId: true,
+          },
+        },
       },
     });
   }
@@ -246,6 +270,12 @@ export class ProductService {
                 url: true,
               },
             },
+          },
+        },
+        authors: {
+          select: {
+            isAuthor: true,
+            userId: true,
           },
         },
       },

@@ -51,8 +51,8 @@ export class ProductController {
   // ─── READ ─────────────────────────────────────────────────────────────────
 
   @Get('getAll')
-  @ApiOperation({ summary: 'Obtener todas las obras paginadas' })
-  @Roles('professor')
+  @ApiOperation({ summary: 'Obtener todos los productos paginadas' })
+  @Roles('admin')
   async getAll(@Query() query: GetProductsDto) {
     return this.productsService.getAll(query);
   }
@@ -64,6 +64,7 @@ export class ProductController {
   }
 
   @Get('getGroup/:uid')
+  @Roles('admin', 'professor')
   @ApiOperation({ summary: 'Obtener obras por grupo' })
   async getAllByGroup(
     @Param('uid') groupId: string,

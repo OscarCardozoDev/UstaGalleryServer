@@ -10,7 +10,10 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AuthenticatedRequest, JwtPayload } from 'src/interface/jwtPayload';
+import type {
+  AuthenticatedRequest,
+  JwtPayload,
+} from 'src/interface/jwtPayload';
 import { ROLES_KEY, RoleName } from 'src/decorators/roles.decorator';
 
 @Injectable()
