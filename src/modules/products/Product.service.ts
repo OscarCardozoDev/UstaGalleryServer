@@ -6,6 +6,7 @@ import {
   GetProductsOptions,
   UpdateProductUseCase,
   UpdateStatusUseCase,
+  ProductStatus,
 } from './Product.interface';
 import { PhotosService } from 'src/modules/photos/Photos.service';
 
@@ -38,7 +39,7 @@ export class ProductService {
       for (const image of images) {
         const photo = await this.photosService.createPhotoUseCase({
           base64: image.base64,
-          name: image.name,
+          name: product.name,
           folder: image.folder,
         });
 
@@ -206,6 +207,11 @@ export class ProductService {
             isMain: true,
           },
         },
+        styles: {
+          select: {
+            styleId: true,
+          },
+        },
       },
     });
 
@@ -286,7 +292,7 @@ export class ProductService {
    * UPDATE
    * ========================= */
   async updateProductUseCase(data: UpdateProductUseCase) {
-    const { productId, data: updateData, image, styles } = data;
+    const { productId, data: updateData, images, styles } = data;
 
     const product = await this.prisma.products.findUnique({
       where: { uid: productId },
@@ -296,29 +302,42 @@ export class ProductService {
             uid: true,
             photoId: true,
             isMain: true,
+            photo: {
+              select: { uid: true },
+            },
           },
         },
       },
     });
 
-    if (!product) {
-      throw new NotFoundException('Product not found');
-    }
+    if (!product) throw new NotFoundException('Product not found');
 
     /**
-     * FASE 1️⃣ — Imagen (fuera de transacción)
-     * Solo se reemplaza el binario
+     * FASE 1️⃣ — Sincronización de imágenes (fuera de transacción)
      */
-    if (image) {
-      const mainPhoto = product.photos.find((p) => p.isMain);
+    if (images && images.length > 0) {
+      const incomingExistingUids = images
+        .filter((img) => img.isExisting && img.uid)
+        .map((img) => img.uid!);
 
-      if (!mainPhoto) {
-        throw new NotFoundException('Main product photo not found');
+      // Fotos que estaban en BD pero el usuario eliminó
+      const toDelete = product.photos.filter(
+        (p) => !incomingExistingUids.includes(p.photo.uid),
+      );
+
+      // Eliminar del storage y BD
+      for (const photo of toDelete) {
+        await this.photosService.deletePhotoUseCase(photo.photoId);
       }
 
-      await this.photosService.updatePhotoUseCase(mainPhoto.photoId, {
-        base64: image.base64,
-      });
+      // Crear fotos nuevas
+      for (const img of images.filter((i) => !i.isExisting)) {
+        await this.photosService.createPhotoUseCase({
+          base64: img.base64!,
+          name: img.name!,
+          folder: img.folder ?? 'products',
+        });
+      }
     }
 
     /* Convierte el precio de number a Decimal si está definido */
@@ -337,37 +356,39 @@ export class ProductService {
       // 1️⃣ Update producto
       await tx.products.update({
         where: { uid: productId },
-        data: parsedData,
+        data: {
+          ...parsedData,
+          status: ProductStatus.PENDING,
+          feedback: null,
+        },
       });
 
-      // 2️⃣ Update relación imagen (isMain)
-      if (image?.isMain !== undefined) {
+      // 2️⃣ Sincronizar isMain de fotos
+      if (images && images.length > 0) {
         await tx.productPhoto.updateMany({
           where: { productId },
           data: { isMain: false },
         });
 
-        const mainPhoto = product.photos.find((p) => p.isMain);
-        if (mainPhoto) {
-          await tx.productPhoto.update({
-            where: { uid: mainPhoto.uid },
-            data: { isMain: image.isMain },
+        const mainImage = images.find((img) => img.isMain);
+        if (mainImage?.uid) {
+          await tx.productPhoto.updateMany({
+            where: {
+              productId,
+              photo: { uid: mainImage.uid },
+            },
+            data: { isMain: true },
           });
         }
       }
 
       // 3️⃣ Estilos
       if (styles) {
-        await tx.productStyle.deleteMany({
-          where: { productId },
-        });
+        await tx.productStyle.deleteMany({ where: { productId } });
 
         if (styles.length) {
           await tx.productStyle.createMany({
-            data: styles.map((styleId) => ({
-              productId,
-              styleId,
-            })),
+            data: styles.map((styleId) => ({ productId, styleId })),
             skipDuplicates: true,
           });
         }
@@ -376,7 +397,6 @@ export class ProductService {
       return { uid: productId };
     });
   }
-
   async updateStatus(data: UpdateStatusUseCase) {
     return this.prisma.products.update({
       where: { uid: data.uid },

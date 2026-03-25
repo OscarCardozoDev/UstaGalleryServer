@@ -51,6 +51,15 @@ export interface CreateProductUseCase {
   }[];
 }
 
+export interface UpdateProductImageUseCase {
+  uid?: string;
+  base64?: string;
+  name?: string;
+  folder?: string;
+  isMain: boolean;
+  isExisting: boolean;
+}
+
 export interface UpdateProductUseCase {
   productId: string;
   data: {
@@ -58,14 +67,14 @@ export interface UpdateProductUseCase {
     description?: string;
     price?: number;
     madeAt?: Date;
-    groupId?: string;
     isSold?: boolean;
   };
+  authors?: {
+    userId: string;
+    isAuthor: boolean;
+  }[];
   styles?: string[];
-  image?: {
-    base64: string;
-    isMain?: boolean;
-  };
+  images?: UpdateProductImageUseCase[];
 }
 
 export interface UpdateStatusUseCase {

@@ -140,6 +140,37 @@ export class ApproveManyDto {
   productIds: string[];
 }
 
+// ─── DTO para imágenes en el update ──────────────────────────────────────────
+export class UpdateProductImageDto {
+  @ApiPropertyOptional({ example: 'uuid-foto' })
+  @IsOptional()
+  @IsString()
+  uid?: string;
+
+  @ApiPropertyOptional({ example: '/9j/4AAQSkZJRgAB...' })
+  @IsOptional()
+  @IsString()
+  base64?: string;
+
+  @ApiPropertyOptional({ example: 'foto.jpg' })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiPropertyOptional({ example: 'products' })
+  @IsOptional()
+  @IsString()
+  folder?: string;
+
+  @ApiProperty({ example: true })
+  @IsBoolean()
+  isMain: boolean;
+
+  @ApiProperty({ example: false })
+  @IsBoolean()
+  isExisting: boolean;
+}
+
 export class UpdateProductDto {
   @ApiPropertyOptional({ example: 'Nuevo nombre' })
   @IsOptional()
@@ -161,11 +192,6 @@ export class UpdateProductDto {
   @IsString()
   madeAt?: string;
 
-  @ApiPropertyOptional({ example: 'uuid-del-grupo' })
-  @IsOptional()
-  @IsString()
-  groupId?: string;
-
   @ApiPropertyOptional({ example: false })
   @IsOptional()
   @IsBoolean()
@@ -177,13 +203,17 @@ export class UpdateProductDto {
   @IsString({ each: true })
   styles?: string[];
 
-  @ApiPropertyOptional({ example: '/9j/4AAQSkZJRgAB...' })
+  @ApiPropertyOptional({ type: [ProductAuthorDto] })
   @IsOptional()
-  @IsString()
-  base64?: string;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ProductAuthorDto)
+  authors?: ProductAuthorDto[];
 
-  @ApiPropertyOptional({ example: true })
+  @ApiPropertyOptional({ type: [UpdateProductImageDto] })
   @IsOptional()
-  @IsBoolean()
-  isMain?: boolean;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => UpdateProductImageDto)
+  images?: UpdateProductImageDto[];
 }

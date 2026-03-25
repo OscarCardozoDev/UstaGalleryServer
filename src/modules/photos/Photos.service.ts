@@ -44,16 +44,23 @@ export class PhotosService {
 
   async createPhotoUseCase(params: CreatePhotoUseCase): Promise<PhotoResponse> {
     const { base64, name, folder } = params;
-
+    let fileResult: { url: string };
     const { buffer, extension } = this.base64ToBuffer(base64);
 
-    const fileName = name.includes('.') ? name : `${uuidv4()}.${extension}`;
+    const uid = uuidv4();
+    const fileName = name.includes('.')
+      ? `${uid}_${name}`
+      : `${uid}_${name}.${extension}`;
 
-    const fileResult = await photoManagment.save({
-      fileBuffer: buffer,
-      fileName,
-      folderPath: folder,
-    });
+    try {
+      fileResult = await photoManagment.save({
+        fileBuffer: buffer,
+        fileName,
+        folderPath: folder,
+      });
+    } catch {
+      throw new Error('Error saving photo to storage');
+    }
 
     const photo = await this.prisma.photos.create({
       data: {
@@ -131,9 +138,10 @@ export class PhotosService {
       throw new NotFoundException('Photo not found');
     }
 
-    const [, , ...parts] = photo.url!.split('/');
-    const fileName = parts.pop()!;
-    const folderPath = parts.join('/');
+    const url = new URL(photo.url!);
+    const segments = url.pathname.split('/').filter(Boolean);
+    const fileName = segments.pop()!;
+    const folderPath = segments.join('/');
 
     await photoManagment.remove(fileName, folderPath);
 

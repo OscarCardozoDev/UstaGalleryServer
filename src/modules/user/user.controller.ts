@@ -60,6 +60,7 @@ export class UserController {
 
   @Get('me')
   @ApiOperation({ summary: 'Obtener usuario actual' })
+  @UseGuards(AuthGuard)
   @Roles('admin', 'professor', 'student')
   @HttpCode(HttpStatus.OK)
   async getCurrentUser(@CurrentUser() user: JwtPayload) {

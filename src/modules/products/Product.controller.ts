@@ -127,13 +127,11 @@ export class ProductController {
         description: body.description,
         price: body.price,
         madeAt: body.madeAt ? new Date(body.madeAt) : undefined,
-        groupId: body.groupId,
         isSold: body.isSold,
       },
+      authors: body.authors,
       styles: body.styles,
-      image: body.base64
-        ? { base64: body.base64, isMain: body.isMain }
-        : undefined,
+      images: body.images,
     });
   }
 }
