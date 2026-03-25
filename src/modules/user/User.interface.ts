@@ -15,6 +15,16 @@ export interface User {
   photoId?: string | null;
 }
 
+export interface AuthorInfo {
+  uid: string;
+  name: string;
+  lastName: string;
+  username: string;
+  description?: string | null;
+  photoId?: string | null;
+  photo?: { uid: string; url?: string } | null;
+}
+
 export interface UserWithRelations extends User {
   userType?: { uid: string; name?: string } | null;
   photo?: { uid: string; url?: string } | null;

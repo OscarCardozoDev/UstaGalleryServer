@@ -5,6 +5,7 @@ import {
   CreateUserUseCase,
   UserWithRelations,
   UserUidResult,
+  AuthorInfo,
 } from './User.interface';
 import { UpdateUserDto } from './User.dto';
 
@@ -109,6 +110,37 @@ export class UserService {
                 name: true,
               },
             },
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with uid ${uid} not found`);
+    }
+
+    return user;
+  }
+
+  /**
+   * ========================
+   * GET INFO OF THE USER AS AUTHOR
+   * ========================
+   */
+  async getInfoAuthor(uid: string): Promise<AuthorInfo> {
+    const user = await this.prismaService.users.findUnique({
+      where: { uid },
+      select: {
+        uid: true,
+        name: true,
+        lastName: true,
+        username: true,
+        description: true,
+        photoId: true,
+        photo: {
+          select: {
+            uid: true,
+            url: true,
           },
         },
       },
