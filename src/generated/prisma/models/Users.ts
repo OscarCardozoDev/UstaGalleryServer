@@ -283,6 +283,7 @@ export type UsersWhereInput = {
   groups?: Prisma.UsersGroupsListRelationFilter
   products?: Prisma.UserProductListRelationFilter
   managedGroups?: Prisma.GroupsListRelationFilter
+  createdEvents?: Prisma.EventsListRelationFilter
 }
 
 export type UsersOrderByWithRelationInput = {
@@ -308,6 +309,7 @@ export type UsersOrderByWithRelationInput = {
   groups?: Prisma.UsersGroupsOrderByRelationAggregateInput
   products?: Prisma.UserProductOrderByRelationAggregateInput
   managedGroups?: Prisma.GroupsOrderByRelationAggregateInput
+  createdEvents?: Prisma.EventsOrderByRelationAggregateInput
 }
 
 export type UsersWhereUniqueInput = Prisma.AtLeast<{
@@ -336,6 +338,7 @@ export type UsersWhereUniqueInput = Prisma.AtLeast<{
   groups?: Prisma.UsersGroupsListRelationFilter
   products?: Prisma.UserProductListRelationFilter
   managedGroups?: Prisma.GroupsListRelationFilter
+  createdEvents?: Prisma.EventsListRelationFilter
 }, "uid" | "uid" | "username" | "idCard" | "photoId">
 
 export type UsersOrderByWithAggregationInput = {
@@ -405,6 +408,7 @@ export type UsersCreateInput = {
   groups?: Prisma.UsersGroupsCreateNestedManyWithoutUserInput
   products?: Prisma.UserProductCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
+  createdEvents?: Prisma.EventsCreateNestedManyWithoutCreatedByInput
 }
 
 export type UsersUncheckedCreateInput = {
@@ -428,6 +432,7 @@ export type UsersUncheckedCreateInput = {
   groups?: Prisma.UsersGroupsUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.UserProductUncheckedCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsUncheckedCreateNestedManyWithoutProfesorInput
+  createdEvents?: Prisma.EventsUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UsersUpdateInput = {
@@ -451,6 +456,7 @@ export type UsersUpdateInput = {
   groups?: Prisma.UsersGroupsUpdateManyWithoutUserNestedInput
   products?: Prisma.UserProductUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
+  createdEvents?: Prisma.EventsUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UsersUncheckedUpdateInput = {
@@ -474,6 +480,7 @@ export type UsersUncheckedUpdateInput = {
   groups?: Prisma.UsersGroupsUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.UserProductUncheckedUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUncheckedUpdateManyWithoutProfesorNestedInput
+  createdEvents?: Prisma.EventsUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UsersCreateManyInput = {
@@ -728,6 +735,20 @@ export type UsersUncheckedUpdateOneWithoutPhotoNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UsersUpdateToOneWithWhereWithoutPhotoInput, Prisma.UsersUpdateWithoutPhotoInput>, Prisma.UsersUncheckedUpdateWithoutPhotoInput>
 }
 
+export type UsersCreateNestedOneWithoutCreatedEventsInput = {
+  create?: Prisma.XOR<Prisma.UsersCreateWithoutCreatedEventsInput, Prisma.UsersUncheckedCreateWithoutCreatedEventsInput>
+  connectOrCreate?: Prisma.UsersCreateOrConnectWithoutCreatedEventsInput
+  connect?: Prisma.UsersWhereUniqueInput
+}
+
+export type UsersUpdateOneRequiredWithoutCreatedEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UsersCreateWithoutCreatedEventsInput, Prisma.UsersUncheckedCreateWithoutCreatedEventsInput>
+  connectOrCreate?: Prisma.UsersCreateOrConnectWithoutCreatedEventsInput
+  upsert?: Prisma.UsersUpsertWithoutCreatedEventsInput
+  connect?: Prisma.UsersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsersUpdateToOneWithWhereWithoutCreatedEventsInput, Prisma.UsersUpdateWithoutCreatedEventsInput>, Prisma.UsersUncheckedUpdateWithoutCreatedEventsInput>
+}
+
 export type UsersCreateNestedOneWithoutProductsInput = {
   create?: Prisma.XOR<Prisma.UsersCreateWithoutProductsInput, Prisma.UsersUncheckedCreateWithoutProductsInput>
   connectOrCreate?: Prisma.UsersCreateOrConnectWithoutProductsInput
@@ -762,6 +783,7 @@ export type UsersCreateWithoutUserTypeInput = {
   groups?: Prisma.UsersGroupsCreateNestedManyWithoutUserInput
   products?: Prisma.UserProductCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
+  createdEvents?: Prisma.EventsCreateNestedManyWithoutCreatedByInput
 }
 
 export type UsersUncheckedCreateWithoutUserTypeInput = {
@@ -784,6 +806,7 @@ export type UsersUncheckedCreateWithoutUserTypeInput = {
   groups?: Prisma.UsersGroupsUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.UserProductUncheckedCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsUncheckedCreateNestedManyWithoutProfesorInput
+  createdEvents?: Prisma.EventsUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UsersCreateOrConnectWithoutUserTypeInput = {
@@ -855,6 +878,7 @@ export type UsersCreateWithoutManagedGroupsInput = {
   photo?: Prisma.PhotosCreateNestedOneWithoutUserInput
   groups?: Prisma.UsersGroupsCreateNestedManyWithoutUserInput
   products?: Prisma.UserProductCreateNestedManyWithoutUserInput
+  createdEvents?: Prisma.EventsCreateNestedManyWithoutCreatedByInput
 }
 
 export type UsersUncheckedCreateWithoutManagedGroupsInput = {
@@ -877,6 +901,7 @@ export type UsersUncheckedCreateWithoutManagedGroupsInput = {
   finishAt?: Date | string | null
   groups?: Prisma.UsersGroupsUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.UserProductUncheckedCreateNestedManyWithoutUserInput
+  createdEvents?: Prisma.EventsUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UsersCreateOrConnectWithoutManagedGroupsInput = {
@@ -915,6 +940,7 @@ export type UsersUpdateWithoutManagedGroupsInput = {
   photo?: Prisma.PhotosUpdateOneWithoutUserNestedInput
   groups?: Prisma.UsersGroupsUpdateManyWithoutUserNestedInput
   products?: Prisma.UserProductUpdateManyWithoutUserNestedInput
+  createdEvents?: Prisma.EventsUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UsersUncheckedUpdateWithoutManagedGroupsInput = {
@@ -937,6 +963,7 @@ export type UsersUncheckedUpdateWithoutManagedGroupsInput = {
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   groups?: Prisma.UsersGroupsUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.UserProductUncheckedUpdateManyWithoutUserNestedInput
+  createdEvents?: Prisma.EventsUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UsersCreateWithoutGroupsInput = {
@@ -959,6 +986,7 @@ export type UsersCreateWithoutGroupsInput = {
   photo?: Prisma.PhotosCreateNestedOneWithoutUserInput
   products?: Prisma.UserProductCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
+  createdEvents?: Prisma.EventsCreateNestedManyWithoutCreatedByInput
 }
 
 export type UsersUncheckedCreateWithoutGroupsInput = {
@@ -981,6 +1009,7 @@ export type UsersUncheckedCreateWithoutGroupsInput = {
   finishAt?: Date | string | null
   products?: Prisma.UserProductUncheckedCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsUncheckedCreateNestedManyWithoutProfesorInput
+  createdEvents?: Prisma.EventsUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UsersCreateOrConnectWithoutGroupsInput = {
@@ -1019,6 +1048,7 @@ export type UsersUpdateWithoutGroupsInput = {
   photo?: Prisma.PhotosUpdateOneWithoutUserNestedInput
   products?: Prisma.UserProductUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
+  createdEvents?: Prisma.EventsUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UsersUncheckedUpdateWithoutGroupsInput = {
@@ -1041,6 +1071,7 @@ export type UsersUncheckedUpdateWithoutGroupsInput = {
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   products?: Prisma.UserProductUncheckedUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUncheckedUpdateManyWithoutProfesorNestedInput
+  createdEvents?: Prisma.EventsUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UsersCreateWithoutPhotoInput = {
@@ -1063,6 +1094,7 @@ export type UsersCreateWithoutPhotoInput = {
   groups?: Prisma.UsersGroupsCreateNestedManyWithoutUserInput
   products?: Prisma.UserProductCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
+  createdEvents?: Prisma.EventsCreateNestedManyWithoutCreatedByInput
 }
 
 export type UsersUncheckedCreateWithoutPhotoInput = {
@@ -1085,6 +1117,7 @@ export type UsersUncheckedCreateWithoutPhotoInput = {
   groups?: Prisma.UsersGroupsUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.UserProductUncheckedCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsUncheckedCreateNestedManyWithoutProfesorInput
+  createdEvents?: Prisma.EventsUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UsersCreateOrConnectWithoutPhotoInput = {
@@ -1123,6 +1156,7 @@ export type UsersUpdateWithoutPhotoInput = {
   groups?: Prisma.UsersGroupsUpdateManyWithoutUserNestedInput
   products?: Prisma.UserProductUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
+  createdEvents?: Prisma.EventsUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UsersUncheckedUpdateWithoutPhotoInput = {
@@ -1139,6 +1173,115 @@ export type UsersUncheckedUpdateWithoutPhotoInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  groups?: Prisma.UsersGroupsUncheckedUpdateManyWithoutUserNestedInput
+  products?: Prisma.UserProductUncheckedUpdateManyWithoutUserNestedInput
+  managedGroups?: Prisma.GroupsUncheckedUpdateManyWithoutProfesorNestedInput
+  createdEvents?: Prisma.EventsUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UsersCreateWithoutCreatedEventsInput = {
+  uid: string
+  name: string
+  lastName: string
+  username: string
+  description?: string | null
+  gender: string
+  idCard: string
+  degree: string
+  semester: string
+  telNumber: string
+  isActive?: boolean
+  isProfesor?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  finishAt?: Date | string | null
+  userType: Prisma.UserTypesCreateNestedOneWithoutUsersInput
+  photo?: Prisma.PhotosCreateNestedOneWithoutUserInput
+  groups?: Prisma.UsersGroupsCreateNestedManyWithoutUserInput
+  products?: Prisma.UserProductCreateNestedManyWithoutUserInput
+  managedGroups?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
+}
+
+export type UsersUncheckedCreateWithoutCreatedEventsInput = {
+  uid: string
+  name: string
+  lastName: string
+  username: string
+  description?: string | null
+  gender: string
+  idCard: string
+  degree: string
+  semester: string
+  telNumber: string
+  isActive?: boolean
+  isProfesor?: boolean
+  userTypeId: string
+  photoId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  finishAt?: Date | string | null
+  groups?: Prisma.UsersGroupsUncheckedCreateNestedManyWithoutUserInput
+  products?: Prisma.UserProductUncheckedCreateNestedManyWithoutUserInput
+  managedGroups?: Prisma.GroupsUncheckedCreateNestedManyWithoutProfesorInput
+}
+
+export type UsersCreateOrConnectWithoutCreatedEventsInput = {
+  where: Prisma.UsersWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsersCreateWithoutCreatedEventsInput, Prisma.UsersUncheckedCreateWithoutCreatedEventsInput>
+}
+
+export type UsersUpsertWithoutCreatedEventsInput = {
+  update: Prisma.XOR<Prisma.UsersUpdateWithoutCreatedEventsInput, Prisma.UsersUncheckedUpdateWithoutCreatedEventsInput>
+  create: Prisma.XOR<Prisma.UsersCreateWithoutCreatedEventsInput, Prisma.UsersUncheckedCreateWithoutCreatedEventsInput>
+  where?: Prisma.UsersWhereInput
+}
+
+export type UsersUpdateToOneWithWhereWithoutCreatedEventsInput = {
+  where?: Prisma.UsersWhereInput
+  data: Prisma.XOR<Prisma.UsersUpdateWithoutCreatedEventsInput, Prisma.UsersUncheckedUpdateWithoutCreatedEventsInput>
+}
+
+export type UsersUpdateWithoutCreatedEventsInput = {
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  idCard?: Prisma.StringFieldUpdateOperationsInput | string
+  degree?: Prisma.StringFieldUpdateOperationsInput | string
+  semester?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userType?: Prisma.UserTypesUpdateOneRequiredWithoutUsersNestedInput
+  photo?: Prisma.PhotosUpdateOneWithoutUserNestedInput
+  groups?: Prisma.UsersGroupsUpdateManyWithoutUserNestedInput
+  products?: Prisma.UserProductUpdateManyWithoutUserNestedInput
+  managedGroups?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
+}
+
+export type UsersUncheckedUpdateWithoutCreatedEventsInput = {
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  idCard?: Prisma.StringFieldUpdateOperationsInput | string
+  degree?: Prisma.StringFieldUpdateOperationsInput | string
+  semester?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
+  photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1167,6 +1310,7 @@ export type UsersCreateWithoutProductsInput = {
   photo?: Prisma.PhotosCreateNestedOneWithoutUserInput
   groups?: Prisma.UsersGroupsCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
+  createdEvents?: Prisma.EventsCreateNestedManyWithoutCreatedByInput
 }
 
 export type UsersUncheckedCreateWithoutProductsInput = {
@@ -1189,6 +1333,7 @@ export type UsersUncheckedCreateWithoutProductsInput = {
   finishAt?: Date | string | null
   groups?: Prisma.UsersGroupsUncheckedCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsUncheckedCreateNestedManyWithoutProfesorInput
+  createdEvents?: Prisma.EventsUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UsersCreateOrConnectWithoutProductsInput = {
@@ -1227,6 +1372,7 @@ export type UsersUpdateWithoutProductsInput = {
   photo?: Prisma.PhotosUpdateOneWithoutUserNestedInput
   groups?: Prisma.UsersGroupsUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
+  createdEvents?: Prisma.EventsUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UsersUncheckedUpdateWithoutProductsInput = {
@@ -1249,6 +1395,7 @@ export type UsersUncheckedUpdateWithoutProductsInput = {
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   groups?: Prisma.UsersGroupsUncheckedUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUncheckedUpdateManyWithoutProfesorNestedInput
+  createdEvents?: Prisma.EventsUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UsersCreateManyUserTypeInput = {
@@ -1290,6 +1437,7 @@ export type UsersUpdateWithoutUserTypeInput = {
   groups?: Prisma.UsersGroupsUpdateManyWithoutUserNestedInput
   products?: Prisma.UserProductUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
+  createdEvents?: Prisma.EventsUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UsersUncheckedUpdateWithoutUserTypeInput = {
@@ -1312,6 +1460,7 @@ export type UsersUncheckedUpdateWithoutUserTypeInput = {
   groups?: Prisma.UsersGroupsUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.UserProductUncheckedUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUncheckedUpdateManyWithoutProfesorNestedInput
+  createdEvents?: Prisma.EventsUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UsersUncheckedUpdateManyWithoutUserTypeInput = {
@@ -1342,12 +1491,14 @@ export type UsersCountOutputType = {
   groups: number
   products: number
   managedGroups: number
+  createdEvents: number
 }
 
 export type UsersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   groups?: boolean | UsersCountOutputTypeCountGroupsArgs
   products?: boolean | UsersCountOutputTypeCountProductsArgs
   managedGroups?: boolean | UsersCountOutputTypeCountManagedGroupsArgs
+  createdEvents?: boolean | UsersCountOutputTypeCountCreatedEventsArgs
 }
 
 /**
@@ -1381,6 +1532,13 @@ export type UsersCountOutputTypeCountManagedGroupsArgs<ExtArgs extends runtime.T
   where?: Prisma.GroupsWhereInput
 }
 
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountCreatedEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EventsWhereInput
+}
+
 
 export type UsersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   uid?: boolean
@@ -1405,6 +1563,7 @@ export type UsersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   groups?: boolean | Prisma.Users$groupsArgs<ExtArgs>
   products?: boolean | Prisma.Users$productsArgs<ExtArgs>
   managedGroups?: boolean | Prisma.Users$managedGroupsArgs<ExtArgs>
+  createdEvents?: boolean | Prisma.Users$createdEventsArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
@@ -1479,6 +1638,7 @@ export type UsersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   groups?: boolean | Prisma.Users$groupsArgs<ExtArgs>
   products?: boolean | Prisma.Users$productsArgs<ExtArgs>
   managedGroups?: boolean | Prisma.Users$managedGroupsArgs<ExtArgs>
+  createdEvents?: boolean | Prisma.Users$createdEventsArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UsersIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1498,6 +1658,7 @@ export type $UsersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     groups: Prisma.$UsersGroupsPayload<ExtArgs>[]
     products: Prisma.$UserProductPayload<ExtArgs>[]
     managedGroups: Prisma.$GroupsPayload<ExtArgs>[]
+    createdEvents: Prisma.$EventsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     uid: string
@@ -1916,6 +2077,7 @@ export interface Prisma__UsersClient<T, Null = never, ExtArgs extends runtime.Ty
   groups<T extends Prisma.Users$groupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Users$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UsersGroupsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   products<T extends Prisma.Users$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Users$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   managedGroups<T extends Prisma.Users$managedGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Users$managedGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdEvents<T extends Prisma.Users$createdEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Users$createdEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2446,6 +2608,30 @@ export type Users$managedGroupsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.GroupsScalarFieldEnum | Prisma.GroupsScalarFieldEnum[]
+}
+
+/**
+ * Users.createdEvents
+ */
+export type Users$createdEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Events
+   */
+  select?: Prisma.EventsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Events
+   */
+  omit?: Prisma.EventsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventsInclude<ExtArgs> | null
+  where?: Prisma.EventsWhereInput
+  orderBy?: Prisma.EventsOrderByWithRelationInput | Prisma.EventsOrderByWithRelationInput[]
+  cursor?: Prisma.EventsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EventsScalarFieldEnum | Prisma.EventsScalarFieldEnum[]
 }
 
 /**

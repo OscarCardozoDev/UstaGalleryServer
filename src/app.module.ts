@@ -9,6 +9,7 @@ import { PhotosModule } from 'src/modules/photos/Photos.module';
 import { StylesModule } from 'src/modules/styles/Styles.module';
 import { GroupModule } from 'src/modules/groups/Group.module';
 import { ProductModule } from 'src/modules/products/Product.module';
+import { EventModule } from 'src/modules/events/Event.module';
 import { join } from 'path';
 
 import configurationApp from 'config/configuration-app';
@@ -33,6 +34,7 @@ import configurationApp from 'config/configuration-app';
     StylesModule,
     GroupModule,
     ProductModule,
+    EventModule,
   ],
   controllers: [],
   providers: [

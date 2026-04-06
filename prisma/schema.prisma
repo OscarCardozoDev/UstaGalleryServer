@@ -25,6 +25,34 @@ enum ProductStatus {
   REJECTED
 }
 
+enum EventStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  COMPLETED
+}
+
+enum EventType {
+  EXHIBITION
+  WORKSHOP
+  PERFORMANCE
+  CONFERENCE
+  OTHER
+}
+
+enum EventPhotoType {
+  HERO
+  PROMO
+  MEMORY
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
 //////////////////////////////////////////////////////
 // USER TYPES
 //////////////////////////////////////////////////////
@@ -44,30 +72,31 @@ model UserTypes {
 //////////////////////////////////////////////////////
 
 model Users {
-  uid         String    @id @unique @db.Uuid
-  name        String    @db.VarChar(30)
-  lastName    String    @db.VarChar(30)
-  username    String    @db.VarChar(30) @unique
-  description String?   @db.VarChar(500)
-  
-  gender      String    @db.VarChar(3)
-  idCard      String    @db.VarChar(12) @unique
-  degree      String    @db.VarChar(120)
-  semester    String    @db.VarChar(2)
-  telNumber   String    @db.VarChar(12)
-  
-  isActive    Boolean   @default(true)
-  isProfesor  Boolean   @default(false)
+  uid            String    @id @unique @db.Uuid
+  name           String    @db.VarChar(30)
+  lastName       String    @db.VarChar(30)
+  username       String    @db.VarChar(30) @unique
+  description    String?   @db.VarChar(500)
+     
+  gender         String    @db.VarChar(3)
+  idCard         String    @db.VarChar(12) @unique
+  degree         String    @db.VarChar(120)
+  semester       String    @db.VarChar(2)
+  telNumber      String    @db.VarChar(12)
+     
+  isActive       Boolean   @default(true)
+  isProfesor     Boolean   @default(false)
 
   // RELACIONES
-  userType    UserTypes @relation(fields: [userTypeId], references: [uid])
-  userTypeId  String    @db.Uuid
-  photo       Photos?   @relation("UserPhoto", fields: [photoId], references: [uid])
-  photoId     String?   @unique @db.Uuid
+  userType       UserTypes @relation(fields: [userTypeId], references: [uid])
+  userTypeId     String    @db.Uuid
+  photo          Photos?   @relation("UserPhoto", fields: [photoId], references: [uid])
+  photoId        String?   @unique @db.Uuid
 
-  groups      UsersGroups[]
-  products    UserProduct[]
-  managedGroups Groups[]  @relation("GroupProfesor")
+  groups         UsersGroups[]
+  products       UserProduct[]
+  managedGroups  Groups[]  @relation("GroupProfesor")
+  createdEvents  Events[]  @relation("EventCreator")
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -89,19 +118,20 @@ model Credentials {
 //////////////////////////////////////////////////////
 
 model Groups {
-  uid         String   @id @default(uuid()) @db.Uuid
-  name        String   @db.VarChar(100) // Ej: "Danza Folclórica"
-  category    Category @default(ARTES)
-  isActive    Boolean  @default(true)
+  uid          String   @id @default(uuid()) @db.Uuid
+  name         String   @db.VarChar(100) // Ej: "Danza Folclórica"
+  category     Category @default(ARTES)
+  isActive     Boolean  @default(true)
 
-  // Profesor (Sin @unique para permitir 1 profesor -> N grupos)
-  profesor    Users    @relation("GroupProfesor", fields: [profesorId], references: [uid])
-  profesorId  String   @db.Uuid
+  // Profesor  (Sin @unique para permitir 1 profesor -> N grupos)
+  profesor     Users    @relation("GroupProfesor", fields: [profesorId], references: [uid])
+  profesorId   String   @db.Uuid
 
-  users       UsersGroups[]
-  products    Products[]
-  events      GroupEvent[]
-  styles      Styles[]
+  users        UsersGroups[]
+  products     Products[]
+  events       GroupEvent[]
+  styles       Styles[]
+  invitations  EventInvitation[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -189,7 +219,7 @@ model ProductStyle {
 model Photos {
   uid        String         @id @default(uuid()) @db.Uuid
   name       String         @db.VarChar(100)
-  url        String         @db.VarChar(300)
+  url        String         @db.VarChar(500)
 
   products   ProductPhoto[]
   events     EventPhoto[]
@@ -218,17 +248,29 @@ model ProductPhoto {
 //////////////////////////////////////////////////////
 
 model Events {
-  uid          String          @id @default(uuid()) @db.Uuid
-  name         String          @db.VarChar(30)
-  description  String
-  date         DateTime
-  isActive     Boolean       @default(true)
+  uid          String      @id @default(uuid()) @db.Uuid
+  name         String      @db.VarChar(100)
+  description  String      @db.VarChar(1000)
+  status       EventStatus @default(PENDING)
+  feedback     String?     @db.VarChar(500)
+  eventType    EventType   @default(EXHIBITION)
+  startDate    DateTime
+  endDate      DateTime?
+  locationUrl  String?     @db.VarChar(500)
+  isVirtual    Boolean     @default(false)
+  streamingUrl String?     @db.VarChar(500)
+  isActive     Boolean     @default(true)
+
+  createdBy    Users       @relation("EventCreator", fields: [createdById], references: [uid])
+  createdById  String      @db.Uuid
 
   products     EventProduct[]
   photos       EventPhoto[]
   groups       GroupEvent[]
+  invitations  EventInvitation[]
 
-  createdAt    DateTime        @default(now())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 }
 
 model EventProduct {
@@ -245,11 +287,27 @@ model EventProduct {
   @@unique([productId, eventId])
 }
 
+model EventInvitation {
+  uid         String           @id @default(uuid()) @db.Uuid
+  eventId     String           @db.Uuid
+  groupId     String           @db.Uuid
+  status      InvitationStatus @default(PENDING)
+
+  event       Events  @relation(fields: [eventId], references: [uid])
+  group       Groups  @relation(fields: [groupId], references: [uid])
+
+  sentAt      DateTime  @default(now())
+  respondedAt DateTime?
+  updatedAt   DateTime  @updatedAt  
+
+  @@unique([eventId, groupId])
+}
+
 model EventPhoto {
-  uid        String   @id @default(uuid()) @db.Uuid
-  eventId    String   @db.Uuid
-  photoId    String   @db.Uuid
-  isHero     Boolean  @default(false)
+  uid        String         @id @default(uuid()) @db.Uuid
+  eventId    String         @db.Uuid
+  photoId    String         @db.Uuid
+  photoType  EventPhotoType @default(PROMO)
 
   event      Events  @relation(fields: [eventId], references: [uid])
   photo      Photos  @relation(fields: [photoId], references: [uid])

@@ -27,8 +27,28 @@ export class SqlInjectionGuard implements CanActivate {
     /SLEEP\s*\(\d+\)/i,
     /WAITFOR\s+DELAY/i,
     /char\s*\(\s*\d+/i,
-    /0x[0-9a-fA-F]+/,
+    /(\s|'|=|\()0x[0-9a-fA-F]{4,}/i,
   ];
+
+  // Campos que pueden contener base64 u otros datos binarios
+  private readonly EXCLUDED_FIELDS = new Set([
+    'image',
+    'photo',
+    'avatar',
+    'file',
+    'thumbnail',
+    'cover',
+    'banner',
+    'picture',
+    'attachment',
+  ]);
+
+  // Detecta si un string parece ser base64 (data URL o base64 puro)
+  private isBase64Like(value: string): boolean {
+    if (value.startsWith('data:') && value.includes(';base64,')) return true;
+    if (value.length > 200 && /^[A-Za-z0-9+/]+=*$/.test(value)) return true;
+    return false;
+  }
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest<Request>();
@@ -51,22 +71,24 @@ export class SqlInjectionGuard implements CanActivate {
   private extractValues(request: Request): string[] {
     const values: string[] = [];
 
-    // Query params: ?name=foo&id=1
     this.collectStrings(request.query, values);
 
-    // Body (JSON, form-data, etc.)
     this.collectStrings(request.body, values);
 
-    // Route params: /users/:id
     this.collectStrings(request.params, values);
 
     return values;
   }
 
-  private collectStrings(obj: unknown, result: string[]): void {
+  private collectStrings(obj: unknown, result: string[], key?: string): void {
     if (obj === null || obj === undefined) return;
 
+    // Saltar campos excluidos por nombre
+    if (key && this.EXCLUDED_FIELDS.has(key.toLowerCase())) return;
+
     if (typeof obj === 'string') {
+      // Saltar strings que parecen base64
+      if (this.isBase64Like(obj)) return;
       result.push(obj);
       return;
     }
@@ -77,12 +99,14 @@ export class SqlInjectionGuard implements CanActivate {
     }
 
     if (Array.isArray(obj)) {
-      obj.forEach((item) => this.collectStrings(item, result));
+      obj.forEach((item) => this.collectStrings(item, result, key));
       return;
     }
 
     if (typeof obj === 'object') {
-      Object.values(obj).forEach((value) => this.collectStrings(value, result));
+      Object.entries(obj).forEach(([k, value]) =>
+        this.collectStrings(value, result, k),
+      );
     }
   }
 

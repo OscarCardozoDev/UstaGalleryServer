@@ -28,7 +28,7 @@ export type EventPhotoMinAggregateOutputType = {
   uid: string | null
   eventId: string | null
   photoId: string | null
-  isHero: boolean | null
+  photoType: $Enums.EventPhotoType | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -37,7 +37,7 @@ export type EventPhotoMaxAggregateOutputType = {
   uid: string | null
   eventId: string | null
   photoId: string | null
-  isHero: boolean | null
+  photoType: $Enums.EventPhotoType | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -46,7 +46,7 @@ export type EventPhotoCountAggregateOutputType = {
   uid: number
   eventId: number
   photoId: number
-  isHero: number
+  photoType: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -57,7 +57,7 @@ export type EventPhotoMinAggregateInputType = {
   uid?: true
   eventId?: true
   photoId?: true
-  isHero?: true
+  photoType?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -66,7 +66,7 @@ export type EventPhotoMaxAggregateInputType = {
   uid?: true
   eventId?: true
   photoId?: true
-  isHero?: true
+  photoType?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -75,7 +75,7 @@ export type EventPhotoCountAggregateInputType = {
   uid?: true
   eventId?: true
   photoId?: true
-  isHero?: true
+  photoType?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -157,7 +157,7 @@ export type EventPhotoGroupByOutputType = {
   uid: string
   eventId: string
   photoId: string
-  isHero: boolean
+  photoType: $Enums.EventPhotoType
   createdAt: Date
   updatedAt: Date
   _count: EventPhotoCountAggregateOutputType | null
@@ -187,7 +187,7 @@ export type EventPhotoWhereInput = {
   uid?: Prisma.UuidFilter<"EventPhoto"> | string
   eventId?: Prisma.UuidFilter<"EventPhoto"> | string
   photoId?: Prisma.UuidFilter<"EventPhoto"> | string
-  isHero?: Prisma.BoolFilter<"EventPhoto"> | boolean
+  photoType?: Prisma.EnumEventPhotoTypeFilter<"EventPhoto"> | $Enums.EventPhotoType
   createdAt?: Prisma.DateTimeFilter<"EventPhoto"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EventPhoto"> | Date | string
   event?: Prisma.XOR<Prisma.EventsScalarRelationFilter, Prisma.EventsWhereInput>
@@ -198,7 +198,7 @@ export type EventPhotoOrderByWithRelationInput = {
   uid?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
-  isHero?: Prisma.SortOrder
+  photoType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   event?: Prisma.EventsOrderByWithRelationInput
@@ -213,7 +213,7 @@ export type EventPhotoWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.EventPhotoWhereInput | Prisma.EventPhotoWhereInput[]
   eventId?: Prisma.UuidFilter<"EventPhoto"> | string
   photoId?: Prisma.UuidFilter<"EventPhoto"> | string
-  isHero?: Prisma.BoolFilter<"EventPhoto"> | boolean
+  photoType?: Prisma.EnumEventPhotoTypeFilter<"EventPhoto"> | $Enums.EventPhotoType
   createdAt?: Prisma.DateTimeFilter<"EventPhoto"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EventPhoto"> | Date | string
   event?: Prisma.XOR<Prisma.EventsScalarRelationFilter, Prisma.EventsWhereInput>
@@ -224,7 +224,7 @@ export type EventPhotoOrderByWithAggregationInput = {
   uid?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
-  isHero?: Prisma.SortOrder
+  photoType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EventPhotoCountOrderByAggregateInput
@@ -239,14 +239,14 @@ export type EventPhotoScalarWhereWithAggregatesInput = {
   uid?: Prisma.UuidWithAggregatesFilter<"EventPhoto"> | string
   eventId?: Prisma.UuidWithAggregatesFilter<"EventPhoto"> | string
   photoId?: Prisma.UuidWithAggregatesFilter<"EventPhoto"> | string
-  isHero?: Prisma.BoolWithAggregatesFilter<"EventPhoto"> | boolean
+  photoType?: Prisma.EnumEventPhotoTypeWithAggregatesFilter<"EventPhoto"> | $Enums.EventPhotoType
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"EventPhoto"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"EventPhoto"> | Date | string
 }
 
 export type EventPhotoCreateInput = {
   uid?: string
-  isHero?: boolean
+  photoType?: $Enums.EventPhotoType
   createdAt?: Date | string
   updatedAt?: Date | string
   event: Prisma.EventsCreateNestedOneWithoutPhotosInput
@@ -257,14 +257,14 @@ export type EventPhotoUncheckedCreateInput = {
   uid?: string
   eventId: string
   photoId: string
-  isHero?: boolean
+  photoType?: $Enums.EventPhotoType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type EventPhotoUpdateInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
-  isHero?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photoType?: Prisma.EnumEventPhotoTypeFieldUpdateOperationsInput | $Enums.EventPhotoType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   event?: Prisma.EventsUpdateOneRequiredWithoutPhotosNestedInput
@@ -275,7 +275,7 @@ export type EventPhotoUncheckedUpdateInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.StringFieldUpdateOperationsInput | string
-  isHero?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photoType?: Prisma.EnumEventPhotoTypeFieldUpdateOperationsInput | $Enums.EventPhotoType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -284,14 +284,14 @@ export type EventPhotoCreateManyInput = {
   uid?: string
   eventId: string
   photoId: string
-  isHero?: boolean
+  photoType?: $Enums.EventPhotoType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type EventPhotoUpdateManyMutationInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
-  isHero?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photoType?: Prisma.EnumEventPhotoTypeFieldUpdateOperationsInput | $Enums.EventPhotoType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -300,7 +300,7 @@ export type EventPhotoUncheckedUpdateManyInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.StringFieldUpdateOperationsInput | string
-  isHero?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photoType?: Prisma.EnumEventPhotoTypeFieldUpdateOperationsInput | $Enums.EventPhotoType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -324,7 +324,7 @@ export type EventPhotoCountOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
-  isHero?: Prisma.SortOrder
+  photoType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -333,7 +333,7 @@ export type EventPhotoMaxOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
-  isHero?: Prisma.SortOrder
+  photoType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -342,7 +342,7 @@ export type EventPhotoMinOrderByAggregateInput = {
   uid?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
-  isHero?: Prisma.SortOrder
+  photoType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -431,9 +431,13 @@ export type EventPhotoUncheckedUpdateManyWithoutEventNestedInput = {
   deleteMany?: Prisma.EventPhotoScalarWhereInput | Prisma.EventPhotoScalarWhereInput[]
 }
 
+export type EnumEventPhotoTypeFieldUpdateOperationsInput = {
+  set?: $Enums.EventPhotoType
+}
+
 export type EventPhotoCreateWithoutPhotoInput = {
   uid?: string
-  isHero?: boolean
+  photoType?: $Enums.EventPhotoType
   createdAt?: Date | string
   updatedAt?: Date | string
   event: Prisma.EventsCreateNestedOneWithoutPhotosInput
@@ -442,7 +446,7 @@ export type EventPhotoCreateWithoutPhotoInput = {
 export type EventPhotoUncheckedCreateWithoutPhotoInput = {
   uid?: string
   eventId: string
-  isHero?: boolean
+  photoType?: $Enums.EventPhotoType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -480,14 +484,14 @@ export type EventPhotoScalarWhereInput = {
   uid?: Prisma.UuidFilter<"EventPhoto"> | string
   eventId?: Prisma.UuidFilter<"EventPhoto"> | string
   photoId?: Prisma.UuidFilter<"EventPhoto"> | string
-  isHero?: Prisma.BoolFilter<"EventPhoto"> | boolean
+  photoType?: Prisma.EnumEventPhotoTypeFilter<"EventPhoto"> | $Enums.EventPhotoType
   createdAt?: Prisma.DateTimeFilter<"EventPhoto"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EventPhoto"> | Date | string
 }
 
 export type EventPhotoCreateWithoutEventInput = {
   uid?: string
-  isHero?: boolean
+  photoType?: $Enums.EventPhotoType
   createdAt?: Date | string
   updatedAt?: Date | string
   photo: Prisma.PhotosCreateNestedOneWithoutEventsInput
@@ -496,7 +500,7 @@ export type EventPhotoCreateWithoutEventInput = {
 export type EventPhotoUncheckedCreateWithoutEventInput = {
   uid?: string
   photoId: string
-  isHero?: boolean
+  photoType?: $Enums.EventPhotoType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -530,14 +534,14 @@ export type EventPhotoUpdateManyWithWhereWithoutEventInput = {
 export type EventPhotoCreateManyPhotoInput = {
   uid?: string
   eventId: string
-  isHero?: boolean
+  photoType?: $Enums.EventPhotoType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type EventPhotoUpdateWithoutPhotoInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
-  isHero?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photoType?: Prisma.EnumEventPhotoTypeFieldUpdateOperationsInput | $Enums.EventPhotoType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   event?: Prisma.EventsUpdateOneRequiredWithoutPhotosNestedInput
@@ -546,7 +550,7 @@ export type EventPhotoUpdateWithoutPhotoInput = {
 export type EventPhotoUncheckedUpdateWithoutPhotoInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
-  isHero?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photoType?: Prisma.EnumEventPhotoTypeFieldUpdateOperationsInput | $Enums.EventPhotoType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -554,7 +558,7 @@ export type EventPhotoUncheckedUpdateWithoutPhotoInput = {
 export type EventPhotoUncheckedUpdateManyWithoutPhotoInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
-  isHero?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photoType?: Prisma.EnumEventPhotoTypeFieldUpdateOperationsInput | $Enums.EventPhotoType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -562,14 +566,14 @@ export type EventPhotoUncheckedUpdateManyWithoutPhotoInput = {
 export type EventPhotoCreateManyEventInput = {
   uid?: string
   photoId: string
-  isHero?: boolean
+  photoType?: $Enums.EventPhotoType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type EventPhotoUpdateWithoutEventInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
-  isHero?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photoType?: Prisma.EnumEventPhotoTypeFieldUpdateOperationsInput | $Enums.EventPhotoType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   photo?: Prisma.PhotosUpdateOneRequiredWithoutEventsNestedInput
@@ -578,7 +582,7 @@ export type EventPhotoUpdateWithoutEventInput = {
 export type EventPhotoUncheckedUpdateWithoutEventInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.StringFieldUpdateOperationsInput | string
-  isHero?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photoType?: Prisma.EnumEventPhotoTypeFieldUpdateOperationsInput | $Enums.EventPhotoType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -586,7 +590,7 @@ export type EventPhotoUncheckedUpdateWithoutEventInput = {
 export type EventPhotoUncheckedUpdateManyWithoutEventInput = {
   uid?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.StringFieldUpdateOperationsInput | string
-  isHero?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photoType?: Prisma.EnumEventPhotoTypeFieldUpdateOperationsInput | $Enums.EventPhotoType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -597,7 +601,7 @@ export type EventPhotoSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   uid?: boolean
   eventId?: boolean
   photoId?: boolean
-  isHero?: boolean
+  photoType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   event?: boolean | Prisma.EventsDefaultArgs<ExtArgs>
@@ -608,7 +612,7 @@ export type EventPhotoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   uid?: boolean
   eventId?: boolean
   photoId?: boolean
-  isHero?: boolean
+  photoType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   event?: boolean | Prisma.EventsDefaultArgs<ExtArgs>
@@ -619,7 +623,7 @@ export type EventPhotoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   uid?: boolean
   eventId?: boolean
   photoId?: boolean
-  isHero?: boolean
+  photoType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   event?: boolean | Prisma.EventsDefaultArgs<ExtArgs>
@@ -630,12 +634,12 @@ export type EventPhotoSelectScalar = {
   uid?: boolean
   eventId?: boolean
   photoId?: boolean
-  isHero?: boolean
+  photoType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EventPhotoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "eventId" | "photoId" | "isHero" | "createdAt" | "updatedAt", ExtArgs["result"]["eventPhoto"]>
+export type EventPhotoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "eventId" | "photoId" | "photoType" | "createdAt" | "updatedAt", ExtArgs["result"]["eventPhoto"]>
 export type EventPhotoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   event?: boolean | Prisma.EventsDefaultArgs<ExtArgs>
   photo?: boolean | Prisma.PhotosDefaultArgs<ExtArgs>
@@ -659,7 +663,7 @@ export type $EventPhotoPayload<ExtArgs extends runtime.Types.Extensions.Internal
     uid: string
     eventId: string
     photoId: string
-    isHero: boolean
+    photoType: $Enums.EventPhotoType
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["eventPhoto"]>
@@ -1090,7 +1094,7 @@ export interface EventPhotoFieldRefs {
   readonly uid: Prisma.FieldRef<"EventPhoto", 'String'>
   readonly eventId: Prisma.FieldRef<"EventPhoto", 'String'>
   readonly photoId: Prisma.FieldRef<"EventPhoto", 'String'>
-  readonly isHero: Prisma.FieldRef<"EventPhoto", 'Boolean'>
+  readonly photoType: Prisma.FieldRef<"EventPhoto", 'EventPhotoType'>
   readonly createdAt: Prisma.FieldRef<"EventPhoto", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"EventPhoto", 'DateTime'>
 }
