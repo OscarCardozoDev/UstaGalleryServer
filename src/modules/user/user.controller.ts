@@ -61,7 +61,6 @@ export class UserController {
   @Get('me')
   @ApiOperation({ summary: 'Obtener usuario actual' })
   @UseGuards(AuthGuard)
-  @Roles('admin', 'professor', 'student')
   @HttpCode(HttpStatus.OK)
   async getCurrentUser(@CurrentUser() user: JwtPayload) {
     return this.userService.getUser(user.uid);
@@ -76,7 +75,6 @@ export class UserController {
 
   @Get(':uid')
   @ApiOperation({ summary: 'Obtener usuario por UID' })
-  @Roles('admin', 'professor', 'student')
   @HttpCode(HttpStatus.OK)
   async getUser(@Param('uid') uid: string) {
     return this.userService.getUser(uid);
