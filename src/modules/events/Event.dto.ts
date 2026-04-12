@@ -96,6 +96,14 @@ export class EventPhotoDto {
   photoType: EventPhotoType;
 }
 
+export class AddEventPhotoDto {
+  @ApiProperty({ type: [EventPhotoDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => EventPhotoDto)
+  images: EventPhotoDto[];
+}
+
 // ─── Crear evento ─────────────────────────────────────────────────────────────
 
 export class CreateEventDto {
@@ -104,7 +112,10 @@ export class CreateEventDto {
   @MaxLength(100)
   name: string;
 
-  @ApiProperty({ example: 'Exhibición de obras del semestre realizada en el auditorio central.' })
+  @ApiProperty({
+    example:
+      'Exhibición de obras del semestre realizada en el auditorio central.',
+  })
   @IsString()
   @MaxLength(1000)
   description: string;
@@ -218,8 +229,13 @@ export class UpdateEventStatusDto {
   @IsEnum(EventStatus)
   status: EventStatus;
 
-  @ApiPropertyOptional({ example: 'La fecha del evento coincide con otro evento aprobado.' })
-  @ValidateIf((o) => o.status === EventStatus.REJECTED || o.status === EventStatus.CANCELLED)
+  @ApiPropertyOptional({
+    example: 'La fecha del evento coincide con otro evento aprobado.',
+  })
+  @ValidateIf(
+    (o) =>
+      o.status === EventStatus.REJECTED || o.status === EventStatus.CANCELLED,
+  )
   @IsString()
   @MaxLength(500)
   feedback?: string;

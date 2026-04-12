@@ -97,12 +97,12 @@ export interface UpdateEventProductsUseCase {
 
 export interface AddEventPhotoUseCase {
   eventId: string;
-  photo: {
+  images: {
     base64: string;
     name: string;
     folder: string;
     photoType: EventPhotoType;
-  };
+  }[];
 }
 
 export interface RespondInvitationUseCase {

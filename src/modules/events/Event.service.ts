@@ -507,37 +507,74 @@ export class EventService {
    * ========================= */
 
   async addPhoto(data: AddEventPhotoUseCase) {
-    const { eventId, photo } = data;
+    const { eventId, images } = data;
 
     const event = await this.prisma.events.findUnique({
       where: { uid: eventId },
+      select: { name: true },
     });
     if (!event) throw new NotFoundException('Event not found');
 
-    // FASE 1️⃣ — Subir foto al storage (fuera de transacción)
-    const createdPhoto = await this.photosService.createPhotoUseCase({
-      base64: photo.base64,
-      name: photo.name,
-      folder: photo.folder,
-    });
+    /**
+     * FASE 1️⃣ — Crear imágenes (fuera de transacción)
+     */
+    const photoResults: { uid: string; photoType: EventPhotoType }[] = [];
 
-    // FASE 2️⃣ — Vincular en BD
-    // Si la nueva foto es HERO, degradar la anterior a PROMO primero
+    const savePhotos = async (
+      images: {
+        base64: string;
+        name: string;
+        folder: string;
+        photoType: EventPhotoType;
+      }[],
+    ) => {
+      for (const image of images) {
+        const photo = await this.photosService.createPhotoUseCase({
+          base64: image.base64,
+          name: `${image.photoType}_${event.name}`,
+          folder: image.folder,
+        });
+
+        photoResults.push({
+          uid: photo.uid,
+          photoType: image.photoType,
+        });
+      }
+    };
+
+    /**
+     * FASE 2️⃣ — Transacción
+     */
     return this.prisma.$transaction(async (tx) => {
-      if (photo.photoType === EventPhotoType.HERO) {
+      // 1️⃣ Subir fotos
+      await savePhotos(images);
+
+      // 2️⃣ Si hay HERO nueva, degradar la anterior
+      const hasHero = photoResults.some(
+        (p) => p.photoType === EventPhotoType.HERO,
+      );
+      if (hasHero) {
         await tx.eventPhoto.updateMany({
           where: { eventId, photoType: EventPhotoType.HERO },
           data: { photoType: EventPhotoType.PROMO },
         });
       }
 
-      return tx.eventPhoto.create({
-        data: {
+      // 3️⃣ Crear vínculos
+      await tx.eventPhoto.createMany({
+        data: photoResults.map((photo) => ({
           eventId,
-          photoId: createdPhoto.uid,
+          photoId: photo.uid,
           photoType: photo.photoType,
-        },
+        })),
       });
+
+      return {
+        photos: photoResults.map((p) => ({
+          uid: p.uid,
+          photoType: p.photoType,
+        })),
+      };
     });
   }
 
@@ -549,11 +586,11 @@ export class EventService {
     if (!eventPhoto)
       throw new NotFoundException('Photo not found in this event');
 
-    await this.photosService.deletePhotoUseCase(photoId);
-
-    return this.prisma.eventPhoto.delete({
+    await this.prisma.eventPhoto.delete({
       where: { uid: eventPhoto.uid },
     });
+
+    return await this.photosService.deletePhotoUseCase(photoId);
   }
 
   /* =========================

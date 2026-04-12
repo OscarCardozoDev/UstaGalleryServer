@@ -132,14 +132,16 @@ export class PhotosService {
   async deletePhotoUseCase(photoId: string): Promise<void> {
     const photo = await this.prisma.photos.findUnique({
       where: { uid: photoId },
+      select: { url: true },
     });
 
     if (!photo) {
       throw new NotFoundException('Photo not found');
     }
 
-    const url = new URL(photo.url!);
-    const segments = url.pathname.split('/').filter(Boolean);
+    // Quitar el primer "/images" si existe
+    const cleanPath = photo.url.replace(/^\/images\//, '');
+    const segments = cleanPath.split('/').filter(Boolean);
     const fileName = segments.pop()!;
     const folderPath = segments.join('/');
 

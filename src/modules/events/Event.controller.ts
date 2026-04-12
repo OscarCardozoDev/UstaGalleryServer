@@ -20,7 +20,7 @@ import {
   UpdateEventDto,
   UpdateEventStatusDto,
   UpdateEventProductsDto,
-  EventPhotoDto,
+  AddEventPhotoDto,
   SendInvitationDto,
   RespondInvitationDto,
   GetEventsDto,
@@ -116,7 +116,7 @@ export class EventController {
   @ApiOperation({
     summary: 'Ver invitaciones pendientes del profesor autenticado',
   })
-  @Roles('professor')
+  @Roles('professor', 'admin')
   async getPendingInvitations(@Query('profesorId') profesorId: string) {
     return this.eventService.getPendingInvitations(profesorId);
   }
@@ -201,15 +201,13 @@ export class EventController {
       'Agregar foto al evento (HERO/PROMO: coordinador/admin · MEMORY: participante)',
   })
   @Roles('professor', 'admin')
-  async addPhoto(@Param() params: EventParamsDto, @Body() body: EventPhotoDto) {
+  async addPhoto(
+    @Param() params: EventParamsDto,
+    @Body() body: AddEventPhotoDto,
+  ) {
     return this.eventService.addPhoto({
       eventId: params.uid,
-      photo: {
-        base64: body.base64,
-        name: body.name,
-        folder: body.folder,
-        photoType: body.photoType,
-      },
+      images: body.images,
     });
   }
 
