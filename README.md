@@ -1,35 +1,88 @@
-1) Inicializar el entorno de prisma con el comando:
+# UstaGalleryServer Documentation
 
-        npx prisma init 
+## Overview
+UstaGalleryServer is a robust backend application designed for managing gallery services. This documentation provides comprehensive instructions on using Bun commands to interact with the server.
 
-    1.1) Para crear una base de datos con prisma para el entorno de desarrollo se ejecuta el siguiente comando:
+## Getting Started
+To get started with UstaGalleryServer, ensure you have Bun installed. You can install it using the following command:
 
-        npx prisma dev
+```bash
+yarn global add bun
+```
 
+### Running the Application
+Use Bun to start the server:
 
+```bash
+bun run start
+```
 
-// ---------------------------------------- DOCKER ---------------------------------------- //
+### Endpoints
+1. **GET /api/galleries**  
+   Retrieves a list of galleries.
+   **Example:**  
+   ```bash
+   curl -X GET http://localhost:3000/api/galleries
+   ```
+   **Response:**  
+   ```json
+   [
+       {
+           "id": 1,
+           "name": "Gallery One"
+       },
+       {
+           "id": 2,
+           "name": "Gallery Two"
+       }
+   ]
+   ```
 
-2) Crear la base de datos con postgres, una imagen de postgres en docker:
+2. **POST /api/galleries**  
+   Creates a new gallery.
+   **Example:**  
+   ```bash
+   curl -X POST http://localhost:3000/api/galleries -H 'Content-Type: application/json' -d '{"name":"New Gallery"}'
+   ```
+   **Response:**  
+   ```json
+   {
+       "id": 3,
+       "name": "New Gallery"
+   }
+   ```
 
-        docker run --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres
+3. **GET /api/galleries/{id}**  
+   Retrieves a gallery by ID.
+   **Example:**  
+   ```bash
+   curl -X GET http://localhost:3000/api/galleries/1
+   ```
+   **Response:**  
+   ```json
+   {
+       "id": 1,
+       "name": "Gallery One"
+   }
+   ```
 
-    2.1) Para revizar si ya esta creada la imagen de la base de datos, se usa el siguiente comando:
+4. **DELETE /api/galleries/{id}**  
+   Deletes a gallery by ID.
+   **Example:**  
+   ```bash
+   curl -X DELETE http://localhost:3000/api/galleries/1
+   ```
+   **Response:**  
+   ```json
+   {
+       "message": "Gallery deleted successfully."
+   }
+   ```
 
-        docker ps
+## Best Practices
+- Always validate input data before processing.
+- Use meaningful names for galleries to enhance organization.
+- Monitor server logs for troubleshooting and performance tuning.
 
-    2.2) En caso de que no este corriendo, se debe ejecutar el siguiente comando:
-
-        docker start db
-
-    2.2) Para ingresar a la base de datos en la imagen, se puede ejecutar el siguiente comando:
-    
-        docker exec -it db bash    
-
-3) Crear el schema de la base de datos con prisma:
-
-        npx prisma db push
-
-4) Correr el servidor:
-
-        bun run start:dev
+## Conclusion
+This documentation serves as a starting point for effectively using the UstaGalleryServer with Bun. For more detailed information, refer to the official documentation or explore the codebase directly.
