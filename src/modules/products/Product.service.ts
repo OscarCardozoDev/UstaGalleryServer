@@ -124,11 +124,12 @@ export class ProductService {
    * READ
    * ========================= */
   async getAll(options: GetProductsOptions = {}) {
-    const { page = 1, limit = 10 } = options;
+    const { page = 1, limit = 10, styleId } = options;
 
     return this.prisma.products.findMany({
       skip: (page - 1) * limit,
       take: limit,
+      where: { styles: { some: { styleId } } },
       orderBy: { createdAt: 'desc' },
       include: {
         authors: {
@@ -159,13 +160,17 @@ export class ProductService {
   }
 
   async getGalleryHome(options: GetProductsOptions = {}) {
-    const { page = 1, limit = 10 } = options;
+    const { page = 1, limit = 10, styleId } = options;
 
     return this.prisma.products.findMany({
       skip: (page - 1) * limit,
       take: limit,
       orderBy: { createdAt: 'desc' },
-      where: { isActive: true, status: 'APPROVED' },
+      where: {
+        isActive: true,
+        status: 'APPROVED',
+        styles: { some: { styleId } },
+      },
       select: {
         uid: true,
         name: true,

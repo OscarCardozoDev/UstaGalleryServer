@@ -23,6 +23,9 @@ export class GetProductsOptions {
   @IsOptional()
   @Transform(({ value }) => Number(value))
   limit?: number = 10;
+
+  @IsOptional()
+  styleId?: string;
 }
 
 /* =========================

@@ -58,6 +58,11 @@ export class GetProductsDto {
   @IsOptional()
   @Transform(({ value }) => Number(value))
   limit?: number = 10;
+
+  @ApiPropertyOptional({ example: 'a270cbc6-60b1-4853-93e7-2ab2ae2afa4e"' })
+  @IsOptional()
+  @IsString()
+  styleId?: string;
 }
 
 export class CreateProductDto {
