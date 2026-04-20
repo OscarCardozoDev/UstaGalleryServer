@@ -72,3 +72,9 @@ export class UpdateStudentsDto {
   @IsArray()
   users: string[];
 }
+
+export class ChangeProfesorDto {
+  @ApiProperty({ example: 'uuid-del-nuevo-profesor' })
+  @IsString()
+  newProfesorId: string;
+}

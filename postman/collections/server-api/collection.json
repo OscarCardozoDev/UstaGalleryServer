@@ -1,0 +1,927 @@
+{
+  "info": {
+    "_postman_id": "12345678-1234-1234-1234-123456789012",
+    "name": "server-api",
+    "description": "NestJS server API — Auth, Groups, Photos, Products, Styles, User",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "login",
+          "request": {
+            "$kind": "http-request",
+            "name": "Login",
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "order": 1000,
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"mail\": \"usuario@correo.com\",\n  \"password\": \"password123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "logout",
+          "request": {
+            "$kind": "http-request",
+            "name": "Logout",
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/logout",
+            "order": 3000
+          }
+        },
+        {
+          "name": "register",
+          "request": {
+            "$kind": "http-request",
+            "name": "Register",
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/register",
+            "order": 2000,
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"mail\": \"nuevo@correo.com\",\n  \"password\": \"password123\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Groups",
+      "item": [
+        {
+          "name": "add-student",
+          "request": {
+            "$kind": "http-request",
+            "name": "Add Student to Group(s)",
+            "method": "POST",
+            "url": "{{baseUrl}}/groups/student/add",
+            "order": 6000,
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"userId\": \"uuid-del-usuario\",\n  \"groupIds\": [\"uuid-grupo-1\", \"uuid-grupo-2\"]\n}"
+            }
+          }
+        },
+        {
+          "name": "create-group",
+          "request": {
+            "$kind": "http-request",
+            "name": "Create Group",
+            "method": "POST",
+            "url": "{{baseUrl}}/groups/create",
+            "order": 1000,
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"name\": \"Grupo A 2025\",\n  \"profesorId\": \"uuid-del-profesor\",\n  \"users\": [\"uuid-alumno-1\", \"uuid-alumno-2\"]\n}"
+            }
+          }
+        },
+        {
+          "name": "delete-all-students",
+          "request": {
+            "$kind": "http-request",
+            "name": "Delete All Students from Group",
+            "method": "DELETE",
+            "url": "{{baseUrl}}/groups/student/deleteAll/:groupId",
+            "order": 9000,
+            "pathVariables": [
+              {
+                "key": "groupId",
+                "value": "uuid-del-grupo"
+              }
+            ]
+          }
+        },
+        {
+          "name": "delete-group",
+          "request": {
+            "$kind": "http-request",
+            "name": "Delete Group",
+            "method": "DELETE",
+            "url": "{{baseUrl}}/groups/delete/:uid",
+            "order": 5000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-grupo"
+              }
+            ]
+          }
+        },
+        {
+          "name": "delete-student",
+          "request": {
+            "$kind": "http-request",
+            "name": "Delete Student from Group",
+            "method": "DELETE",
+            "url": "{{baseUrl}}/groups/student/delete/:groupId",
+            "order": 8000,
+            "pathVariables": [
+              {
+                "key": "groupId",
+                "value": "uuid-del-grupo"
+              }
+            ],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"userId\": \"uuid-del-usuario\"\n}"
+            }
+          }
+        },
+        {
+          "name": "get-group-by-uid",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get Group by UID",
+            "method": "GET",
+            "url": "{{baseUrl}}/groups/get/:uid",
+            "order": 3000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-grupo"
+              }
+            ]
+          }
+        },
+        {
+          "name": "get-groups",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get All Groups",
+            "method": "GET",
+            "url": "{{baseUrl}}/groups/get",
+            "order": 2000,
+            "queryParams": [
+              {
+                "key": "page",
+                "value": "1",
+                "description": "Page number (default 1)"
+              },
+              {
+                "key": "limit",
+                "value": "10",
+                "description": "Items per page (default 10)"
+              }
+            ]
+          }
+        },
+        {
+          "name": "get-students-by-group",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get Students by Group",
+            "method": "GET",
+            "url": "{{baseUrl}}/groups/student/get/:groupId",
+            "order": 7000,
+            "pathVariables": [
+              {
+                "key": "groupId",
+                "value": "uuid-del-grupo"
+              }
+            ]
+          }
+        },
+        {
+          "name": "update-group",
+          "request": {
+            "$kind": "http-request",
+            "name": "Update Group",
+            "method": "PUT",
+            "url": "{{baseUrl}}/groups/update/:uid",
+            "order": 4000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-grupo"
+              }
+            ],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"name\": \"Grupo B 2025\",\n  \"profesorId\": \"uuid-del-profesor\"\n}"
+            }
+          }
+        },
+        {
+          "name": "change-profesor",
+          "request": {
+            "$kind": "http-request",
+            "name": "Change Group Profesor",
+            "method": "PATCH",
+            "url": "{{baseUrl}}/groups/change-profesor/:uid",
+            "order": 4500,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-grupo"
+              }
+            ],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"newProfesorId\": \"uuid-del-nuevo-profesor\"\n}"
+            }
+          }
+        },
+        {
+          "name": "update-students",
+          "request": {
+            "$kind": "http-request",
+            "name": "Update Students in Group",
+            "method": "PUT",
+            "url": "{{baseUrl}}/groups/student/update/:groupId",
+            "order": 10000,
+            "pathVariables": [
+              {
+                "key": "groupId",
+                "value": "uuid-del-grupo"
+              }
+            ],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"users\": [\"uuid-alumno-1\", \"uuid-alumno-2\"]\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Photos",
+      "item": [
+        {
+          "name": "create-photo",
+          "request": {
+            "$kind": "http-request",
+            "name": "Create Photo",
+            "method": "POST",
+            "url": "{{baseUrl}}/photos/create",
+            "order": 2000,
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"base64\": \"/9j/4AAQSkZJRgAB...\",\n  \"name\": \"obra.jpeg\",\n  \"folder\": \"products\"\n}"
+            }
+          }
+        },
+        {
+          "name": "edit-photo",
+          "request": {
+            "$kind": "http-request",
+            "name": "Edit Photo",
+            "method": "PUT",
+            "url": "{{baseUrl}}/photos/edit/:uid",
+            "order": 3000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-de-la-foto"
+              }
+            ],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"base64\": \"/9j/4AAQSkZJRgAB...\"\n}"
+            }
+          }
+        },
+        {
+          "name": "get-photo",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get Photo by UID",
+            "method": "GET",
+            "url": "{{baseUrl}}/photos/get/:uid",
+            "order": 1000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-de-la-foto"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "approve-many-products",
+          "request": {
+            "$kind": "http-request",
+            "name": "Approve Many Products",
+            "method": "PUT",
+            "url": "{{baseUrl}}/products/approveMany",
+            "order": 7000,
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"productIds\": [\n    \"aa35ee0c-f81a-4739-aa4c-af4cdfa820d3\",\n    \"b4fa2024-0da5-49a9-bc29-2417515e118c\"\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "create-product",
+          "request": {
+            "$kind": "http-request",
+            "name": "Create Product",
+            "method": "POST",
+            "url": "{{baseUrl}}/products/create",
+            "order": 1000,
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"name\": \"Mi hermosa novia\",\n  \"description\": \"Obra hecha en acuarela\",\n  \"price\": 99999,\n  \"madeAt\": \"2025-07-29\",\n  \"groupId\": \"uuid-del-grupo\",\n  \"isSold\": false,\n  \"authors\": [\n    {\n      \"userId\": \"uuid-del-autor\",\n      \"isAuthor\": true\n    }\n  ],\n  \"styles\": [\"Expresionismo\"],\n  \"images\": [\n    {\n      \"base64\": \"/9j/4AAQSkZJRgAB...\",\n      \"name\": \"obra.jpeg\",\n      \"folder\": \"products\",\n      \"isMain\": true\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "get-all-products",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get All Products",
+            "method": "GET",
+            "url": "{{baseUrl}}/products/getAll",
+            "order": 2000,
+            "queryParams": [
+              {
+                "key": "page",
+                "value": "1",
+                "description": "Page number (default 1)"
+              },
+              {
+                "key": "limit",
+                "value": "10",
+                "description": "Items per page (default 10)"
+              },
+              {
+                "key": "styleId",
+                "value": "",
+                "description": "Optional style UUID filter",
+                "disabled": true
+              }
+            ]
+          }
+        },
+        {
+          "name": "get-gallery-home",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get Gallery Home",
+            "method": "GET",
+            "url": "{{baseUrl}}/products/getGalleryHome",
+            "order": 3000,
+            "queryParams": [
+              {
+                "key": "page",
+                "value": "1"
+              },
+              {
+                "key": "limit",
+                "value": "10"
+              },
+              {
+                "key": "styleId",
+                "value": "",
+                "disabled": true
+              }
+            ]
+          }
+        },
+        {
+          "name": "get-product-by-uid",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get Product by UID",
+            "method": "GET",
+            "url": "{{baseUrl}}/products/get/:uid",
+            "order": 6000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-producto"
+              }
+            ]
+          }
+        },
+        {
+          "name": "get-products-by-author",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get Products by Author",
+            "method": "GET",
+            "url": "{{baseUrl}}/products/getAuthor/:uid",
+            "order": 5000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-autor"
+              }
+            ],
+            "queryParams": [
+              {
+                "key": "page",
+                "value": "1"
+              },
+              {
+                "key": "limit",
+                "value": "10"
+              },
+              {
+                "key": "styleId",
+                "value": "",
+                "disabled": true
+              }
+            ]
+          }
+        },
+        {
+          "name": "get-products-by-group",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get Products by Group",
+            "method": "GET",
+            "url": "{{baseUrl}}/products/getGroup/:uid",
+            "order": 4000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-grupo"
+              }
+            ],
+            "queryParams": [
+              {
+                "key": "page",
+                "value": "1"
+              },
+              {
+                "key": "limit",
+                "value": "10"
+              },
+              {
+                "key": "styleId",
+                "value": "",
+                "disabled": true
+              }
+            ]
+          }
+        },
+        {
+          "name": "update-product-status",
+          "request": {
+            "$kind": "http-request",
+            "name": "Update Product Status",
+            "method": "PATCH",
+            "url": "{{baseUrl}}/products/status/:uid",
+            "order": 8000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-producto"
+              }
+            ],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"status\": \"APPROVED\",\n  \"feedback\": \"\"\n}"
+            }
+          }
+        },
+        {
+          "name": "update-product",
+          "request": {
+            "$kind": "http-request",
+            "name": "Update Product",
+            "method": "PUT",
+            "url": "{{baseUrl}}/products/update/:uid",
+            "order": 9000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-producto"
+              }
+            ],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"name\": \"Nuevo nombre\",\n  \"description\": \"Nueva descripción\",\n  \"price\": 50000,\n  \"madeAt\": \"2025-07-29\",\n  \"isSold\": false,\n  \"styles\": [\"Surrealismo\"],\n  \"authors\": [\n    {\n      \"userId\": \"uuid-del-autor\",\n      \"isAuthor\": true\n    }\n  ],\n  \"images\": [\n    {\n      \"uid\": \"uuid-foto-existente\",\n      \"isMain\": true,\n      \"isExisting\": true\n    }\n  ]\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Styles",
+      "item": [
+        {
+          "name": "create-style",
+          "request": {
+            "$kind": "http-request",
+            "name": "Create Style",
+            "method": "POST",
+            "url": "{{baseUrl}}/styles/create",
+            "order": 4000,
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"name\": \"Expresionismo\",\n  \"description\": \"Estilo caracterizado por la distorsión emocional\",\n  \"groupId\": \"uuid-del-grupo\"\n}"
+            }
+          }
+        },
+        {
+          "name": "delete-style",
+          "request": {
+            "$kind": "http-request",
+            "name": "Delete Style",
+            "method": "DELETE",
+            "url": "{{baseUrl}}/styles/delete/:uid",
+            "order": 6000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-estilo"
+              }
+            ]
+          }
+        },
+        {
+          "name": "get-all-styles",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get All Styles",
+            "method": "GET",
+            "url": "{{baseUrl}}/styles/all",
+            "order": 1000
+          }
+        },
+        {
+          "name": "get-style-by-uid",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get Style by UID",
+            "method": "GET",
+            "url": "{{baseUrl}}/styles/get/:uid",
+            "order": 3000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-estilo"
+              }
+            ]
+          }
+        },
+        {
+          "name": "get-styles-by-group",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get Styles by Group",
+            "method": "GET",
+            "url": "{{baseUrl}}/styles/all/:groupId",
+            "order": 2000,
+            "pathVariables": [
+              {
+                "key": "groupId",
+                "value": "uuid-del-grupo"
+              }
+            ]
+          }
+        },
+        {
+          "name": "update-style",
+          "request": {
+            "$kind": "http-request",
+            "name": "Update Style",
+            "method": "PUT",
+            "url": "{{baseUrl}}/styles/update/:uid",
+            "order": 5000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-estilo"
+              }
+            ],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"name\": \"Surrealismo\",\n  \"description\": \"Nueva descripción del estilo\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "create-user",
+          "request": {
+            "$kind": "http-request",
+            "name": "Create User Profile",
+            "method": "POST",
+            "url": "{{baseUrl}}/user/create",
+            "order": 1000,
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"name\": \"Juan\",\n  \"lastName\": \"Pérez\",\n  \"username\": \"juanperez\",\n  \"description\": \"Estudiante de artes\",\n  \"gender\": \"M\",\n  \"idCard\": \"123456789\",\n  \"degree\": \"Artes Plásticas\",\n  \"semester\": \"5\",\n  \"telNumber\": \"3001234567\",\n  \"isProfesor\": false,\n  \"userTypeId\": \"uuid-del-tipo\",\n  \"photo\": {\n    \"base64\": \"/9j/4AAQSkZJRgAB...\",\n    \"name\": \"foto.jpeg\",\n    \"folder\": \"users\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "deactivate-current-user",
+          "request": {
+            "$kind": "http-request",
+            "name": "Deactivate Current User",
+            "method": "PATCH",
+            "url": "{{baseUrl}}/user/desactivate",
+            "order": 10000
+          }
+        },
+        {
+          "name": "deactivate-user-by-uid",
+          "request": {
+            "$kind": "http-request",
+            "name": "Deactivate User by UID (admin)",
+            "method": "PATCH",
+            "url": "{{baseUrl}}/user/:uid/desactivate",
+            "order": 11000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-usuario"
+              }
+            ]
+          }
+        },
+        {
+          "name": "get-all-active-users",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get All Active Users",
+            "method": "GET",
+            "url": "{{baseUrl}}/user/allActive",
+            "order": 2000
+          }
+        },
+        {
+          "name": "get-author-info",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get Author Info",
+            "method": "GET",
+            "url": "{{baseUrl}}/user/author/:uid",
+            "order": 4000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-usuario"
+              }
+            ]
+          }
+        },
+        {
+          "name": "get-me",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get Current User (me)",
+            "method": "GET",
+            "url": "{{baseUrl}}/user/me",
+            "order": 3000
+          }
+        },
+        {
+          "name": "get-user-by-uid",
+          "request": {
+            "$kind": "http-request",
+            "name": "Get User by UID",
+            "method": "GET",
+            "url": "{{baseUrl}}/user/:uid",
+            "order": 5000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-usuario"
+              }
+            ]
+          }
+        },
+        {
+          "name": "reactivate-user-by-uid",
+          "request": {
+            "$kind": "http-request",
+            "name": "Reactivate User by UID (admin)",
+            "method": "PATCH",
+            "url": "{{baseUrl}}/user/:uid/reactivate",
+            "order": 12000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-usuario"
+              }
+            ]
+          }
+        },
+        {
+          "name": "update-current-user-photo",
+          "request": {
+            "$kind": "http-request",
+            "name": "Update Current User Photo",
+            "method": "PATCH",
+            "url": "{{baseUrl}}/user/photo",
+            "order": 8000,
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"base64\": \"/9j/4AAQSkZJRgAB...\",\n  \"name\": \"foto.jpeg\",\n  \"folder\": \"users\"\n}"
+            }
+          }
+        },
+        {
+          "name": "update-current-user",
+          "request": {
+            "$kind": "http-request",
+            "name": "Update Current User",
+            "method": "PUT",
+            "url": "{{baseUrl}}/user/update",
+            "order": 6000,
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"name\": \"Juan\",\n  \"lastName\": \"Pérez\",\n  \"username\": \"juanperez\",\n  \"description\": \"Actualizado\",\n  \"gender\": \"M\",\n  \"degree\": \"Artes Plásticas\",\n  \"semester\": \"6\",\n  \"telNumber\": \"3001234567\",\n  \"isProfesor\": false,\n  \"userTypeId\": \"uuid-del-tipo\"\n}"
+            }
+          }
+        },
+        {
+          "name": "update-user-by-uid",
+          "request": {
+            "$kind": "http-request",
+            "name": "Update User by UID (admin)",
+            "method": "PUT",
+            "url": "{{baseUrl}}/user/:uid",
+            "order": 7000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-usuario"
+              }
+            ],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"name\": \"Juan\",\n  \"lastName\": \"Pérez\",\n  \"username\": \"juanperez\",\n  \"description\": \"Actualizado por admin\",\n  \"gender\": \"M\",\n  \"degree\": \"Artes Plásticas\",\n  \"semester\": \"6\",\n  \"telNumber\": \"3001234567\",\n  \"isProfesor\": false,\n  \"userTypeId\": \"uuid-del-tipo\"\n}"
+            }
+          }
+        },
+        {
+          "name": "update-user-photo-by-uid",
+          "request": {
+            "$kind": "http-request",
+            "name": "Update User Photo by UID (admin)",
+            "method": "PATCH",
+            "url": "{{baseUrl}}/user/:uid/photo",
+            "order": 9000,
+            "pathVariables": [
+              {
+                "key": "uid",
+                "value": "uuid-del-usuario"
+              }
+            ],
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "content": "{\n  \"base64\": \"/9j/4AAQSkZJRgAB...\",\n  \"name\": \"foto.jpeg\",\n  \"folder\": \"users\"\n}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001",
+      "description": "Base URL of the NestJS server"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "description": "JWT access token (set after login via cookie; use this for Bearer if needed)"
+    }
+  ]
+}

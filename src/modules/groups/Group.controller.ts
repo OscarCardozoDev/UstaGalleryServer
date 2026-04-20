@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Put,
+  Patch,
   Delete,
   UseGuards,
   Body,
@@ -23,6 +24,7 @@ import {
   AddStudentDto,
   DeleteStudentDto,
   UpdateStudentsDto,
+  ChangeProfesorDto,
 } from './Group.dto';
 
 @ApiTags('groups')
@@ -75,6 +77,19 @@ export class GroupController {
   async delete(@Param() params: GroupParamsDto) {
     await this.groupService.deleteGroup(params.uid);
     return { success: true };
+  }
+
+  @Patch('change-profesor/:uid')
+  @Roles('admin')
+  @ApiOperation({ summary: 'Cambiar el profesor asignado al grupo' })
+  async changeProfesor(
+    @Param() params: GroupParamsDto,
+    @Body() body: ChangeProfesorDto,
+  ) {
+    return this.groupService.changeProfesor({
+      groupId: params.uid,
+      newProfesorId: body.newProfesorId,
+    });
   }
 
   @Post('student/add')
