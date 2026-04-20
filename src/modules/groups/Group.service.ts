@@ -12,6 +12,7 @@ import {
   UpdateStudentsByGroupUseCase,
   DeleteStudentByGroupUseCase,
   AddStudentToGroupsUseCase,
+  ChangeProfesorUseCase,
 } from './Group.interface';
 
 @Injectable()
@@ -135,6 +136,75 @@ export class GroupService {
     });
 
     return true;
+  }
+
+  /* =========================
+   * CHANGE PROFESOR
+   * ========================= */
+  async changeProfesor(data: ChangeProfesorUseCase) {
+    const { groupId, newProfesorId } = data;
+
+    // 1️⃣ Verificar que el grupo existe
+    const group = await this.prisma.groups.findUnique({
+      where: { uid: groupId },
+    });
+
+    if (!group) {
+      throw new NotFoundException('Group not found');
+    }
+
+    // 2️⃣ Verificar que el nuevo profesor existe
+    const newProfesor = await this.prisma.users.findUnique({
+      where: { uid: newProfesorId },
+      select: { uid: true, name: true },
+    });
+
+    if (!newProfesor) {
+      throw new NotFoundException('Profesor not found');
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      const oldProfesorId = group.profesorId;
+
+      // 3️⃣ Actualizar el profesor del grupo
+      await tx.groups.update({
+        where: { uid: groupId },
+        data: { profesorId: newProfesorId },
+      });
+
+      // 4️⃣ Eliminar al antiguo profesor como miembro (si no es el mismo)
+      if (oldProfesorId && oldProfesorId !== newProfesorId) {
+        await tx.usersGroups
+          .delete({
+            where: {
+              userId_groupId: {
+                userId: oldProfesorId,
+                groupId,
+              },
+            },
+          })
+          .catch(() => {
+            // Si no existía la relación, ignoramos el error
+          });
+      }
+
+      // 5️⃣ Agregar al nuevo profesor como miembro (si no está ya)
+      await tx.usersGroups
+        .create({
+          data: {
+            userId: newProfesorId,
+            groupId,
+          },
+        })
+        .catch(() => {
+          // Si ya era miembro, no pasa nada
+        });
+
+      return {
+        groupId,
+        profesor: newProfesor,
+      };
+    });
   }
 
   /* --------------------------------------- Student Uses Cases For Groups --------------------------------------- */
