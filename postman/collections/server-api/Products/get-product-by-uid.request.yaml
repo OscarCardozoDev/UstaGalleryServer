@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Product by UID'
+method: GET
+url: '{{baseUrl}}/products/get/:uid'
+order: 6000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-producto'

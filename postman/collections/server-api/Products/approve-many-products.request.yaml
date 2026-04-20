@@ -1,0 +1,17 @@
+$kind: http-request
+name: 'Approve Many Products'
+method: PUT
+url: '{{baseUrl}}/products/approveMany'
+order: 7000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "productIds": [
+        "aa35ee0c-f81a-4739-aa4c-af4cdfa820d3",
+        "b4fa2024-0da5-49a9-bc29-2417515e118c"
+      ]
+    }

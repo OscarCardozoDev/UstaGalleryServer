@@ -1,0 +1,18 @@
+$kind: http-request
+name: 'Update Style'
+method: PUT
+url: '{{baseUrl}}/styles/update/:uid'
+order: 5000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-estilo'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Surrealismo",
+      "description": "Nueva descripción del estilo"
+    }

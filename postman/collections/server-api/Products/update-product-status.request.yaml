@@ -1,0 +1,18 @@
+$kind: http-request
+name: 'Update Product Status'
+method: PATCH
+url: '{{baseUrl}}/products/status/:uid'
+order: 8000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-producto'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "status": "APPROVED",
+      "feedback": ""
+    }

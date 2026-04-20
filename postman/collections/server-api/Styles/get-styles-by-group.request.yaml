@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Styles by Group'
+method: GET
+url: '{{baseUrl}}/styles/all/:groupId'
+order: 2000
+pathVariables:
+  - key: groupId
+    value: 'uuid-del-grupo'

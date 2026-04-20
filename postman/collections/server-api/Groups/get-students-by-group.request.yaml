@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Students by Group'
+method: GET
+url: '{{baseUrl}}/groups/student/get/:groupId'
+order: 7000
+pathVariables:
+  - key: groupId
+    value: 'uuid-del-grupo'

@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get User by UID'
+method: GET
+url: '{{baseUrl}}/user/:uid'
+order: 5000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-usuario'

@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Photo by UID'
+method: GET
+url: '{{baseUrl}}/photos/get/:uid'
+order: 1000
+pathVariables:
+  - key: uid
+    value: 'uuid-de-la-foto'

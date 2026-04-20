@@ -1,0 +1,16 @@
+$kind: http-request
+name: 'Create Group'
+method: POST
+url: '{{baseUrl}}/groups/create'
+order: 1000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Grupo A 2025",
+      "profesorId": "uuid-del-profesor",
+      "users": ["uuid-alumno-1", "uuid-alumno-2"]
+    }

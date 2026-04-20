@@ -1,0 +1,19 @@
+$kind: http-request
+name: 'Update User Photo by UID (admin)'
+method: PATCH
+url: '{{baseUrl}}/user/:uid/photo'
+order: 9000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-usuario'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "base64": "/9j/4AAQSkZJRgAB...",
+      "name": "foto.jpeg",
+      "folder": "users"
+    }

@@ -1,0 +1,13 @@
+$kind: http-request
+name: 'Get Gallery Home'
+method: GET
+url: '{{baseUrl}}/products/getGalleryHome'
+order: 3000
+queryParams:
+  - key: page
+    value: '1'
+  - key: limit
+    value: '10'
+  - key: styleId
+    value: ''
+    disabled: true

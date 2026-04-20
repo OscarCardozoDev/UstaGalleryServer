@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Group by UID'
+method: GET
+url: '{{baseUrl}}/groups/get/:uid'
+order: 3000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-grupo'

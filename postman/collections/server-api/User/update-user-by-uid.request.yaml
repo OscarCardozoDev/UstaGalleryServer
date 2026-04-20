@@ -1,0 +1,26 @@
+$kind: http-request
+name: 'Update User by UID (admin)'
+method: PUT
+url: '{{baseUrl}}/user/:uid'
+order: 7000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-usuario'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Juan",
+      "lastName": "Pérez",
+      "username": "juanperez",
+      "description": "Actualizado por admin",
+      "gender": "M",
+      "degree": "Artes Plásticas",
+      "semester": "6",
+      "telNumber": "3001234567",
+      "isProfesor": false,
+      "userTypeId": "uuid-del-tipo"
+    }

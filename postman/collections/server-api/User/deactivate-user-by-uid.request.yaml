@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Deactivate User by UID (admin)'
+method: PATCH
+url: '{{baseUrl}}/user/:uid/desactivate'
+order: 11000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-usuario'

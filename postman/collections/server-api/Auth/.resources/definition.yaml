@@ -1,0 +1,4 @@
+$kind: collection
+name: Auth
+description: 'Authentication endpoints — login, register, logout. Auth uses httpOnly cookies (access_token). No Authorization header needed.'
+order: 1000

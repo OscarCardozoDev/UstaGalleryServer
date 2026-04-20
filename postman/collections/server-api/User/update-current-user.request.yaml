@@ -1,0 +1,23 @@
+$kind: http-request
+name: 'Update Current User'
+method: PUT
+url: '{{baseUrl}}/user/update'
+order: 6000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Juan",
+      "lastName": "Pérez",
+      "username": "juanperez",
+      "description": "Actualizado",
+      "gender": "M",
+      "degree": "Artes Plásticas",
+      "semester": "6",
+      "telNumber": "3001234567",
+      "isProfesor": false,
+      "userTypeId": "uuid-del-tipo"
+    }

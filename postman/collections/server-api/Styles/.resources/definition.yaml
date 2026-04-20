@@ -1,0 +1,4 @@
+$kind: collection
+name: Styles
+description: 'Art style management. Read endpoints are public. Create/update/delete require auth (admin or professor).'
+order: 5000

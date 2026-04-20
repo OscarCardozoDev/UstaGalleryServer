@@ -1,0 +1,29 @@
+$kind: http-request
+name: 'Create User Profile'
+method: POST
+url: '{{baseUrl}}/user/create'
+order: 1000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Juan",
+      "lastName": "Pérez",
+      "username": "juanperez",
+      "description": "Estudiante de artes",
+      "gender": "M",
+      "idCard": "123456789",
+      "degree": "Artes Plásticas",
+      "semester": "5",
+      "telNumber": "3001234567",
+      "isProfesor": false,
+      "userTypeId": "uuid-del-tipo",
+      "photo": {
+        "base64": "/9j/4AAQSkZJRgAB...",
+        "name": "foto.jpeg",
+        "folder": "users"
+      }
+    }

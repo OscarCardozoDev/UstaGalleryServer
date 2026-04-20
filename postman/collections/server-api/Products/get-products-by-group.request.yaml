@@ -1,0 +1,16 @@
+$kind: http-request
+name: 'Get Products by Group'
+method: GET
+url: '{{baseUrl}}/products/getGroup/:uid'
+order: 4000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-grupo'
+queryParams:
+  - key: page
+    value: '1'
+  - key: limit
+    value: '10'
+  - key: styleId
+    value: ''
+    disabled: true

@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Delete Style'
+method: DELETE
+url: '{{baseUrl}}/styles/delete/:uid'
+order: 6000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-estilo'

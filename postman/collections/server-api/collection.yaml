@@ -1,0 +1,10 @@
+$kind: collection
+name: server-api
+description: 'NestJS server API — Auth, Groups, Photos, Products, Styles, User'
+variables:
+  - key: baseUrl
+    value: 'http://localhost:3001'
+    description: 'Base URL of the NestJS server'
+  - key: token
+    value: ''
+    description: 'JWT access token (set after login via cookie; use this for Bearer if needed)'

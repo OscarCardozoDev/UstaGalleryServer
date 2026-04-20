@@ -1,0 +1,4 @@
+$kind: collection
+name: Products
+description: 'Product (artwork) management. Role-based access: student/professor for create/update, professor for approve, admin for getAll.'
+order: 4000

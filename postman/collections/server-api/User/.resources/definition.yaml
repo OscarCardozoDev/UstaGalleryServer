@@ -1,0 +1,4 @@
+$kind: collection
+name: User
+description: 'User profile management. Most endpoints require JWT cookie auth. Role-based access for admin operations.'
+order: 6000

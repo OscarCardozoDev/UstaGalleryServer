@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Get All Active Users'
+method: GET
+url: '{{baseUrl}}/user/allActive'
+order: 2000

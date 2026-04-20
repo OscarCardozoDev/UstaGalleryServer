@@ -1,0 +1,12 @@
+$kind: http-request
+name: 'Get All Groups'
+method: GET
+url: '{{baseUrl}}/groups/get'
+order: 2000
+queryParams:
+  - key: page
+    value: '1'
+    description: 'Page number (default 1)'
+  - key: limit
+    value: '10'
+    description: 'Items per page (default 10)'

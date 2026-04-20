@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Author Info'
+method: GET
+url: '{{baseUrl}}/user/author/:uid'
+order: 4000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-usuario'

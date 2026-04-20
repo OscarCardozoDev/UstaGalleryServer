@@ -1,0 +1,17 @@
+$kind: http-request
+name: 'Edit Photo'
+method: PUT
+url: '{{baseUrl}}/photos/edit/:uid'
+order: 3000
+pathVariables:
+  - key: uid
+    value: 'uuid-de-la-foto'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "base64": "/9j/4AAQSkZJRgAB..."
+    }

@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Deactivate Current User'
+method: PATCH
+url: '{{baseUrl}}/user/desactivate'
+order: 10000

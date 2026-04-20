@@ -1,0 +1,18 @@
+$kind: http-request
+name: 'Update Group'
+method: PUT
+url: '{{baseUrl}}/groups/update/:uid'
+order: 4000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-grupo'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Grupo B 2025",
+      "profesorId": "uuid-del-profesor"
+    }

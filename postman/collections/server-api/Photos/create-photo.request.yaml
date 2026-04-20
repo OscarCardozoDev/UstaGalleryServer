@@ -1,0 +1,16 @@
+$kind: http-request
+name: 'Create Photo'
+method: POST
+url: '{{baseUrl}}/photos/create'
+order: 2000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "base64": "/9j/4AAQSkZJRgAB...",
+      "name": "obra.jpeg",
+      "folder": "products"
+    }

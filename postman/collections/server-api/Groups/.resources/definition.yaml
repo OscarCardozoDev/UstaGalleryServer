@@ -1,0 +1,4 @@
+$kind: collection
+name: Groups
+description: 'Group management. All endpoints require JWT (cookie). Admin role required for create/update/delete. Professor role for student management.'
+order: 2000

@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Reactivate User by UID (admin)'
+method: PATCH
+url: '{{baseUrl}}/user/:uid/reactivate'
+order: 12000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-usuario'

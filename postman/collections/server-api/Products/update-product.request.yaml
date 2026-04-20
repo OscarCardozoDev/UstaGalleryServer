@@ -1,0 +1,35 @@
+$kind: http-request
+name: 'Update Product'
+method: PUT
+url: '{{baseUrl}}/products/update/:uid'
+order: 9000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-producto'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Nuevo nombre",
+      "description": "Nueva descripción",
+      "price": 50000,
+      "madeAt": "2025-07-29",
+      "isSold": false,
+      "styles": ["Surrealismo"],
+      "authors": [
+        {
+          "userId": "uuid-del-autor",
+          "isAuthor": true
+        }
+      ],
+      "images": [
+        {
+          "uid": "uuid-foto-existente",
+          "isMain": true,
+          "isExisting": true
+        }
+      ]
+    }

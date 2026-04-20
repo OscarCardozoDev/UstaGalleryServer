@@ -1,0 +1,16 @@
+$kind: http-request
+name: 'Update Current User Photo'
+method: PATCH
+url: '{{baseUrl}}/user/photo'
+order: 8000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "base64": "/9j/4AAQSkZJRgAB...",
+      "name": "foto.jpeg",
+      "folder": "users"
+    }

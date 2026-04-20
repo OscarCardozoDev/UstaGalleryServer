@@ -1,0 +1,5 @@
+$kind: http-request
+name: 'Get All Styles'
+method: GET
+url: '{{baseUrl}}/styles/all'
+order: 1000

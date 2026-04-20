@@ -1,0 +1,17 @@
+$kind: http-request
+name: 'Update Students in Group'
+method: PUT
+url: '{{baseUrl}}/groups/student/update/:groupId'
+order: 10000
+pathVariables:
+  - key: groupId
+    value: 'uuid-del-grupo'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "users": ["uuid-alumno-1", "uuid-alumno-2"]
+    }

@@ -1,0 +1,8 @@
+$kind: http-request
+name: 'Get Style by UID'
+method: GET
+url: '{{baseUrl}}/styles/get/:uid'
+order: 3000
+pathVariables:
+  - key: uid
+    value: 'uuid-del-estilo'

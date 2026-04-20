@@ -1,0 +1,4 @@
+$kind: collection
+name: Photos
+description: 'Photo management. No auth guard on controller level — individual endpoints may require auth.'
+order: 3000

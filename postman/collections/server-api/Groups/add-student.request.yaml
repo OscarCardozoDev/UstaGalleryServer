@@ -1,0 +1,15 @@
+$kind: http-request
+name: 'Add Student to Group(s)'
+method: POST
+url: '{{baseUrl}}/groups/student/add'
+order: 6000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "userId": "uuid-del-usuario",
+      "groupIds": ["uuid-grupo-1", "uuid-grupo-2"]
+    }
