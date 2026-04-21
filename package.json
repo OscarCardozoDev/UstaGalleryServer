@@ -14,8 +14,9 @@
     "start:prod": "cross-env NODE_ENV=production node -r dotenv/config dist/src/main dotenv_config_path=env/production.env",
     "prisma:migrate:dev": "cross-env NODE_ENV=development npx prisma migrate dev --name",
     "prisma:migrate:prod": "cross-env NODE_ENV=production npx prisma migrate deploy",
+    "prisma:seed:static": "ts-node env/seed.static.ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-      "test:api": "newman run ./tests/postman-collection.json --environment ./tests/postman-env.json --reporters cli,htmlextra --reporter-htmlextra-export ./reports/api-test-report.html"
+    "test:api": "newman run ./tests/postman-collection.json --environment ./tests/postman-env.json --reporters cli,htmlextra --reporter-htmlextra-export ./reports/api-test-report.html"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
