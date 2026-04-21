@@ -27,3 +27,43 @@ export const ProductStatus = {
 } as const
 
 export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus]
+
+
+export const EventStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED',
+  COMPLETED: 'COMPLETED'
+} as const
+
+export type EventStatus = (typeof EventStatus)[keyof typeof EventStatus]
+
+
+export const EventType = {
+  EXHIBITION: 'EXHIBITION',
+  WORKSHOP: 'WORKSHOP',
+  PERFORMANCE: 'PERFORMANCE',
+  CONFERENCE: 'CONFERENCE',
+  OTHER: 'OTHER'
+} as const
+
+export type EventType = (typeof EventType)[keyof typeof EventType]
+
+
+export const EventPhotoType = {
+  HERO: 'HERO',
+  PROMO: 'PROMO',
+  MEMORY: 'MEMORY'
+} as const
+
+export type EventPhotoType = (typeof EventPhotoType)[keyof typeof EventPhotoType]
+
+
+export const InvitationStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type InvitationStatus = (typeof InvitationStatus)[keyof typeof InvitationStatus]

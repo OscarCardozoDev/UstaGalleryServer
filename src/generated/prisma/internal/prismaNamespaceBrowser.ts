@@ -63,6 +63,7 @@ export const ModelName = {
   ProductPhoto: 'ProductPhoto',
   Events: 'Events',
   EventProduct: 'EventProduct',
+  EventInvitation: 'EventInvitation',
   EventPhoto: 'EventPhoto',
   UserProduct: 'UserProduct',
   GroupEvent: 'GroupEvent'
@@ -220,9 +221,18 @@ export const EventsScalarFieldEnum = {
   uid: 'uid',
   name: 'name',
   description: 'description',
-  date: 'date',
+  status: 'status',
+  feedback: 'feedback',
+  eventType: 'eventType',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  locationUrl: 'locationUrl',
+  isVirtual: 'isVirtual',
+  streamingUrl: 'streamingUrl',
   isActive: 'isActive',
-  createdAt: 'createdAt'
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type EventsScalarFieldEnum = (typeof EventsScalarFieldEnum)[keyof typeof EventsScalarFieldEnum]
@@ -239,11 +249,24 @@ export const EventProductScalarFieldEnum = {
 export type EventProductScalarFieldEnum = (typeof EventProductScalarFieldEnum)[keyof typeof EventProductScalarFieldEnum]
 
 
+export const EventInvitationScalarFieldEnum = {
+  uid: 'uid',
+  eventId: 'eventId',
+  groupId: 'groupId',
+  status: 'status',
+  sentAt: 'sentAt',
+  respondedAt: 'respondedAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EventInvitationScalarFieldEnum = (typeof EventInvitationScalarFieldEnum)[keyof typeof EventInvitationScalarFieldEnum]
+
+
 export const EventPhotoScalarFieldEnum = {
   uid: 'uid',
   eventId: 'eventId',
   photoId: 'photoId',
-  isHero: 'isHero',
+  photoType: 'photoType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

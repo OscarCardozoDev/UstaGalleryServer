@@ -78,6 +78,11 @@ export type Events = Prisma.EventsModel
  */
 export type EventProduct = Prisma.EventProductModel
 /**
+ * Model EventInvitation
+ * 
+ */
+export type EventInvitation = Prisma.EventInvitationModel
+/**
  * Model EventPhoto
  * 
  */
