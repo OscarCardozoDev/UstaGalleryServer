@@ -195,6 +195,7 @@ export class EventService {
         photos: {
           where: { photoType: EventPhotoType.HERO },
           select: {
+            photoType: true,
             photo: { select: { uid: true, url: true } },
           },
           take: 1,
@@ -230,6 +231,7 @@ export class EventService {
         photos: {
           where: { photoType: EventPhotoType.HERO },
           select: {
+            photoType: true,
             photo: { select: { uid: true, url: true } },
           },
           take: 1,
@@ -262,6 +264,7 @@ export class EventService {
         photos: {
           where: { photoType: EventPhotoType.HERO },
           select: {
+            photoType: true,
             photo: { select: { uid: true, url: true } },
           },
           take: 1,
@@ -344,6 +347,7 @@ export class EventService {
         photos: {
           where: { photoType: EventPhotoType.HERO },
           select: {
+            photoType: true,
             photo: { select: { uid: true, url: true } },
           },
           take: 1,
@@ -646,7 +650,10 @@ export class EventService {
             startDate: true,
             photos: {
               where: { photoType: EventPhotoType.HERO },
-              select: { photo: { select: { uid: true, url: true } } },
+              select: {
+                photoType: true,
+                photo: { select: { uid: true, url: true } },
+              },
               take: 1,
             },
           },
