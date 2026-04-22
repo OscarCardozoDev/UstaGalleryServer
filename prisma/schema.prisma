@@ -97,6 +97,7 @@ model Users {
   products       UserProduct[]
   managedGroups  Groups[]  @relation("GroupProfesor")
   createdEvents  Events[]  @relation("EventCreator")
+  attendance     Attendance[]
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -132,6 +133,8 @@ model Groups {
   events       GroupEvent[]
   styles       Styles[]
   invitations  EventInvitation[]
+  schedules    Schedule[]
+  classes      Classes[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -352,4 +355,54 @@ model GroupEvent {
   createdAt  DateTime @default(now())
 
   @@unique([groupId, eventId])
+}
+
+//////////////////////////////////////////////////////
+// SCHEDULE & CLASSES
+//////////////////////////////////////////////////////
+
+model Schedule {
+  uid        String   @id @default(uuid()) @db.Uuid
+  groupId    String   @db.Uuid
+  dayOfWeek  Int      // 0=Dom, 1=Lun, 2=Mar, 3=Mié, 4=Jue, 5=Vie, 6=Sáb
+  startTime  String   @db.VarChar(5)  // "HH:mm"
+  endTime    String   @db.VarChar(5)  // "HH:mm"
+  isActive   Boolean  @default(true)
+
+  group      Groups   @relation(fields: [groupId], references: [uid])
+  classes    Classes[]
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Classes {
+  uid        String    @id @default(uuid()) @db.Uuid
+  groupId    String    @db.Uuid
+  scheduleId String?   @db.Uuid  // null = clase manual
+  date       DateTime
+  startTime  String    @db.VarChar(5)  // "HH:mm"
+  endTime    String    @db.VarChar(5)  // "HH:mm"
+  topic      String?   @db.VarChar(500)
+  review     String?   @db.VarChar(1000)
+  isActive   Boolean   @default(true)
+
+  group      Groups    @relation(fields: [groupId], references: [uid])
+  schedule   Schedule? @relation(fields: [scheduleId], references: [uid])
+  attendance Attendance[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Attendance {
+  uid      String   @id @default(uuid()) @db.Uuid
+  classId  String   @db.Uuid
+  userId   String   @db.Uuid
+  takenAt  DateTime @default(now())
+
+  class    Classes  @relation(fields: [classId], references: [uid])
+  user     Users    @relation(fields: [userId], references: [uid])
+
+  @@unique([classId, userId])
 }
