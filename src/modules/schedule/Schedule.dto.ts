@@ -3,11 +3,13 @@ import { IsString, IsInt, Min, Max, IsOptional } from 'class-validator';
 
 export class ScheduleParamsDto {
   @ApiProperty({ example: 'uuid-del-horario' })
+  @IsString()
   uid: string;
 }
 
 export class GroupParamDto {
   @ApiProperty({ example: 'uuid-del-grupo' })
+  @IsString()
   groupId: string;
 }
 

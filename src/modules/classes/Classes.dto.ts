@@ -3,11 +3,13 @@ import { IsString, IsOptional, IsDateString } from 'class-validator';
 
 export class ClassParamsDto {
   @ApiProperty({ example: 'uuid-de-la-clase' })
+  @IsString()
   uid: string;
 }
 
 export class GroupParamDto {
   @ApiProperty({ example: 'uuid-del-grupo' })
+  @IsString()
   groupId: string;
 }
 
