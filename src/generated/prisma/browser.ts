@@ -97,3 +97,18 @@ export type UserProduct = Prisma.UserProductModel
  * 
  */
 export type GroupEvent = Prisma.GroupEventModel
+/**
+ * Model Schedule
+ * 
+ */
+export type Schedule = Prisma.ScheduleModel
+/**
+ * Model Classes
+ * 
+ */
+export type Classes = Prisma.ClassesModel
+/**
+ * Model Attendance
+ * 
+ */
+export type Attendance = Prisma.AttendanceModel

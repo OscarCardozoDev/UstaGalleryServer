@@ -66,7 +66,10 @@ export const ModelName = {
   EventInvitation: 'EventInvitation',
   EventPhoto: 'EventPhoto',
   UserProduct: 'UserProduct',
-  GroupEvent: 'GroupEvent'
+  GroupEvent: 'GroupEvent',
+  Schedule: 'Schedule',
+  Classes: 'Classes',
+  Attendance: 'Attendance'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -294,6 +297,47 @@ export const GroupEventScalarFieldEnum = {
 } as const
 
 export type GroupEventScalarFieldEnum = (typeof GroupEventScalarFieldEnum)[keyof typeof GroupEventScalarFieldEnum]
+
+
+export const ScheduleScalarFieldEnum = {
+  uid: 'uid',
+  groupId: 'groupId',
+  dayOfWeek: 'dayOfWeek',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ScheduleScalarFieldEnum = (typeof ScheduleScalarFieldEnum)[keyof typeof ScheduleScalarFieldEnum]
+
+
+export const ClassesScalarFieldEnum = {
+  uid: 'uid',
+  groupId: 'groupId',
+  scheduleId: 'scheduleId',
+  date: 'date',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  topic: 'topic',
+  review: 'review',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ClassesScalarFieldEnum = (typeof ClassesScalarFieldEnum)[keyof typeof ClassesScalarFieldEnum]
+
+
+export const AttendanceScalarFieldEnum = {
+  uid: 'uid',
+  classId: 'classId',
+  userId: 'userId',
+  takenAt: 'takenAt'
+} as const
+
+export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
 
 
 export const SortOrder = {
