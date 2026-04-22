@@ -1,0 +1,82 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  UseGuards,
+  Body,
+  Param,
+  Query,
+} from '@nestjs/common';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ClassesService } from './Classes.service';
+import { AuthGuard } from 'src/middleware/jwt.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { CurrentUser } from 'src/decorators/currentUser';
+import {
+  ClassParamsDto,
+  GroupParamDto,
+  GetClassesDto,
+  CreateClassDto,
+  UpdateTopicDto,
+  AttendDto,
+} from './Classes.dto';
+
+@ApiTags('classes')
+@UseGuards(AuthGuard)
+@Controller('classes')
+export class ClassesController {
+  constructor(private readonly classesService: ClassesService) {}
+
+  // Fixed-prefix routes first
+  @Post('create')
+  @Roles('professor', 'admin')
+  @ApiOperation({ summary: 'Crear clase manual' })
+  async create(@Body() body: CreateClassDto) {
+    return this.classesService.create({
+      groupId: body.groupId,
+      date: new Date(body.date),
+      startTime: body.startTime,
+      endTime: body.endTime,
+      topic: body.topic,
+    });
+  }
+
+  @Post('attend')
+  @Roles('student')
+  @ApiOperation({ summary: 'Registrar asistencia del estudiante autenticado' })
+  async attend(@CurrentUser('uid') userId: string, @Body() body: AttendDto) {
+    return this.classesService.attend({ classId: body.classId, userId });
+  }
+
+  @Get('group/:groupId')
+  @ApiOperation({ summary: 'Obtener sesiones del grupo para el calendario' })
+  async getByGroup(@Param() params: GroupParamDto, @Query() query: GetClassesDto) {
+    return this.classesService.getByGroup(params.groupId, query.from, query.to);
+  }
+
+  @Get('current/:groupId')
+  @ApiOperation({ summary: '¿Hay clase activa ahora para el grupo?' })
+  async getCurrent(@Param() params: GroupParamDto) {
+    return this.classesService.getCurrentClass(params.groupId);
+  }
+
+  // Parameterized routes after
+  @Get(':uid/attendance')
+  @Roles('professor', 'admin')
+  @ApiOperation({ summary: 'Listar estudiantes que asistieron a la clase' })
+  async getAttendance(@Param() params: ClassParamsDto) {
+    return this.classesService.getAttendance(params.uid);
+  }
+
+  @Patch(':uid/topic')
+  @Roles('professor', 'admin')
+  @ApiOperation({ summary: 'Actualizar temática y/o reseña de la clase' })
+  async updateTopic(@Param() params: ClassParamsDto, @Body() body: UpdateTopicDto) {
+    return this.classesService.updateTopic({
+      classId: params.uid,
+      topic: body.topic,
+      review: body.review,
+    });
+  }
+}
