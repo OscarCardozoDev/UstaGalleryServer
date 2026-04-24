@@ -14,6 +14,7 @@ const IDS = {
     student:   '00000000-0000-0000-0000-000000000003',
   },
   users: {
+    admin:     '00000000-0000-0000-0000-000000000010',
     professor: '00000000-0000-0000-0000-000000000020',
     student:   '00000000-0000-0000-0000-000000000030',
   },
@@ -57,6 +58,7 @@ async function main() {
 
   const professorPasswordHash = await bcrypt.hash('Professor@1234!', SALT_ROUNDS);
   const studentPasswordHash   = await bcrypt.hash('Student@1234!', SALT_ROUNDS);
+  const adminPasswordHash     = await bcrypt.hash('Admin@1234!', SALT_ROUNDS);
 
   await prisma.credentials.upsert({
     where:  { mail: 'professor@gmail.com' },
@@ -75,6 +77,17 @@ async function main() {
       uid:      IDS.users.student,
       mail:     'student@gmail.com',
       password: studentPasswordHash,
+    },
+  });
+
+  await prisma.credentials.upsert({
+    where:  { mail: 'admin@ustagallery.com' },
+    update: {},
+    create: {
+      uid:      IDS.users.admin,
+      mail:     'admin@ustagallery.com',
+      password: adminPasswordHash,
+      userType: { connect: { uid: IDS.userTypes.admin } },
     },
   });
 
@@ -141,7 +154,7 @@ async function main() {
   console.log('\n✅ [STATIC] Seed completado!\n');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   console.log('UserTypes : Admin | Professor | Student');
-  console.log('Usuarios  : professor@gmail.com | student@gmail.com');
+  console.log('Usuarios  : admin@ustagallery.com | professor@gmail.com | student@gmail.com');
   console.log('Grupo     : Grupo de Artes y Fotografía (ARTES)');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 }

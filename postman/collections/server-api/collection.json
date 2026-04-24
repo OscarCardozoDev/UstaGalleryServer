@@ -1,8 +1,8 @@
 {
   "info": {
-    "_postman_id": "12345678-1234-1234-1234-123456789012",
-    "name": "server-api",
-    "description": "NestJS server API — Auth, Groups, Photos, Products, Styles, User",
+    "_postman_id": "usta-gallery-api-tests",
+    "name": "UstaGallery API Tests",
+    "description": "Full Newman test suite — Auth, User, Groups, Photos, Products, Styles, Events, Classes, Schedule",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -10,693 +10,208 @@
       "name": "Auth",
       "item": [
         {
-          "name": "login",
+          "name": "Register",
           "request": {
-            "$kind": "http-request",
-            "name": "Login",
             "method": "POST",
-            "url": "{{baseUrl}}/auth/login",
-            "order": 1000,
-            "headers": [
+            "header": [
               {
                 "key": "Content-Type",
                 "value": "application/json"
               }
             ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register"
+            },
             "body": {
-              "type": "json",
-              "content": "{\n  \"mail\": \"usuario@correo.com\",\n  \"password\": \"password123\"\n}"
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{newUserMail}}\",\n  \"password\": \"{{newUserPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has message', () => pm.expect(json.message).to.be.a('string'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
-          "name": "logout",
+          "name": "Register - duplicate email returns 409",
           "request": {
-            "$kind": "http-request",
-            "name": "Logout",
             "method": "POST",
-            "url": "{{baseUrl}}/auth/logout",
-            "order": 3000
-          }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{newUserMail}}\",\n  \"password\": \"{{newUserPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 409 on duplicate', () => pm.response.to.have.status(409));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
-          "name": "register",
+          "name": "Login (professor)",
           "request": {
-            "$kind": "http-request",
-            "name": "Register",
             "method": "POST",
-            "url": "{{baseUrl}}/auth/register",
-            "order": 2000,
-            "headers": [
+            "header": [
               {
                 "key": "Content-Type",
                 "value": "application/json"
               }
             ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
             "body": {
-              "type": "json",
-              "content": "{\n  \"mail\": \"nuevo@correo.com\",\n  \"password\": \"password123\"\n}"
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{professorMail}}\",\n  \"password\": \"{{professorPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Groups",
-      "item": [
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has message', () => pm.expect(json.message).to.equal('Login successful'));",
+                  "pm.test('hasProfile is boolean', () => pm.expect(json.hasProfile).to.be.a('boolean'));",
+                  "pm.test('hasGroup is boolean', () => pm.expect(json.hasGroup).to.be.a('boolean'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
         {
-          "name": "add-student",
+          "name": "Login - wrong password returns 401",
           "request": {
-            "$kind": "http-request",
-            "name": "Add Student to Group(s)",
             "method": "POST",
-            "url": "{{baseUrl}}/groups/student/add",
-            "order": 6000,
-            "headers": [
+            "header": [
               {
                 "key": "Content-Type",
                 "value": "application/json"
               }
             ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
             "body": {
-              "type": "json",
-              "content": "{\n  \"userId\": \"uuid-del-usuario\",\n  \"groupIds\": [\"uuid-grupo-1\", \"uuid-grupo-2\"]\n}"
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{professorMail}}\",\n  \"password\": \"WrongPassword1!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 on bad password', () => pm.response.to.have.status(401));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
-          "name": "create-group",
+          "name": "Login - unknown email returns 404",
           "request": {
-            "$kind": "http-request",
-            "name": "Create Group",
             "method": "POST",
-            "url": "{{baseUrl}}/groups/create",
-            "order": 1000,
-            "headers": [
+            "header": [
               {
                 "key": "Content-Type",
                 "value": "application/json"
               }
             ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
             "body": {
-              "type": "json",
-              "content": "{\n  \"name\": \"Grupo A 2025\",\n  \"profesorId\": \"uuid-del-profesor\",\n  \"users\": [\"uuid-alumno-1\", \"uuid-alumno-2\"]\n}"
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"nobody@nowhere.com\",\n  \"password\": \"Test@1234!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             }
-          }
-        },
-        {
-          "name": "delete-all-students",
-          "request": {
-            "$kind": "http-request",
-            "name": "Delete All Students from Group",
-            "method": "DELETE",
-            "url": "{{baseUrl}}/groups/student/deleteAll/:groupId",
-            "order": 9000,
-            "pathVariables": [
-              {
-                "key": "groupId",
-                "value": "uuid-del-grupo"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404 on unknown email', () => pm.response.to.have.status(404));"
+                ],
+                "type": "text/javascript"
               }
-            ]
-          }
-        },
-        {
-          "name": "delete-group",
-          "request": {
-            "$kind": "http-request",
-            "name": "Delete Group",
-            "method": "DELETE",
-            "url": "{{baseUrl}}/groups/delete/:uid",
-            "order": 5000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-grupo"
-              }
-            ]
-          }
-        },
-        {
-          "name": "delete-student",
-          "request": {
-            "$kind": "http-request",
-            "name": "Delete Student from Group",
-            "method": "DELETE",
-            "url": "{{baseUrl}}/groups/student/delete/:groupId",
-            "order": 8000,
-            "pathVariables": [
-              {
-                "key": "groupId",
-                "value": "uuid-del-grupo"
-              }
-            ],
-            "headers": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "type": "json",
-              "content": "{\n  \"userId\": \"uuid-del-usuario\"\n}"
             }
-          }
+          ]
         },
         {
-          "name": "get-group-by-uid",
+          "name": "Logout",
           "request": {
-            "$kind": "http-request",
-            "name": "Get Group by UID",
-            "method": "GET",
-            "url": "{{baseUrl}}/groups/get/:uid",
-            "order": 3000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-grupo"
-              }
-            ]
-          }
-        },
-        {
-          "name": "get-groups",
-          "request": {
-            "$kind": "http-request",
-            "name": "Get All Groups",
-            "method": "GET",
-            "url": "{{baseUrl}}/groups/get",
-            "order": 2000,
-            "queryParams": [
-              {
-                "key": "page",
-                "value": "1",
-                "description": "Page number (default 1)"
-              },
-              {
-                "key": "limit",
-                "value": "10",
-                "description": "Items per page (default 10)"
-              }
-            ]
-          }
-        },
-        {
-          "name": "get-students-by-group",
-          "request": {
-            "$kind": "http-request",
-            "name": "Get Students by Group",
-            "method": "GET",
-            "url": "{{baseUrl}}/groups/student/get/:groupId",
-            "order": 7000,
-            "pathVariables": [
-              {
-                "key": "groupId",
-                "value": "uuid-del-grupo"
-              }
-            ]
-          }
-        },
-        {
-          "name": "update-group",
-          "request": {
-            "$kind": "http-request",
-            "name": "Update Group",
-            "method": "PUT",
-            "url": "{{baseUrl}}/groups/update/:uid",
-            "order": 4000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-grupo"
-              }
-            ],
-            "headers": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "type": "json",
-              "content": "{\n  \"name\": \"Grupo B 2025\",\n  \"profesorId\": \"uuid-del-profesor\"\n}"
-            }
-          }
-        },
-        {
-          "name": "change-profesor",
-          "request": {
-            "$kind": "http-request",
-            "name": "Change Group Profesor",
-            "method": "PATCH",
-            "url": "{{baseUrl}}/groups/change-profesor/:uid",
-            "order": 4500,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-grupo"
-              }
-            ],
-            "headers": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "type": "json",
-              "content": "{\n  \"newProfesorId\": \"uuid-del-nuevo-profesor\"\n}"
-            }
-          }
-        },
-        {
-          "name": "update-students",
-          "request": {
-            "$kind": "http-request",
-            "name": "Update Students in Group",
-            "method": "PUT",
-            "url": "{{baseUrl}}/groups/student/update/:groupId",
-            "order": 10000,
-            "pathVariables": [
-              {
-                "key": "groupId",
-                "value": "uuid-del-grupo"
-              }
-            ],
-            "headers": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "type": "json",
-              "content": "{\n  \"users\": [\"uuid-alumno-1\", \"uuid-alumno-2\"]\n}"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Photos",
-      "item": [
-        {
-          "name": "create-photo",
-          "request": {
-            "$kind": "http-request",
-            "name": "Create Photo",
             "method": "POST",
-            "url": "{{baseUrl}}/photos/create",
-            "order": 2000,
-            "headers": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "type": "json",
-              "content": "{\n  \"base64\": \"/9j/4AAQSkZJRgAB...\",\n  \"name\": \"obra.jpeg\",\n  \"folder\": \"products\"\n}"
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout"
             }
-          }
-        },
-        {
-          "name": "edit-photo",
-          "request": {
-            "$kind": "http-request",
-            "name": "Edit Photo",
-            "method": "PUT",
-            "url": "{{baseUrl}}/photos/edit/:uid",
-            "order": 3000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-de-la-foto"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has logout message', () => pm.expect(json.message).to.be.a('string'));"
+                ],
+                "type": "text/javascript"
               }
-            ],
-            "headers": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "type": "json",
-              "content": "{\n  \"base64\": \"/9j/4AAQSkZJRgAB...\"\n}"
             }
-          }
-        },
-        {
-          "name": "get-photo",
-          "request": {
-            "$kind": "http-request",
-            "name": "Get Photo by UID",
-            "method": "GET",
-            "url": "{{baseUrl}}/photos/get/:uid",
-            "order": 1000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-de-la-foto"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Products",
-      "item": [
-        {
-          "name": "approve-many-products",
-          "request": {
-            "$kind": "http-request",
-            "name": "Approve Many Products",
-            "method": "PUT",
-            "url": "{{baseUrl}}/products/approveMany",
-            "order": 7000,
-            "headers": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "type": "json",
-              "content": "{\n  \"productIds\": [\n    \"aa35ee0c-f81a-4739-aa4c-af4cdfa820d3\",\n    \"b4fa2024-0da5-49a9-bc29-2417515e118c\"\n  ]\n}"
-            }
-          }
-        },
-        {
-          "name": "create-product",
-          "request": {
-            "$kind": "http-request",
-            "name": "Create Product",
-            "method": "POST",
-            "url": "{{baseUrl}}/products/create",
-            "order": 1000,
-            "headers": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "type": "json",
-              "content": "{\n  \"name\": \"Mi hermosa novia\",\n  \"description\": \"Obra hecha en acuarela\",\n  \"price\": 99999,\n  \"madeAt\": \"2025-07-29\",\n  \"groupId\": \"uuid-del-grupo\",\n  \"isSold\": false,\n  \"authors\": [\n    {\n      \"userId\": \"uuid-del-autor\",\n      \"isAuthor\": true\n    }\n  ],\n  \"styles\": [\"Expresionismo\"],\n  \"images\": [\n    {\n      \"base64\": \"/9j/4AAQSkZJRgAB...\",\n      \"name\": \"obra.jpeg\",\n      \"folder\": \"products\",\n      \"isMain\": true\n    }\n  ]\n}"
-            }
-          }
-        },
-        {
-          "name": "get-all-products",
-          "request": {
-            "$kind": "http-request",
-            "name": "Get All Products",
-            "method": "GET",
-            "url": "{{baseUrl}}/products/getAll",
-            "order": 2000,
-            "queryParams": [
-              {
-                "key": "page",
-                "value": "1",
-                "description": "Page number (default 1)"
-              },
-              {
-                "key": "limit",
-                "value": "10",
-                "description": "Items per page (default 10)"
-              },
-              {
-                "key": "styleId",
-                "value": "",
-                "description": "Optional style UUID filter",
-                "disabled": true
-              }
-            ]
-          }
-        },
-        {
-          "name": "get-gallery-home",
-          "request": {
-            "$kind": "http-request",
-            "name": "Get Gallery Home",
-            "method": "GET",
-            "url": "{{baseUrl}}/products/getGalleryHome",
-            "order": 3000,
-            "queryParams": [
-              {
-                "key": "page",
-                "value": "1"
-              },
-              {
-                "key": "limit",
-                "value": "10"
-              },
-              {
-                "key": "styleId",
-                "value": "",
-                "disabled": true
-              }
-            ]
-          }
-        },
-        {
-          "name": "get-product-by-uid",
-          "request": {
-            "$kind": "http-request",
-            "name": "Get Product by UID",
-            "method": "GET",
-            "url": "{{baseUrl}}/products/get/:uid",
-            "order": 6000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-producto"
-              }
-            ]
-          }
-        },
-        {
-          "name": "get-products-by-author",
-          "request": {
-            "$kind": "http-request",
-            "name": "Get Products by Author",
-            "method": "GET",
-            "url": "{{baseUrl}}/products/getAuthor/:uid",
-            "order": 5000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-autor"
-              }
-            ],
-            "queryParams": [
-              {
-                "key": "page",
-                "value": "1"
-              },
-              {
-                "key": "limit",
-                "value": "10"
-              },
-              {
-                "key": "styleId",
-                "value": "",
-                "disabled": true
-              }
-            ]
-          }
-        },
-        {
-          "name": "get-products-by-group",
-          "request": {
-            "$kind": "http-request",
-            "name": "Get Products by Group",
-            "method": "GET",
-            "url": "{{baseUrl}}/products/getGroup/:uid",
-            "order": 4000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-grupo"
-              }
-            ],
-            "queryParams": [
-              {
-                "key": "page",
-                "value": "1"
-              },
-              {
-                "key": "limit",
-                "value": "10"
-              },
-              {
-                "key": "styleId",
-                "value": "",
-                "disabled": true
-              }
-            ]
-          }
-        },
-        {
-          "name": "update-product-status",
-          "request": {
-            "$kind": "http-request",
-            "name": "Update Product Status",
-            "method": "PATCH",
-            "url": "{{baseUrl}}/products/status/:uid",
-            "order": 8000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-producto"
-              }
-            ],
-            "headers": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "type": "json",
-              "content": "{\n  \"status\": \"APPROVED\",\n  \"feedback\": \"\"\n}"
-            }
-          }
-        },
-        {
-          "name": "update-product",
-          "request": {
-            "$kind": "http-request",
-            "name": "Update Product",
-            "method": "PUT",
-            "url": "{{baseUrl}}/products/update/:uid",
-            "order": 9000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-producto"
-              }
-            ],
-            "headers": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "type": "json",
-              "content": "{\n  \"name\": \"Nuevo nombre\",\n  \"description\": \"Nueva descripción\",\n  \"price\": 50000,\n  \"madeAt\": \"2025-07-29\",\n  \"isSold\": false,\n  \"styles\": [\"Surrealismo\"],\n  \"authors\": [\n    {\n      \"userId\": \"uuid-del-autor\",\n      \"isAuthor\": true\n    }\n  ],\n  \"images\": [\n    {\n      \"uid\": \"uuid-foto-existente\",\n      \"isMain\": true,\n      \"isExisting\": true\n    }\n  ]\n}"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Styles",
-      "item": [
-        {
-          "name": "create-style",
-          "request": {
-            "$kind": "http-request",
-            "name": "Create Style",
-            "method": "POST",
-            "url": "{{baseUrl}}/styles/create",
-            "order": 4000,
-            "headers": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "type": "json",
-              "content": "{\n  \"name\": \"Expresionismo\",\n  \"description\": \"Estilo caracterizado por la distorsión emocional\",\n  \"groupId\": \"uuid-del-grupo\"\n}"
-            }
-          }
-        },
-        {
-          "name": "delete-style",
-          "request": {
-            "$kind": "http-request",
-            "name": "Delete Style",
-            "method": "DELETE",
-            "url": "{{baseUrl}}/styles/delete/:uid",
-            "order": 6000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-estilo"
-              }
-            ]
-          }
-        },
-        {
-          "name": "get-all-styles",
-          "request": {
-            "$kind": "http-request",
-            "name": "Get All Styles",
-            "method": "GET",
-            "url": "{{baseUrl}}/styles/all",
-            "order": 1000
-          }
-        },
-        {
-          "name": "get-style-by-uid",
-          "request": {
-            "$kind": "http-request",
-            "name": "Get Style by UID",
-            "method": "GET",
-            "url": "{{baseUrl}}/styles/get/:uid",
-            "order": 3000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-estilo"
-              }
-            ]
-          }
-        },
-        {
-          "name": "get-styles-by-group",
-          "request": {
-            "$kind": "http-request",
-            "name": "Get Styles by Group",
-            "method": "GET",
-            "url": "{{baseUrl}}/styles/all/:groupId",
-            "order": 2000,
-            "pathVariables": [
-              {
-                "key": "groupId",
-                "value": "uuid-del-grupo"
-              }
-            ]
-          }
-        },
-        {
-          "name": "update-style",
-          "request": {
-            "$kind": "http-request",
-            "name": "Update Style",
-            "method": "PUT",
-            "url": "{{baseUrl}}/styles/update/:uid",
-            "order": 5000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-estilo"
-              }
-            ],
-            "headers": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "type": "json",
-              "content": "{\n  \"name\": \"Surrealismo\",\n  \"description\": \"Nueva descripción del estilo\"\n}"
-            }
-          }
+          ]
         }
       ]
     },
@@ -704,224 +219,2773 @@
       "name": "User",
       "item": [
         {
-          "name": "create-user",
+          "name": "🔐 Login as Admin",
           "request": {
-            "$kind": "http-request",
-            "name": "Create User Profile",
             "method": "POST",
-            "url": "{{baseUrl}}/user/create",
-            "order": 1000,
-            "headers": [
+            "header": [
               {
                 "key": "Content-Type",
                 "value": "application/json"
               }
             ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
             "body": {
-              "type": "json",
-              "content": "{\n  \"name\": \"Juan\",\n  \"lastName\": \"Pérez\",\n  \"username\": \"juanperez\",\n  \"description\": \"Estudiante de artes\",\n  \"gender\": \"M\",\n  \"idCard\": \"123456789\",\n  \"degree\": \"Artes Plásticas\",\n  \"semester\": \"5\",\n  \"telNumber\": \"3001234567\",\n  \"isProfesor\": false,\n  \"userTypeId\": \"uuid-del-tipo\",\n  \"photo\": {\n    \"base64\": \"/9j/4AAQSkZJRgAB...\",\n    \"name\": \"foto.jpeg\",\n    \"folder\": \"users\"\n  }\n}"
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{adminMail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             }
-          }
-        },
-        {
-          "name": "deactivate-current-user",
-          "request": {
-            "$kind": "http-request",
-            "name": "Deactivate Current User",
-            "method": "PATCH",
-            "url": "{{baseUrl}}/user/desactivate",
-            "order": 10000
-          }
-        },
-        {
-          "name": "deactivate-user-by-uid",
-          "request": {
-            "$kind": "http-request",
-            "name": "Deactivate User by UID (admin)",
-            "method": "PATCH",
-            "url": "{{baseUrl}}/user/:uid/desactivate",
-            "order": 11000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-usuario"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
               }
-            ]
-          }
+            }
+          ]
         },
         {
-          "name": "get-all-active-users",
+          "name": "Create User Profile (admin)",
           "request": {
-            "$kind": "http-request",
-            "name": "Get All Active Users",
-            "method": "GET",
-            "url": "{{baseUrl}}/user/allActive",
-            "order": 2000
-          }
-        },
-        {
-          "name": "get-author-info",
-          "request": {
-            "$kind": "http-request",
-            "name": "Get Author Info",
-            "method": "GET",
-            "url": "{{baseUrl}}/user/author/:uid",
-            "order": 4000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-usuario"
-              }
-            ]
-          }
-        },
-        {
-          "name": "get-me",
-          "request": {
-            "$kind": "http-request",
-            "name": "Get Current User (me)",
-            "method": "GET",
-            "url": "{{baseUrl}}/user/me",
-            "order": 3000
-          }
-        },
-        {
-          "name": "get-user-by-uid",
-          "request": {
-            "$kind": "http-request",
-            "name": "Get User by UID",
-            "method": "GET",
-            "url": "{{baseUrl}}/user/:uid",
-            "order": 5000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-usuario"
-              }
-            ]
-          }
-        },
-        {
-          "name": "reactivate-user-by-uid",
-          "request": {
-            "$kind": "http-request",
-            "name": "Reactivate User by UID (admin)",
-            "method": "PATCH",
-            "url": "{{baseUrl}}/user/:uid/reactivate",
-            "order": 12000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-usuario"
-              }
-            ]
-          }
-        },
-        {
-          "name": "update-current-user-photo",
-          "request": {
-            "$kind": "http-request",
-            "name": "Update Current User Photo",
-            "method": "PATCH",
-            "url": "{{baseUrl}}/user/photo",
-            "order": 8000,
-            "headers": [
+            "method": "POST",
+            "header": [
               {
                 "key": "Content-Type",
                 "value": "application/json"
               }
             ],
+            "url": {
+              "raw": "{{baseUrl}}/user/create"
+            },
             "body": {
-              "type": "json",
-              "content": "{\n  \"base64\": \"/9j/4AAQSkZJRgAB...\",\n  \"name\": \"foto.jpeg\",\n  \"folder\": \"users\"\n}"
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test\",\n  \"lastName\": \"Testerson\",\n  \"username\": \"testerson_api_001\",\n  \"description\": \"A test user\",\n  \"gender\": \"M\",\n  \"idCard\": \"1234567890\",\n  \"degree\": \"Artes Plásticas\",\n  \"semester\": 4,\n  \"telNumber\": \"3001234567\",\n  \"isProfesor\": false,\n  \"userTypeId\": \"00000000-0000-0000-0000-000000000003\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has uid', () => pm.expect(json.uid).to.be.a('string'));",
+                  "pm.environment.set('createdUserId', json.uid);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
-          "name": "update-current-user",
+          "name": "Get All Active Users (admin)",
           "request": {
-            "$kind": "http-request",
-            "name": "Update Current User",
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/allActive"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Me (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/me"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Author Info (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/author/{{createdUserId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has name', () => pm.expect(pm.response.json().name).to.be.a('string'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get User by UID (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/{{createdUserId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get User by UID - 404",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/00000000-0000-0000-0000-000000000000"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update User by UID (admin)",
+          "request": {
             "method": "PUT",
-            "url": "{{baseUrl}}/user/update",
-            "order": 6000,
-            "headers": [
+            "header": [
               {
                 "key": "Content-Type",
                 "value": "application/json"
               }
             ],
+            "url": {
+              "raw": "{{baseUrl}}/user/{{createdUserId}}"
+            },
             "body": {
-              "type": "json",
-              "content": "{\n  \"name\": \"Juan\",\n  \"lastName\": \"Pérez\",\n  \"username\": \"juanperez\",\n  \"description\": \"Actualizado\",\n  \"gender\": \"M\",\n  \"degree\": \"Artes Plásticas\",\n  \"semester\": \"6\",\n  \"telNumber\": \"3001234567\",\n  \"isProfesor\": false,\n  \"userTypeId\": \"uuid-del-tipo\"\n}"
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"TestUpdated\",\n  \"lastName\": \"Testerson\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Name updated', () => pm.expect(pm.response.json().name).to.equal('TestUpdated'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
-          "name": "update-user-by-uid",
+          "name": "Deactivate User by UID (admin)",
           "request": {
-            "$kind": "http-request",
-            "name": "Update User by UID (admin)",
-            "method": "PUT",
-            "url": "{{baseUrl}}/user/:uid",
-            "order": 7000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-usuario"
-              }
-            ],
-            "headers": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "type": "json",
-              "content": "{\n  \"name\": \"Juan\",\n  \"lastName\": \"Pérez\",\n  \"username\": \"juanperez\",\n  \"description\": \"Actualizado por admin\",\n  \"gender\": \"M\",\n  \"degree\": \"Artes Plásticas\",\n  \"semester\": \"6\",\n  \"telNumber\": \"3001234567\",\n  \"isProfesor\": false,\n  \"userTypeId\": \"uuid-del-tipo\"\n}"
-            }
-          }
-        },
-        {
-          "name": "update-user-photo-by-uid",
-          "request": {
-            "$kind": "http-request",
-            "name": "Update User Photo by UID (admin)",
             "method": "PATCH",
-            "url": "{{baseUrl}}/user/:uid/photo",
-            "order": 9000,
-            "pathVariables": [
-              {
-                "key": "uid",
-                "value": "uuid-del-usuario"
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/{{createdUserId}}/desactivate"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
               }
-            ],
-            "headers": [
+            }
+          ]
+        },
+        {
+          "name": "Reactivate User by UID (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/{{createdUserId}}/reactivate"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "🔐 Login as Professor",
+          "request": {
+            "method": "POST",
+            "header": [
               {
                 "key": "Content-Type",
                 "value": "application/json"
               }
             ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
             "body": {
-              "type": "json",
-              "content": "{\n  \"base64\": \"/9j/4AAQSkZJRgAB...\",\n  \"name\": \"foto.jpeg\",\n  \"folder\": \"users\"\n}"
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{professorMail}}\",\n  \"password\": \"{{professorPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Current User (professor)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/user/update"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Profesor\",\n  \"lastName\": \"Actualizado\",\n  \"semester\": 8\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Name updated', () => pm.expect(pm.response.json().name).to.equal('Profesor'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get All Active - 403 for professor",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/allActive"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403', () => pm.response.to.have.status(403));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "🔐 Login as Student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{studentMail}}\",\n  \"password\": \"{{studentPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Deactivate Current User (student)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/desactivate"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "🔐 Login as Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{adminMail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         }
       ]
-    }
-  ],
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:3001",
-      "description": "Base URL of the NestJS server"
     },
     {
-      "key": "token",
-      "value": "",
-      "description": "JWT access token (set after login via cookie; use this for Bearer if needed)"
+      "name": "Groups",
+      "item": [
+        {
+          "name": "🔐 Login as Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{adminMail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Group",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/groups/create"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Grupo Test 2026\",\n  \"profesorId\": \"00000000-0000-0000-0000-000000000020\",\n  \"users\": []\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has uid', () => pm.expect(json.uid).to.be.a('string'));",
+                  "pm.environment.set('groupId', json.uid);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get All Groups",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/get?page=1&limit=10"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has data array', () => pm.expect(json.data).to.be.an('array'));",
+                  "pm.test('Has total', () => pm.expect(json.total).to.be.a('number'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Group by UID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/get/{{groupId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('UID matches', () => pm.expect(pm.response.json().uid).to.equal(pm.environment.get('groupId')));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Group",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/groups/update/{{groupId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Grupo Test Actualizado 2026\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Name updated', () => pm.expect(pm.response.json().name).to.equal('Grupo Test Actualizado 2026'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Change Group Profesor",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/groups/change-profesor/{{groupId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newProfesorId\": \"00000000-0000-0000-0000-000000000020\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Add Student to Group",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/groups/student/add"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"00000000-0000-0000-0000-000000000030\",\n  \"groupIds\": [\n    \"{{groupId}}\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 or 201', () => pm.expect(pm.response.code).to.be.oneOf([200, 201]));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Students by Group",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/student/get/{{groupId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Students in Group",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/groups/student/update/{{groupId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"users\": [\n    \"00000000-0000-0000-0000-000000000030\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Student from Group",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/groups/student/delete/{{groupId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"00000000-0000-0000-0000-000000000030\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete All Students from Group",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/student/deleteAll/{{groupId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Group",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/delete/{{groupId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Group (downstream)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/groups/create"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Grupo Downstream 2026\",\n  \"profesorId\": \"00000000-0000-0000-0000-000000000020\",\n  \"users\": [\n    \"00000000-0000-0000-0000-000000000030\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.environment.set('groupId', pm.response.json().uid);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Photos",
+      "item": [
+        {
+          "name": "Create Photo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/photos/create"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"base64\": \"/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgUEB//EAB8QAAIBBAMBAAAAAAAAAAAAAAECAwQFERIhMf/EABQBAQAAAAAAAAAAAAAAAAAAAAD/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCw1mozLsuoKMKOp06UrqWt5G7SMi6oifdKj9IqpuAAAAAAAAAAAAB//9k=\",\n  \"name\": \"test-photo.jpg\",\n  \"folder\": \"products\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has uid', () => pm.expect(json.uid).to.be.a('string'));",
+                  "pm.environment.set('photoId', json.uid);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Photo by UID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/photos/get/{{photoId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('UID matches', () => pm.expect(json.uid).to.equal(pm.environment.get('photoId')));",
+                  "pm.test('Has base64', () => pm.expect(json.base64).to.be.a('string'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Edit Photo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/photos/edit/{{photoId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"base64\": \"/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgUEB//EAB8QAAIBBAMBAAAAAAAAAAAAAAECAwQFERIhMf/EABQBAQAAAAAAAAAAAAAAAAAAAAD/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCw1mozLsuoKMKOp06UrqWt5G7SMi6oifdKj9IqpuAAAAAAAAAAAAB//9k=\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Photo - 404",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/photos/get/00000000-0000-0000-0000-000000000000"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "🔐 Login as Professor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{professorMail}}\",\n  \"password\": \"{{professorPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/create"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Obra de Prueba\",\n  \"description\": \"Descripción de prueba\",\n  \"price\": 50000,\n  \"madeAt\": \"2026-01-15\",\n  \"groupId\": \"{{groupId}}\",\n  \"isSold\": false,\n  \"authors\": [\n    {\n      \"userId\": \"00000000-0000-0000-0000-000000000020\",\n      \"isAuthor\": true\n    }\n  ],\n  \"styles\": [],\n  \"images\": [\n    {\n      \"base64\": \"/9j/4AAQSkZJRgABAQEASABIAAD/\",\n      \"name\": \"obra.jpg\",\n      \"folder\": \"products\",\n      \"isMain\": true\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has uid', () => pm.expect(json.uid).to.be.a('string'));",
+                  "pm.test('Status PENDING', () => pm.expect(json.status).to.equal('PENDING'));",
+                  "pm.environment.set('productId', json.uid);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Gallery Home (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/getGalleryHome?page=1&limit=10"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has data', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Products by Author (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/getAuthor/00000000-0000-0000-0000-000000000020?page=1&limit=10"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has data', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Product by UID (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/get/{{productId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('UID matches', () => pm.expect(json.uid).to.equal(pm.environment.get('productId')));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Product Status - REJECTED without feedback returns 400",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/status/{{productId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"REJECTED\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Product Status - APPROVED (professor)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/status/{{productId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status APPROVED', () => pm.expect(pm.response.json().status).to.equal('APPROVED'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Approve Many Products (professor)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/approveMany"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productIds\": [\n    \"{{productId}}\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has approved', () => pm.expect(pm.response.json().approved).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Product (professor)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/update/{{productId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Obra Actualizada\",\n  \"description\": \"Descripción actualizada\",\n  \"images\": []\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Name updated', () => pm.expect(pm.response.json().name).to.equal('Obra Actualizada'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "🔐 Login as Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{adminMail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get All Products (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/getAll?page=1&limit=10"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has data', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Products by Group (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/getGroup/{{groupId}}?page=1&limit=10"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has data', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Styles",
+      "item": [
+        {
+          "name": "Get All Styles (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/styles/all"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Styles by Group (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/styles/all/{{groupId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "🔐 Login as Professor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{professorMail}}\",\n  \"password\": \"{{professorPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Style (professor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/styles/create"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Impresionismo Test\",\n  \"description\": \"Estilo de prueba\",\n  \"groupId\": \"{{groupId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has uid', () => pm.expect(json.uid).to.be.a('string'));",
+                  "pm.test('Name correct', () => pm.expect(json.name).to.equal('Impresionismo Test'));",
+                  "pm.environment.set('styleId', json.uid);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Style by UID (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/styles/get/{{styleId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('UID matches', () => pm.expect(pm.response.json().uid).to.equal(pm.environment.get('styleId')));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Style (professor)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/styles/update/{{styleId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Impresionismo Actualizado\",\n  \"description\": \"Actualizado\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Name updated', () => pm.expect(pm.response.json().name).to.equal('Impresionismo Actualizado'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Style - 403 for professor",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/styles/delete/{{styleId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403', () => pm.response.to.have.status(403));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "🔐 Login as Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{adminMail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Style (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/styles/delete/{{styleId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Style - 404 after delete",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/styles/get/{{styleId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "Get Upcoming Events (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/events/upcoming?page=1&limit=10"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has data', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Past Events (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/events/past?page=1&limit=10"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has data', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Events Home (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/events/home?page=1&limit=5"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has data', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Events by Group (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/events/getByGroup/{{groupId}}?page=1&limit=10"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has data', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "🔐 Login as Professor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{professorMail}}\",\n  \"password\": \"{{professorPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Available Products for Group (professor)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/events/available-products/{{groupId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Event (professor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/create"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Exposición de Arte Test\",\n  \"description\": \"Evento de prueba para test suite\",\n  \"eventType\": \"EXHIBITION\",\n  \"startDate\": \"2026-06-15T10:00:00.000Z\",\n  \"endDate\": \"2026-06-15T18:00:00.000Z\",\n  \"locationUrl\": \"https://maps.example.com/usta\",\n  \"isVirtual\": false,\n  \"createdById\": \"00000000-0000-0000-0000-000000000020\",\n  \"groupIds\": [\n    \"{{groupId}}\"\n  ],\n  \"productIds\": [],\n  \"coverPhoto\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has uid', () => pm.expect(json.uid).to.be.a('string'));",
+                  "pm.test('Status PENDING', () => pm.expect(json.status).to.equal('PENDING'));",
+                  "pm.environment.set('eventId', json.uid);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Event by UID (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/events/get/{{eventId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has uid', () => pm.expect(json.uid).to.equal(pm.environment.get('eventId')));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Event (professor)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/update/{{eventId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Exposición Actualizada\",\n  \"description\": \"Descripción actualizada\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Name updated', () => pm.expect(json.name).to.equal('Exposición Actualizada'));",
+                  "pm.test('Back to PENDING', () => pm.expect(json.status).to.equal('PENDING'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Event Products (professor)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/{{eventId}}/products"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productIds\": [],\n  \"groupId\": \"{{groupId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Pending Invitations (professor)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/events/invitations/pending?profesorId=00000000-0000-0000-0000-000000000020"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "🔐 Login as Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{adminMail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get All Events (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/events/getAll?page=1&limit=10"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has data', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Event Status - APPROVED (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/status/{{eventId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status APPROVED', () => pm.expect(pm.response.json().status).to.equal('APPROVED'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Event Status - CANCELLED without feedback returns 400 (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/status/{{eventId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CANCELLED\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 - feedback required', () => pm.response.to.have.status(400));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Send Invitation to Group (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/{{eventId}}/invite"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"groupId\": \"{{groupId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 or 201', () => pm.expect(pm.response.code).to.be.oneOf([200, 201]));",
+                  "const json = pm.response.json();",
+                  "if (json && json.uid) pm.environment.set('invitationId', json.uid);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Revoke Invitation (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/events/{{eventId}}/invite/{{groupId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Deactivate Event (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/events/deactivate/{{eventId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Classes",
+      "item": [
+        {
+          "name": "🔐 Login as Professor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{professorMail}}\",\n  \"password\": \"{{professorPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Class (professor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/classes/create"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"groupId\": \"{{groupId}}\",\n  \"date\": \"2026-04-25\",\n  \"startTime\": \"08:00\",\n  \"endTime\": \"10:00\",\n  \"topic\": \"Introducción al color\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has uid', () => pm.expect(json.uid).to.be.a('string'));",
+                  "pm.test('Has date', () => pm.expect(json.date).to.be.a('string'));",
+                  "pm.environment.set('classId', json.uid);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Classes by Group (professor)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/classes/group/{{groupId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Classes by Group with date filter",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/classes/group/{{groupId}}?from=2026-01-01&to=2026-12-31"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Current Class for Group",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/classes/current/{{groupId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Returns null or object', () => pm.expect(json === null || typeof json === 'object').to.be.true);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Class Topic (professor)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/classes/{{classId}}/topic"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"topic\": \"Teoría del color avanzada\",\n  \"review\": \"Clase productiva\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Topic updated', () => pm.expect(pm.response.json().topic).to.equal('Teoría del color avanzada'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Class Attendance (professor)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/classes/{{classId}}/attendance"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "🔐 Login as Student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{studentMail}}\",\n  \"password\": \"{{studentPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Attend Class (student)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/classes/attend"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"classId\": \"{{classId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 or 400 (not active)', () => pm.expect(pm.response.code).to.be.oneOf([201, 400]));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Class - 403 for student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/classes/create"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"groupId\": \"{{groupId}}\",\n  \"date\": \"2026-06-01\",\n  \"startTime\": \"08:00\",\n  \"endTime\": \"10:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403', () => pm.response.to.have.status(403));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "🔐 Login as Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{adminMail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Class Attendance (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/classes/{{classId}}/attendance"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Schedule",
+      "item": [
+        {
+          "name": "🔐 Login as Professor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{professorMail}}\",\n  \"password\": \"{{professorPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Schedule (professor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/schedule/create"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"groupId\": \"{{groupId}}\",\n  \"dayOfWeek\": 1,\n  \"startTime\": \"14:00\",\n  \"endTime\": \"16:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has uid', () => pm.expect(json.uid).to.be.a('string'));",
+                  "pm.test('dayOfWeek correct', () => pm.expect(json.dayOfWeek).to.equal(1));",
+                  "pm.test('startTime correct', () => pm.expect(json.startTime).to.equal('14:00'));",
+                  "pm.environment.set('scheduleId', json.uid);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Schedules by Group (professor)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/schedule/group/{{groupId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Returns array', () => pm.expect(json).to.be.an('array'));",
+                  "pm.test('Has at least 1 schedule', () => pm.expect(json.length).to.be.at.least(1));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Schedule (professor)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/schedule/{{scheduleId}}"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dayOfWeek\": 3,\n  \"startTime\": \"09:00\",\n  \"endTime\": \"11:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('dayOfWeek updated', () => pm.expect(json.dayOfWeek).to.equal(3));",
+                  "pm.test('startTime updated', () => pm.expect(json.startTime).to.equal('09:00'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete Schedule (professor)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/schedule/{{scheduleId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Schedules - after delete",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/schedule/group/{{groupId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "🔐 Login as Student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mail\": \"{{studentMail}}\",\n  \"password\": \"{{studentPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login OK', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Schedule - 403 for student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/schedule/create"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"groupId\": \"{{groupId}}\",\n  \"dayOfWeek\": 2,\n  \"startTime\": \"10:00\",\n  \"endTime\": \"12:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403', () => pm.response.to.have.status(403));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Schedules - 403 for student",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/schedule/group/{{groupId}}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403', () => pm.response.to.have.status(403));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
