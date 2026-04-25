@@ -51,7 +51,11 @@ export class ClassesController {
 
   @Get('group/:groupId')
   @ApiOperation({ summary: 'Obtener sesiones del grupo para el calendario' })
-  async getByGroup(@Param() params: GroupParamDto, @Query() query: GetClassesDto) {
+  async getByGroup(
+    @Param() params: GroupParamDto,
+    @Query() query: GetClassesDto,
+  ) {
+    console.log(params.groupId);
     return this.classesService.getByGroup(params.groupId, query.from, query.to);
   }
 
@@ -72,7 +76,10 @@ export class ClassesController {
   @Patch(':uid/topic')
   @Roles('professor', 'admin')
   @ApiOperation({ summary: 'Actualizar temática y/o reseña de la clase' })
-  async updateTopic(@Param() params: ClassParamsDto, @Body() body: UpdateTopicDto) {
+  async updateTopic(
+    @Param() params: ClassParamsDto,
+    @Body() body: UpdateTopicDto,
+  ) {
     return this.classesService.updateTopic({
       classId: params.uid,
       topic: body.topic,

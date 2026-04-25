@@ -19,7 +19,7 @@ export class ScheduleController {
   }
 
   @Get('group/:groupId')
-  @Roles('professor', 'admin')
+  @Roles('professor', 'admin', 'student')
   @ApiOperation({ summary: 'Obtener horarios activos del grupo' })
   async getByGroup(@Param() params: GroupParamDto) {
     return this.scheduleService.getByGroup(params.groupId);

@@ -25,8 +25,22 @@ export class ClassesService {
 
   private getTodayRange(): { start: Date; end: Date } {
     const now = new Date();
-    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+    const start = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0,
+      0,
+      0,
+    );
+    const end = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23,
+      59,
+      59,
+    );
     return { start, end };
   }
 
@@ -88,7 +102,9 @@ export class ClassesService {
   }
 
   async getAttendance(classId: string) {
-    const cls = await this.prisma.classes.findUnique({ where: { uid: classId } });
+    const cls = await this.prisma.classes.findUnique({
+      where: { uid: classId },
+    });
     if (!cls) throw new NotFoundException('Class not found');
 
     return this.prisma.attendance.findMany({
@@ -96,7 +112,9 @@ export class ClassesService {
       select: {
         uid: true,
         takenAt: true,
-        user: { select: { uid: true, name: true, lastName: true, username: true } },
+        user: {
+          select: { uid: true, name: true, lastName: true, username: true },
+        },
       },
       orderBy: { takenAt: 'asc' },
     });
@@ -121,7 +139,13 @@ export class ClassesService {
   async attend({ classId, userId }: AttendUseCase) {
     const cls = await this.prisma.classes.findUnique({
       where: { uid: classId },
-      select: { uid: true, groupId: true, startTime: true, endTime: true, date: true },
+      select: {
+        uid: true,
+        groupId: true,
+        startTime: true,
+        endTime: true,
+        date: true,
+      },
     });
     if (!cls) throw new NotFoundException('Class not found');
 

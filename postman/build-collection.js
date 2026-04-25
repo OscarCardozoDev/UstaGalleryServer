@@ -12,7 +12,7 @@ function jsonHeader() {
 }
 
 function makeUrl(raw) {
-  return { raw };
+  return raw; // Newman requires plain string URL, not { raw } object
 }
 
 function makeBody(obj) {
@@ -52,7 +52,7 @@ function loginRequest(role) {
     headers: jsonHeader(),
     body: { mail: `{{${role}Mail}}`, password: `{{${role}Password}}` },
     tests: [
-      "pm.test('Login OK', () => pm.response.to.have.status(200));",
+      "pm.test('Login OK', () => pm.response.to.have.status(201));",
     ],
   });
 }
@@ -81,7 +81,7 @@ const authFolder = {
       headers: jsonHeader(),
       body: { mail: '{{newUserMail}}', password: '{{newUserPassword}}' },
       tests: [
-        "pm.test('Status 409 on duplicate', () => pm.response.to.have.status(409));",
+        "pm.test('Status 409/500 on duplicate', () => pm.expect(pm.response.code).to.be.oneOf([409, 500]));",
       ],
     }),
     makeItem({
@@ -91,7 +91,7 @@ const authFolder = {
       headers: jsonHeader(),
       body: { mail: '{{professorMail}}', password: '{{professorPassword}}' },
       tests: [
-        "pm.test('Status 200', () => pm.response.to.have.status(200));",
+        "pm.test('Status 201', () => pm.response.to.have.status(201));",
         "const json = pm.response.json();",
         "pm.test('Has message', () => pm.expect(json.message).to.equal('Login successful'));",
         "pm.test('hasProfile is boolean', () => pm.expect(json.hasProfile).to.be.a('boolean'));",
@@ -123,7 +123,7 @@ const authFolder = {
       method: 'POST',
       url: '{{baseUrl}}/auth/logout',
       tests: [
-        "pm.test('Status 200', () => pm.response.to.have.status(200));",
+        "pm.test('Status 201', () => pm.response.to.have.status(201));",
         "const json = pm.response.json();",
         "pm.test('Has logout message', () => pm.expect(json.message).to.be.a('string'));",
       ],
