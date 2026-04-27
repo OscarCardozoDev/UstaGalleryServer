@@ -1,25 +1,31 @@
+// Load DATABASE_URL before PrismaClient initializes
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+require('dotenv').config({ path: 'env/development.env' });
+
 import { PrismaClient } from '../src/generated/prisma/client';
-import { ConfigService } from '@nestjs/config';
+import { PrismaPg } from '@prisma/adapter-pg';
 import * as bcrypt from 'bcryptjs';
 
-const config = new ConfigService();
-const prisma = new PrismaClient(config.get('database.url'));
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL_TEST!,
+});
+const prisma = new PrismaClient({ adapter });
 
 const SALT_ROUNDS = 10;
 
 const IDS = {
   userTypes: {
-    admin: '00000000-0000-0000-0000-000000000001',
-    professor: '00000000-0000-0000-0000-000000000002',
-    student: '00000000-0000-0000-0000-000000000003',
+    admin: 'c782a79d-54f2-40d2-b5af-1282abgt33ef',
+    professor: 'b782a79d-54f2-40d2-b5af-5190llkj152h',
+    student: 'e782a79d-54f2-40d2-b5af-5509bb1e369a',
   },
   users: {
-    admin: '00000000-0000-0000-0000-000000000010',
-    professor: '00000000-0000-0000-0000-000000000020',
-    student: '00000000-0000-0000-0000-000000000030',
+    admin: 'c782a79d-54f2-40d2-b5af-1282abgt33ef',
+    professor: 'b782a79d-54f2-40d2-b5af-5190llkj152h',
+    student: 'e782a79d-54f2-40d2-b5af-5509bb1e369a',
   },
   groups: {
-    artes: '00000000-0000-0000-0000-000000000100',
+    artes: 'e782a79d-54f2-arte-b5af-5509bb1e369a',
   },
 };
 
