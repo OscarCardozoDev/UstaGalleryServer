@@ -105,13 +105,26 @@ model Users {
 }
 
 model Credentials {
-  uid        String   @id @default(uuid()) @db.Uuid
-  mail       String   @db.VarChar(100) @unique
-  password   String   @db.VarChar(250)
+  uid              String    @id @default(uuid()) @db.Uuid
+  mail             String    @db.VarChar(100) @unique
+  password         String    @db.VarChar(250)
+  isEmailVerified  Boolean   @default(false)
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  finishedAt DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  finishedAt       DateTime?
+}
+
+model VerificationCodes {
+  uid           String    @id @default(uuid()) @db.Uuid
+  credentialUid String    @db.Uuid
+  code          String    @db.VarChar(6)
+  expiresAt     DateTime
+  usedAt        DateTime?
+
+  createdAt     DateTime  @default(now())
+
+  @@index([credentialUid])
 }
 
 //////////////////////////////////////////////////////

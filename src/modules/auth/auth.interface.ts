@@ -3,4 +3,5 @@ export interface GetCredentialResult {
   password: string;
   hasProfile?: boolean;
   hasGroup?: boolean;
+  isEmailVerified?: boolean;
 }
