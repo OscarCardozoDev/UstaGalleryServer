@@ -53,6 +53,11 @@ export type Users = Prisma.UsersModel
  */
 export type Credentials = Prisma.CredentialsModel
 /**
+ * Model VerificationCodes
+ * 
+ */
+export type VerificationCodes = Prisma.VerificationCodesModel
+/**
  * Model Groups
  * 
  */
