@@ -85,7 +85,6 @@ model Users {
   telNumber      String    @db.VarChar(12)
      
   isActive       Boolean   @default(true)
-  isProfesor     Boolean   @default(false)
 
   // RELACIONES
   userType       UserTypes @relation(fields: [userTypeId], references: [uid])
@@ -203,11 +202,12 @@ model Styles {
   uid          String          @id @default(uuid()) @db.Uuid
   name         String          @db.VarChar(30)
   description  String          @db.VarChar(300)
-  isActive     Boolean       @default(true)
+  category     Category        @default(ARTES)
+  isActive     Boolean         @default(true)
 
   products     ProductStyle[]
 
-  groupId      String          @db.Uuid
+    groupId      String          @db.Uuid
   group        Groups          @relation(fields: [groupId], references: [uid])
 
   createdAt    DateTime        @default(now())

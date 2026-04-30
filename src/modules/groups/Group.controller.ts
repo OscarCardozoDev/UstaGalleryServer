@@ -93,7 +93,6 @@ export class GroupController {
   }
 
   @Post('student/add')
-  @Roles('admin', 'professor', 'student')
   @ApiOperation({ summary: 'Agregar estudiante a grupo(s)' })
   async addStudent(
     @CurrentUser('uid') uid: string,

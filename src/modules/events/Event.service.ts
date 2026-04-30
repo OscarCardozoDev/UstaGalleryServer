@@ -696,6 +696,31 @@ export class EventService {
     });
   }
 
+  async removeGroupFromEvent(
+    eventId: string,
+    groupId: string,
+  ): Promise<{ removed: boolean }> {
+    const groupEvent = await this.prisma.groupEvent.findFirst({
+      where: { eventId, groupId },
+    });
+    if (!groupEvent) throw new NotFoundException('Group not found in event');
+
+    return this.prisma.$transaction(async (tx) => {
+      await tx.groupEvent.deleteMany({ where: { eventId, groupId } });
+
+      await tx.eventProduct.deleteMany({
+        where: { eventId, product: { groupId } },
+      });
+
+      await tx.events.update({
+        where: { uid: eventId },
+        data: { status: EventStatus.PENDING, feedback: null },
+      });
+
+      return { removed: true };
+    });
+  }
+
   async revokeInvitation(
     eventId: string,
     groupId: string,

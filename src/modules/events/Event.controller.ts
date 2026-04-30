@@ -257,4 +257,14 @@ export class EventController {
   async revokeInvitation(@Param() params: EventGroupParamsDto) {
     return this.eventService.revokeInvitation(params.uid, params.groupId);
   }
+
+  @Delete(':uid/groups/:groupId')
+  @UseGuards(AuthGuard)
+  @ApiOperation({
+    summary: 'Quitar un grupo del evento directamente (coordinador/admin)',
+  })
+  @Roles('professor', 'admin')
+  async removeGroup(@Param() params: EventGroupParamsDto) {
+    return this.eventService.removeGroupFromEvent(params.uid, params.groupId);
+  }
 }
