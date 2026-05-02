@@ -1,47 +1,45 @@
 DO $$
 DECLARE
-  artesId UUID := '2c4707a0-541d-4fc1-a4e9-b4f830114332';
+  artesId      UUID := '2c4707a0-541d-4fc1-a4e9-b4f830114332';
+  rolePregrad  UUID := '00000000-0000-0000-0000-000000000001';
+  rolePosgrado UUID := '00000000-0000-0000-0000-000000000002';
+  roleFuncion  UUID := '00000000-0000-0000-0000-000000000003';
+  roleEgresado UUID := '00000000-0000-0000-0000-000000000004';
+  roleParticu  UUID := '00000000-0000-0000-0000-000000000005';
 BEGIN
 
-INSERT INTO "UserTypes" ("uid", "name", "updatedAt") VALUES 
+INSERT INTO "UserTypes" ("uid", "name", "updatedAt") VALUES
   ('77d188f7-b42e-4401-b6a2-bc8630e4700e', 'admin',     NOW()),
   ('0d85160a-c5fc-43af-a6d1-566ff6b5a6ec', 'professor', NOW()),
   ('afa0a8dc-9c60-4ec1-b20f-4276bcc4b91d', 'student',   NOW());
+
+INSERT INTO "Roles" ("uid", "name", "slug", "updatedAt") VALUES
+  (rolePregrad,  'Estudiante Pregrado', 'pregrado',    NOW()),
+  (rolePosgrado, 'Estudiante Posgrado', 'posgrado',    NOW()),
+  (roleFuncion,  'Funcionario',         'funcionario', NOW()),
+  (roleEgresado, 'Egresado',            'egresado',    NOW()),
+  (roleParticu,  'Profesor Particular', 'particular',  NOW());
 
 INSERT INTO "Credentials" ("uid", "mail", "password", "isEmailVerified", "updatedAt") VALUES 
   ('40693052-0e35-4d3b-9366-3fe1ecc9ac3d', 'admin@gmail.com',     '$2a$12$xXjevI/oABdIC3g7ZRbGgOhPleI1qdkfHea.80wF1aX.qo5fZJuMC', true, NOW()),
   ('568c79c2-7bb8-4d1a-98d3-8d23205a6814', 'professor@gmail.com', '$2a$12$xXjevI/oABdIC3g7ZRbGgOhPleI1qdkfHea.80wF1aX.qo5fZJuMC', true, NOW());
 
-INSERT INTO "Users" ("uid", "name", "lastName", "username", "description", "gender", "idCard", "degree", "semester", "telNumber", "isActive", "userTypeId", "updatedAt") VALUES
+INSERT INTO "Users" ("uid", "name", "lastName", "username", "description", "gender", "telNumber", "isActive", "userTypeId", "roleId", "roleData", "updatedAt") VALUES
   (
     '40693052-0e35-4d3b-9366-3fe1ecc9ac3d',
-    'Admin',
-    'USTA Gallery',
-    'admin.usta',
+    'Admin', 'USTA Gallery', 'admin.usta',
     'Administrador principal de la plataforma USTA Gallery. Gestiona usuarios, grupos y contenido de la galería.',
-    'O',
-    '000000000001',
-    'Administración de Sistemas',
-    '10',
-    '0000000000',
-    true,
+    'O', '0000000000', true,
     '77d188f7-b42e-4401-b6a2-bc8630e4700e',
-    NOW()
+    NULL, NULL, NOW()
   ),
   (
     '568c79c2-7bb8-4d1a-98d3-8d23205a6814',
-    'Profesor',
-    'USTA Gallery',
-    'professor.usta',
+    'Profesor', 'USTA Gallery', 'professor.usta',
     'Docente coordinador del grupo de artes de la Universidad Santo Tomás sede Tunja. Gestiona obras y eventos del grupo.',
-    'O',
-    '000000000002',
-    'Ingeniería de Sistemas',
-    '10',
-    '0000000000',
-    true,
+    'O', '0000000000', true,
     '0d85160a-c5fc-43af-a6d1-566ff6b5a6ec',
-    NOW()
+    roleParticu, '{}', NOW()
   );
 
 INSERT INTO "Groups" ("uid", "name", "category", "profesorId", "updatedAt") VALUES 
