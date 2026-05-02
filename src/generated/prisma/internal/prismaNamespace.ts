@@ -387,6 +387,7 @@ export const ModelName = {
   UserTypes: 'UserTypes',
   Users: 'Users',
   Credentials: 'Credentials',
+  VerificationCodes: 'VerificationCodes',
   Groups: 'Groups',
   UsersGroups: 'UsersGroups',
   Products: 'Products',
@@ -418,7 +419,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "userTypes" | "users" | "credentials" | "groups" | "usersGroups" | "products" | "styles" | "productStyle" | "photos" | "productPhoto" | "events" | "eventProduct" | "eventInvitation" | "eventPhoto" | "userProduct" | "groupEvent" | "schedule" | "classes" | "attendance"
+    modelProps: "userTypes" | "users" | "credentials" | "verificationCodes" | "groups" | "usersGroups" | "products" | "styles" | "productStyle" | "photos" | "productPhoto" | "events" | "eventProduct" | "eventInvitation" | "eventPhoto" | "userProduct" | "groupEvent" | "schedule" | "classes" | "attendance"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -641,6 +642,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CredentialsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CredentialsCountAggregateOutputType> | number
+        }
+      }
+    }
+    VerificationCodes: {
+      payload: Prisma.$VerificationCodesPayload<ExtArgs>
+      fields: Prisma.VerificationCodesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VerificationCodesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VerificationCodesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VerificationCodesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VerificationCodesPayload>
+        }
+        findFirst: {
+          args: Prisma.VerificationCodesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VerificationCodesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VerificationCodesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VerificationCodesPayload>
+        }
+        findMany: {
+          args: Prisma.VerificationCodesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VerificationCodesPayload>[]
+        }
+        create: {
+          args: Prisma.VerificationCodesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VerificationCodesPayload>
+        }
+        createMany: {
+          args: Prisma.VerificationCodesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VerificationCodesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VerificationCodesPayload>[]
+        }
+        delete: {
+          args: Prisma.VerificationCodesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VerificationCodesPayload>
+        }
+        update: {
+          args: Prisma.VerificationCodesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VerificationCodesPayload>
+        }
+        deleteMany: {
+          args: Prisma.VerificationCodesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VerificationCodesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VerificationCodesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VerificationCodesPayload>[]
+        }
+        upsert: {
+          args: Prisma.VerificationCodesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VerificationCodesPayload>
+        }
+        aggregate: {
+          args: Prisma.VerificationCodesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVerificationCodes>
+        }
+        groupBy: {
+          args: Prisma.VerificationCodesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VerificationCodesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VerificationCodesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VerificationCodesCountAggregateOutputType> | number
         }
       }
     }
@@ -1889,7 +1964,6 @@ export const UsersScalarFieldEnum = {
   semester: 'semester',
   telNumber: 'telNumber',
   isActive: 'isActive',
-  isProfesor: 'isProfesor',
   userTypeId: 'userTypeId',
   photoId: 'photoId',
   createdAt: 'createdAt',
@@ -1904,12 +1978,25 @@ export const CredentialsScalarFieldEnum = {
   uid: 'uid',
   mail: 'mail',
   password: 'password',
+  isEmailVerified: 'isEmailVerified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   finishedAt: 'finishedAt'
 } as const
 
 export type CredentialsScalarFieldEnum = (typeof CredentialsScalarFieldEnum)[keyof typeof CredentialsScalarFieldEnum]
+
+
+export const VerificationCodesScalarFieldEnum = {
+  uid: 'uid',
+  credentialUid: 'credentialUid',
+  code: 'code',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type VerificationCodesScalarFieldEnum = (typeof VerificationCodesScalarFieldEnum)[keyof typeof VerificationCodesScalarFieldEnum]
 
 
 export const GroupsScalarFieldEnum = {
@@ -1957,6 +2044,7 @@ export const StylesScalarFieldEnum = {
   uid: 'uid',
   name: 'name',
   description: 'description',
+  category: 'category',
   isActive: 'isActive',
   groupId: 'groupId',
   createdAt: 'createdAt',
@@ -2407,6 +2495,7 @@ export type GlobalOmitConfig = {
   userTypes?: Prisma.UserTypesOmit
   users?: Prisma.UsersOmit
   credentials?: Prisma.CredentialsOmit
+  verificationCodes?: Prisma.VerificationCodesOmit
   groups?: Prisma.GroupsOmit
   usersGroups?: Prisma.UsersGroupsOmit
   products?: Prisma.ProductsOmit

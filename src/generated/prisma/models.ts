@@ -11,6 +11,7 @@
 export type * from './models/UserTypes'
 export type * from './models/Users'
 export type * from './models/Credentials'
+export type * from './models/VerificationCodes'
 export type * from './models/Groups'
 export type * from './models/UsersGroups'
 export type * from './models/Products'

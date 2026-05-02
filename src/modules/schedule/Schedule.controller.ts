@@ -1,9 +1,23 @@
-import { Controller, Get, Post, Put, Delete, UseGuards, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  UseGuards,
+  Body,
+  Param,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ScheduleService } from './Schedule.service';
 import { AuthGuard } from 'src/middleware/jwt.guard';
 import { Roles } from 'src/decorators/roles.decorator';
-import { CreateScheduleDto, UpdateScheduleDto, ScheduleParamsDto, GroupParamDto } from './Schedule.dto';
+import {
+  CreateScheduleDto,
+  UpdateScheduleDto,
+  ScheduleParamsDto,
+  GroupParamDto,
+} from './Schedule.dto';
 
 @ApiTags('schedule')
 @UseGuards(AuthGuard)
@@ -28,13 +42,18 @@ export class ScheduleController {
   @Put(':uid')
   @Roles('professor', 'admin')
   @ApiOperation({ summary: 'Actualizar horario y regenerar sesiones futuras' })
-  async update(@Param() params: ScheduleParamsDto, @Body() body: UpdateScheduleDto) {
+  async update(
+    @Param() params: ScheduleParamsDto,
+    @Body() body: UpdateScheduleDto,
+  ) {
     return this.scheduleService.update({ scheduleId: params.uid, data: body });
   }
 
   @Delete(':uid')
   @Roles('professor', 'admin')
-  @ApiOperation({ summary: 'Desactivar horario y eliminar sesiones futuras sin asistencia' })
+  @ApiOperation({
+    summary: 'Desactivar horario y eliminar sesiones futuras sin asistencia',
+  })
   async remove(@Param() params: ScheduleParamsDto) {
     return this.scheduleService.remove(params.uid);
   }

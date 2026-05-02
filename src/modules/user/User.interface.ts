@@ -10,7 +10,6 @@ export interface User {
   semester: string;
   telNumber: string;
   isActive: boolean;
-  isProfesor: boolean;
   userTypeId: string;
   photoId?: string | null;
 }
@@ -43,7 +42,6 @@ export interface CreateUserUseCase {
     degree: string;
     semester: string;
     telNumber: string;
-    isProfesor?: boolean;
     userTypeId: string;
   };
   photo?: {
@@ -62,7 +60,6 @@ export interface UpdateUserUseCase {
   degree?: string;
   semester?: string;
   telNumber?: string;
-  isProfesor?: boolean;
   userTypeId?: string;
 }
 

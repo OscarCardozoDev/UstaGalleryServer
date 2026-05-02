@@ -9,7 +9,6 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
-import { PrismaService } from 'src/prisma/prisma.service';
 import type {
   AuthenticatedRequest,
   JwtPayload,
@@ -22,7 +21,6 @@ export class AuthGuard implements CanActivate {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly reflector: Reflector,
-    private readonly prisma: PrismaService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -60,21 +58,14 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    // 3️⃣ Consultar el tipo de usuario en la DB
-    const user = await this.prisma.users.findUnique({
-      where: { uid: payload.uid },
-      select: { userTypeId: true },
-    });
-
-    if (!user) {
-      throw new UnauthorizedException('User not found');
+    if (!payload.userTypeId) {
+      throw new UnauthorizedException('User has no role assigned');
     }
 
-    // 4️⃣ Resolver nombre → UUID y comparar
     const hasRole = requiredRoles.some(
       (role) =>
         this.configService.get<string>(`config.roles.${role}`) ===
-        user.userTypeId,
+        payload.userTypeId,
     );
 
     if (!hasRole) {

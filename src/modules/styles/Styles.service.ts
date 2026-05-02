@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   Style,
+  Category,
   StyleUidResult,
   CreateStyleUseCase,
   UpdateStyleUseCase,
@@ -13,21 +14,39 @@ export class StylesService {
 
   async getAll(): Promise<Style[]> {
     return this.prismaService.styles.findMany({
-      select: { uid: true, name: true, description: true, groupId: true },
+      select: {
+        uid: true,
+        name: true,
+        description: true,
+        category: true,
+        groupId: true,
+      },
     });
   }
 
-  async getAllByGroup(groupId: string): Promise<Style[]> {
+  async getAllByGroup(category: Category): Promise<Style[]> {
     return this.prismaService.styles.findMany({
-      where: { groupId },
-      select: { uid: true, name: true, description: true, groupId: true },
+      where: { category },
+      select: {
+        uid: true,
+        name: true,
+        description: true,
+        category: true,
+        groupId: true,
+      },
     });
   }
 
   async get(uid: string): Promise<Style> {
     const style = await this.prismaService.styles.findUnique({
       where: { uid },
-      select: { uid: true, name: true, description: true, groupId: true },
+      select: {
+        uid: true,
+        name: true,
+        description: true,
+        groupId: true,
+        category: true,
+      },
     });
 
     if (!style) throw new NotFoundException(`Style with uid ${uid} not found`);
@@ -40,7 +59,7 @@ export class StylesService {
         name: style.name,
         description: style.description,
         groupId: style.groupId,
-        // uid lo genera Prisma automáticamente
+        category: style.category,
       },
       select: { uid: true },
     });

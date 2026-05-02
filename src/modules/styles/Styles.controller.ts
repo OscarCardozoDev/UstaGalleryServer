@@ -10,11 +10,12 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { StylesService } from './Styles.service';
 import { CreateStyleDto, UpdateStyleDto } from './Styles.dto';
 import { AuthGuard } from 'src/middleware/jwt.guard';
 import { Roles } from 'src/decorators/roles.decorator';
+import { Category } from './Styles.interface';
 
 @ApiTags('styles')
 @Controller('styles')
@@ -28,11 +29,16 @@ export class StylesController {
     return this.stylesService.getAll();
   }
 
-  @Get('all/:groupId')
+  @Get('all/:category')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Obtener estilos por grupo' })
-  async getAllByGroup(@Param('groupId') groupId: string) {
-    return this.stylesService.getAllByGroup(groupId);
+  @ApiParam({
+    name: 'category',
+    enum: ['ARTES', 'TEATRO', 'DANZAS', 'MUSICA', 'CANTO'],
+    enumName: 'Category',
+  })
+  async getAllByGroup(@Param('category') category: Category) {
+    return this.stylesService.getAllByGroup(category);
   }
 
   @Get('get/:uid')

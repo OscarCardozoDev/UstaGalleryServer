@@ -5,6 +5,7 @@ export default registerAs('config', () => ({
   jwtSecret: process.env.JWT_SECRET,
   corsOrigin: process.env.CORS_URL_FRONT,
   nodeEnv: process.env.NODE_ENV,
+  resendKey: process.env.RESEND_API_KEY,
   semesterEndDate: process.env.SEMESTER_END_DATE,
   roles: {
     student: process.env.ID_STUDENT,

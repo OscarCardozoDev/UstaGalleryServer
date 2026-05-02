@@ -36,7 +36,6 @@ export class UserService {
         semester: true,
         telNumber: true,
         isActive: true,
-        isProfesor: true,
         userTypeId: true,
         photoId: true,
         userType: {
@@ -87,7 +86,6 @@ export class UserService {
         semester: true,
         telNumber: true,
         isActive: true,
-        isProfesor: true,
         userTypeId: true,
         photoId: true,
         userType: {
@@ -192,7 +190,6 @@ export class UserService {
           degree: user.degree,
           semester: user.semester,
           telNumber: user.telNumber,
-          isProfesor: user.isProfesor ?? false,
           userType: {
             connect: { uid: user.userTypeId },
           },

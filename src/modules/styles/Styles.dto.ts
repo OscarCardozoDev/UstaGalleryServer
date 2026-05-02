@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsEnum } from 'class-validator';
+import { Category, CategoryValues } from './Styles.interface';
 
 export class CreateStyleDto {
   @ApiProperty({ example: 'Expresionismo' })
@@ -13,6 +14,14 @@ export class CreateStyleDto {
   @ApiProperty({ example: 'uuid-del-grupo' })
   @IsString()
   groupId: string;
+
+  @ApiProperty({
+    enum: CategoryValues,
+    enumName: 'Category',
+    example: 'ARTES',
+  })
+  @IsEnum(Category)
+  category: Category;
 }
 
 export class UpdateStyleDto {
@@ -25,4 +34,28 @@ export class UpdateStyleDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiProperty({
+    enum: CategoryValues,
+    enumName: 'Category',
+    example: 'ARTES',
+  })
+  @IsOptional()
+  @IsEnum(Category)
+  category?: Category;
+}
+
+export class StyleDto {
+  @ApiProperty({ example: 'uuid-del-estilo' })
+  @IsOptional()
+  uid?: string;
+
+  @ApiProperty({
+    enum: CategoryValues,
+    enumName: 'Category',
+    example: 'ARTES',
+  })
+  @IsOptional()
+  @IsEnum(Category)
+  category?: Category;
 }

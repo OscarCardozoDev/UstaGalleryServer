@@ -54,6 +54,7 @@ export const ModelName = {
   UserTypes: 'UserTypes',
   Users: 'Users',
   Credentials: 'Credentials',
+  VerificationCodes: 'VerificationCodes',
   Groups: 'Groups',
   UsersGroups: 'UsersGroups',
   Products: 'Products',
@@ -110,7 +111,6 @@ export const UsersScalarFieldEnum = {
   semester: 'semester',
   telNumber: 'telNumber',
   isActive: 'isActive',
-  isProfesor: 'isProfesor',
   userTypeId: 'userTypeId',
   photoId: 'photoId',
   createdAt: 'createdAt',
@@ -125,12 +125,25 @@ export const CredentialsScalarFieldEnum = {
   uid: 'uid',
   mail: 'mail',
   password: 'password',
+  isEmailVerified: 'isEmailVerified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   finishedAt: 'finishedAt'
 } as const
 
 export type CredentialsScalarFieldEnum = (typeof CredentialsScalarFieldEnum)[keyof typeof CredentialsScalarFieldEnum]
+
+
+export const VerificationCodesScalarFieldEnum = {
+  uid: 'uid',
+  credentialUid: 'credentialUid',
+  code: 'code',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type VerificationCodesScalarFieldEnum = (typeof VerificationCodesScalarFieldEnum)[keyof typeof VerificationCodesScalarFieldEnum]
 
 
 export const GroupsScalarFieldEnum = {
@@ -178,6 +191,7 @@ export const StylesScalarFieldEnum = {
   uid: 'uid',
   name: 'name',
   description: 'description',
+  category: 'category',
   isActive: 'isActive',
   groupId: 'groupId',
   createdAt: 'createdAt',

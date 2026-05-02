@@ -85,7 +85,6 @@ model Users {
   telNumber      String    @db.VarChar(12)
      
   isActive       Boolean   @default(true)
-  isProfesor     Boolean   @default(false)
 
   // RELACIONES
   userType       UserTypes @relation(fields: [userTypeId], references: [uid])
@@ -105,13 +104,26 @@ model Users {
 }
 
 model Credentials {
-  uid        String   @id @default(uuid()) @db.Uuid
-  mail       String   @db.VarChar(100) @unique
-  password   String   @db.VarChar(250)
+  uid              String    @id @default(uuid()) @db.Uuid
+  mail             String    @db.VarChar(100) @unique
+  password         String    @db.VarChar(250)
+  isEmailVerified  Boolean   @default(false)
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  finishedAt DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  finishedAt       DateTime?
+}
+
+model VerificationCodes {
+  uid           String    @id @default(uuid()) @db.Uuid
+  credentialUid String    @db.Uuid
+  code          String    @db.VarChar(6)
+  expiresAt     DateTime
+  usedAt        DateTime?
+
+  createdAt     DateTime  @default(now())
+
+  @@index([credentialUid])
 }
 
 //////////////////////////////////////////////////////
@@ -190,11 +202,12 @@ model Styles {
   uid          String          @id @default(uuid()) @db.Uuid
   name         String          @db.VarChar(30)
   description  String          @db.VarChar(300)
-  isActive     Boolean       @default(true)
+  category     Category        @default(ARTES)
+  isActive     Boolean         @default(true)
 
   products     ProductStyle[]
 
-  groupId      String          @db.Uuid
+    groupId      String          @db.Uuid
   group        Groups          @relation(fields: [groupId], references: [uid])
 
   createdAt    DateTime        @default(now())

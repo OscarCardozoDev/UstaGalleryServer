@@ -55,7 +55,6 @@ export class ClassesController {
     @Param() params: GroupParamDto,
     @Query() query: GetClassesDto,
   ) {
-    console.log(params.groupId);
     return this.classesService.getByGroup(params.groupId, query.from, query.to);
   }
 
