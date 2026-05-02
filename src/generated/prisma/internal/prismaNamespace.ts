@@ -1964,7 +1964,6 @@ export const UsersScalarFieldEnum = {
   semester: 'semester',
   telNumber: 'telNumber',
   isActive: 'isActive',
-  isProfesor: 'isProfesor',
   userTypeId: 'userTypeId',
   photoId: 'photoId',
   createdAt: 'createdAt',

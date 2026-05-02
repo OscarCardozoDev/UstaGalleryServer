@@ -46,7 +46,10 @@ export class AuthController {
       throw new UnauthorizedException('Password not match');
     }
 
-    const token = await this.jwtService.signAsync({ uid: credential.uid });
+    const token = await this.jwtService.signAsync({
+      uid: credential.uid,
+      userTypeId: credential.userTypeId,
+    });
 
     res.cookie('access_token', token, {
       httpOnly: true,

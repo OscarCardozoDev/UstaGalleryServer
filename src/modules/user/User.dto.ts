@@ -53,11 +53,6 @@ export class CreateUserDto {
   @IsString()
   telNumber: string;
 
-  @ApiPropertyOptional({ example: false })
-  @IsOptional()
-  @IsBoolean()
-  isProfesor?: boolean;
-
   @ApiProperty({ example: 'uuid-del-tipo' })
   @IsString()
   userTypeId: string;
@@ -107,11 +102,6 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   telNumber?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsBoolean()
-  isProfesor?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()

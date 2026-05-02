@@ -36,7 +36,6 @@ export type UsersMinAggregateOutputType = {
   semester: string | null
   telNumber: string | null
   isActive: boolean | null
-  isProfesor: boolean | null
   userTypeId: string | null
   photoId: string | null
   createdAt: Date | null
@@ -56,7 +55,6 @@ export type UsersMaxAggregateOutputType = {
   semester: string | null
   telNumber: string | null
   isActive: boolean | null
-  isProfesor: boolean | null
   userTypeId: string | null
   photoId: string | null
   createdAt: Date | null
@@ -76,7 +74,6 @@ export type UsersCountAggregateOutputType = {
   semester: number
   telNumber: number
   isActive: number
-  isProfesor: number
   userTypeId: number
   photoId: number
   createdAt: number
@@ -98,7 +95,6 @@ export type UsersMinAggregateInputType = {
   semester?: true
   telNumber?: true
   isActive?: true
-  isProfesor?: true
   userTypeId?: true
   photoId?: true
   createdAt?: true
@@ -118,7 +114,6 @@ export type UsersMaxAggregateInputType = {
   semester?: true
   telNumber?: true
   isActive?: true
-  isProfesor?: true
   userTypeId?: true
   photoId?: true
   createdAt?: true
@@ -138,7 +133,6 @@ export type UsersCountAggregateInputType = {
   semester?: true
   telNumber?: true
   isActive?: true
-  isProfesor?: true
   userTypeId?: true
   photoId?: true
   createdAt?: true
@@ -231,7 +225,6 @@ export type UsersGroupByOutputType = {
   semester: string
   telNumber: string
   isActive: boolean
-  isProfesor: boolean
   userTypeId: string
   photoId: string | null
   createdAt: Date
@@ -272,7 +265,6 @@ export type UsersWhereInput = {
   semester?: Prisma.StringFilter<"Users"> | string
   telNumber?: Prisma.StringFilter<"Users"> | string
   isActive?: Prisma.BoolFilter<"Users"> | boolean
-  isProfesor?: Prisma.BoolFilter<"Users"> | boolean
   userTypeId?: Prisma.UuidFilter<"Users"> | string
   photoId?: Prisma.UuidNullableFilter<"Users"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Users"> | Date | string
@@ -299,7 +291,6 @@ export type UsersOrderByWithRelationInput = {
   semester?: Prisma.SortOrder
   telNumber?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  isProfesor?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
   photoId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -330,7 +321,6 @@ export type UsersWhereUniqueInput = Prisma.AtLeast<{
   semester?: Prisma.StringFilter<"Users"> | string
   telNumber?: Prisma.StringFilter<"Users"> | string
   isActive?: Prisma.BoolFilter<"Users"> | boolean
-  isProfesor?: Prisma.BoolFilter<"Users"> | boolean
   userTypeId?: Prisma.UuidFilter<"Users"> | string
   createdAt?: Prisma.DateTimeFilter<"Users"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Users"> | Date | string
@@ -356,7 +346,6 @@ export type UsersOrderByWithAggregationInput = {
   semester?: Prisma.SortOrder
   telNumber?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  isProfesor?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
   photoId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -382,7 +371,6 @@ export type UsersScalarWhereWithAggregatesInput = {
   semester?: Prisma.StringWithAggregatesFilter<"Users"> | string
   telNumber?: Prisma.StringWithAggregatesFilter<"Users"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"Users"> | boolean
-  isProfesor?: Prisma.BoolWithAggregatesFilter<"Users"> | boolean
   userTypeId?: Prisma.UuidWithAggregatesFilter<"Users"> | string
   photoId?: Prisma.UuidNullableWithAggregatesFilter<"Users"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Users"> | Date | string
@@ -402,7 +390,6 @@ export type UsersCreateInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -427,7 +414,6 @@ export type UsersUncheckedCreateInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   userTypeId: string
   photoId?: string | null
   createdAt?: Date | string
@@ -452,7 +438,6 @@ export type UsersUpdateInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -477,7 +462,6 @@ export type UsersUncheckedUpdateInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -502,7 +486,6 @@ export type UsersCreateManyInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   userTypeId: string
   photoId?: string | null
   createdAt?: Date | string
@@ -522,7 +505,6 @@ export type UsersUpdateManyMutationInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -540,7 +522,6 @@ export type UsersUncheckedUpdateManyInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -570,7 +551,6 @@ export type UsersCountOrderByAggregateInput = {
   semester?: Prisma.SortOrder
   telNumber?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  isProfesor?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -590,7 +570,6 @@ export type UsersMaxOrderByAggregateInput = {
   semester?: Prisma.SortOrder
   telNumber?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  isProfesor?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -610,7 +589,6 @@ export type UsersMinOrderByAggregateInput = {
   semester?: Prisma.SortOrder
   telNumber?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  isProfesor?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -796,7 +774,6 @@ export type UsersCreateWithoutUserTypeInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -820,7 +797,6 @@ export type UsersUncheckedCreateWithoutUserTypeInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   photoId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -873,7 +849,6 @@ export type UsersScalarWhereInput = {
   semester?: Prisma.StringFilter<"Users"> | string
   telNumber?: Prisma.StringFilter<"Users"> | string
   isActive?: Prisma.BoolFilter<"Users"> | boolean
-  isProfesor?: Prisma.BoolFilter<"Users"> | boolean
   userTypeId?: Prisma.UuidFilter<"Users"> | string
   photoId?: Prisma.UuidNullableFilter<"Users"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Users"> | Date | string
@@ -893,7 +868,6 @@ export type UsersCreateWithoutManagedGroupsInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -917,7 +891,6 @@ export type UsersUncheckedCreateWithoutManagedGroupsInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   userTypeId: string
   photoId?: string | null
   createdAt?: Date | string
@@ -957,7 +930,6 @@ export type UsersUpdateWithoutManagedGroupsInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -981,7 +953,6 @@ export type UsersUncheckedUpdateWithoutManagedGroupsInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1005,7 +976,6 @@ export type UsersCreateWithoutGroupsInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -1029,7 +999,6 @@ export type UsersUncheckedCreateWithoutGroupsInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   userTypeId: string
   photoId?: string | null
   createdAt?: Date | string
@@ -1069,7 +1038,6 @@ export type UsersUpdateWithoutGroupsInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1093,7 +1061,6 @@ export type UsersUncheckedUpdateWithoutGroupsInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1117,7 +1084,6 @@ export type UsersCreateWithoutPhotoInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -1141,7 +1107,6 @@ export type UsersUncheckedCreateWithoutPhotoInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   userTypeId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1181,7 +1146,6 @@ export type UsersUpdateWithoutPhotoInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1205,7 +1169,6 @@ export type UsersUncheckedUpdateWithoutPhotoInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1229,7 +1192,6 @@ export type UsersCreateWithoutCreatedEventsInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -1253,7 +1215,6 @@ export type UsersUncheckedCreateWithoutCreatedEventsInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   userTypeId: string
   photoId?: string | null
   createdAt?: Date | string
@@ -1293,7 +1254,6 @@ export type UsersUpdateWithoutCreatedEventsInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1317,7 +1277,6 @@ export type UsersUncheckedUpdateWithoutCreatedEventsInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1341,7 +1300,6 @@ export type UsersCreateWithoutProductsInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -1365,7 +1323,6 @@ export type UsersUncheckedCreateWithoutProductsInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   userTypeId: string
   photoId?: string | null
   createdAt?: Date | string
@@ -1405,7 +1362,6 @@ export type UsersUpdateWithoutProductsInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1429,7 +1385,6 @@ export type UsersUncheckedUpdateWithoutProductsInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1453,7 +1408,6 @@ export type UsersCreateWithoutAttendanceInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -1477,7 +1431,6 @@ export type UsersUncheckedCreateWithoutAttendanceInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   userTypeId: string
   photoId?: string | null
   createdAt?: Date | string
@@ -1517,7 +1470,6 @@ export type UsersUpdateWithoutAttendanceInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1541,7 +1493,6 @@ export type UsersUncheckedUpdateWithoutAttendanceInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1565,7 +1516,6 @@ export type UsersCreateManyUserTypeInput = {
   semester: string
   telNumber: string
   isActive?: boolean
-  isProfesor?: boolean
   photoId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1584,7 +1534,6 @@ export type UsersUpdateWithoutUserTypeInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1608,7 +1557,6 @@ export type UsersUncheckedUpdateWithoutUserTypeInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1632,7 +1580,6 @@ export type UsersUncheckedUpdateManyWithoutUserTypeInput = {
   semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isProfesor?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1718,7 +1665,6 @@ export type UsersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   semester?: boolean
   telNumber?: boolean
   isActive?: boolean
-  isProfesor?: boolean
   userTypeId?: boolean
   photoId?: boolean
   createdAt?: boolean
@@ -1746,7 +1692,6 @@ export type UsersSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   semester?: boolean
   telNumber?: boolean
   isActive?: boolean
-  isProfesor?: boolean
   userTypeId?: boolean
   photoId?: boolean
   createdAt?: boolean
@@ -1768,7 +1713,6 @@ export type UsersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   semester?: boolean
   telNumber?: boolean
   isActive?: boolean
-  isProfesor?: boolean
   userTypeId?: boolean
   photoId?: boolean
   createdAt?: boolean
@@ -1790,7 +1734,6 @@ export type UsersSelectScalar = {
   semester?: boolean
   telNumber?: boolean
   isActive?: boolean
-  isProfesor?: boolean
   userTypeId?: boolean
   photoId?: boolean
   createdAt?: boolean
@@ -1798,7 +1741,7 @@ export type UsersSelectScalar = {
   finishAt?: boolean
 }
 
-export type UsersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "name" | "lastName" | "username" | "description" | "gender" | "idCard" | "degree" | "semester" | "telNumber" | "isActive" | "isProfesor" | "userTypeId" | "photoId" | "createdAt" | "updatedAt" | "finishAt", ExtArgs["result"]["users"]>
+export type UsersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "name" | "lastName" | "username" | "description" | "gender" | "idCard" | "degree" | "semester" | "telNumber" | "isActive" | "userTypeId" | "photoId" | "createdAt" | "updatedAt" | "finishAt", ExtArgs["result"]["users"]>
 export type UsersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   userType?: boolean | Prisma.UserTypesDefaultArgs<ExtArgs>
   photo?: boolean | Prisma.Users$photoArgs<ExtArgs>
@@ -1841,7 +1784,6 @@ export type $UsersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     semester: string
     telNumber: string
     isActive: boolean
-    isProfesor: boolean
     userTypeId: string
     photoId: string | null
     createdAt: Date
@@ -2288,7 +2230,6 @@ export interface UsersFieldRefs {
   readonly semester: Prisma.FieldRef<"Users", 'String'>
   readonly telNumber: Prisma.FieldRef<"Users", 'String'>
   readonly isActive: Prisma.FieldRef<"Users", 'Boolean'>
-  readonly isProfesor: Prisma.FieldRef<"Users", 'Boolean'>
   readonly userTypeId: Prisma.FieldRef<"Users", 'String'>
   readonly photoId: Prisma.FieldRef<"Users", 'String'>
   readonly createdAt: Prisma.FieldRef<"Users", 'DateTime'>

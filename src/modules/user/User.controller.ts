@@ -43,7 +43,6 @@ export class UserController {
         degree: body.degree,
         semester: body.semester,
         telNumber: body.telNumber,
-        isProfesor: body.isProfesor,
         userTypeId: body.userTypeId,
       },
       photo: body.photo,

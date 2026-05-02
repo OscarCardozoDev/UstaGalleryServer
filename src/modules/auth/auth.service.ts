@@ -31,8 +31,9 @@ export class AuthService {
 
     if (!credential) return null;
 
-    const hasProfile = await this.prismaService.users.findUnique({
+    const userProfile = await this.prismaService.users.findUnique({
       where: { uid: credential.uid },
+      select: { userTypeId: true },
     });
     const hasGroup = await this.prismaService.usersGroups.findFirst({
       where: { userId: credential.uid },
@@ -40,8 +41,9 @@ export class AuthService {
 
     return {
       ...credential,
-      hasProfile: Boolean(hasProfile),
+      hasProfile: Boolean(userProfile),
       hasGroup: Boolean(hasGroup),
+      userTypeId: userProfile?.userTypeId ?? null,
     };
   }
 

@@ -13,7 +13,7 @@ import { AuthGuard } from 'src/middleware/jwt.guard';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('config.jwtSecret'),
-        signOptions: { expiresIn: '365d' },
+        signOptions: { expiresIn: '24h' },
       }),
     }),
   ],
