@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { Resend } from 'resend';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCredentialDto } from './auth.dto';
-import { GetCredentialResult } from './auth.interface';
+import { GetCredentialResult, CredentialWithoutProfile } from './auth.interface';
 
 @Injectable()
 export class AuthService {
@@ -127,5 +127,14 @@ export class AuthService {
     });
 
     return { verified: true };
+  }
+
+  async getCredentialsWithoutProfile(): Promise<CredentialWithoutProfile[]> {
+    return this.prismaService.$queryRaw<CredentialWithoutProfile[]>`
+      SELECT uid::text, mail, "createdAt"
+      FROM "Credentials"
+      WHERE uid NOT IN (SELECT uid FROM "Users")
+      ORDER BY "createdAt" DESC
+    `;
   }
 }

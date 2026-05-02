@@ -6,3 +6,9 @@ export interface GetCredentialResult {
   isEmailVerified?: boolean;
   userTypeId?: string | null;
 }
+
+export interface CredentialWithoutProfile {
+  uid: string;
+  mail: string;
+  createdAt: Date;
+}

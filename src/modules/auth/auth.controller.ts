@@ -7,6 +7,9 @@ import {
   UnauthorizedException,
   UseGuards,
   Req,
+  Get,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import type { Response } from 'express';
@@ -17,6 +20,7 @@ import { hashText, verifyText } from 'src/utils/crypto.util';
 import { CreateCredentialDto, VerifyCodeDto } from './auth.dto';
 import { AuthGuard } from 'src/middleware/jwt.guard';
 import type { AuthenticatedRequest } from 'src/interface/jwtPayload';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -114,5 +118,14 @@ export class AuthController {
   ) {
     await this.authService.verifyEmailCode(req.user.uid, dto.code);
     return { message: 'Código verificado' };
+  }
+
+  @Get('without-profile')
+  @ApiOperation({ summary: 'Obtener credenciales sin perfil de usuario (admin)' })
+  @UseGuards(AuthGuard)
+  @Roles('admin')
+  @HttpCode(HttpStatus.OK)
+  async getWithoutProfile() {
+    return this.authService.getCredentialsWithoutProfile();
   }
 }

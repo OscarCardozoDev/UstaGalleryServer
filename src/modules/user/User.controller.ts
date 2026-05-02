@@ -151,7 +151,7 @@ export class UserController {
     return this.userService.updateUserPhoto(uid, body);
   }
 
-  @Patch('desactivate')
+  @Patch('deactivate')
   @ApiOperation({ summary: 'Desactivar usuario actual' })
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
@@ -159,7 +159,7 @@ export class UserController {
     return this.userService.deactivateUser(user.uid);
   }
 
-  @Patch(':uid/desactivate')
+  @Patch(':uid/deactivate')
   @ApiOperation({ summary: 'Desactivar usuario por UID (admin)' })
   @UseGuards(AuthGuard)
   @Roles('admin')
