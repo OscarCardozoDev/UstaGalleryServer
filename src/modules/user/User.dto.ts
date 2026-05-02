@@ -37,18 +37,6 @@ export class CreateUserDto {
   @IsString()
   gender: string;
 
-  @ApiProperty({ example: '123456789' })
-  @IsString()
-  idCard: string;
-
-  @ApiProperty({ example: 'Artes Plásticas' })
-  @IsString()
-  degree: string;
-
-  @ApiProperty({ example: '5' })
-  @IsString()
-  semester: string;
-
   @ApiProperty({ example: '3001234567' })
   @IsString()
   telNumber: string;
@@ -87,16 +75,6 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   gender?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  degree?: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  semester?: string;
 
   @ApiPropertyOptional()
   @IsOptional()

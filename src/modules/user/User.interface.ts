@@ -5,9 +5,6 @@ export interface User {
   username: string;
   description?: string | null;
   gender: string;
-  idCard: string;
-  degree: string;
-  semester: string;
   telNumber: string;
   isActive: boolean;
   userTypeId: string;
@@ -38,9 +35,6 @@ export interface CreateUserUseCase {
     username: string;
     description?: string;
     gender: string;
-    idCard: string;
-    degree: string;
-    semester: string;
     telNumber: string;
     userTypeId: string;
   };
@@ -57,8 +51,6 @@ export interface UpdateUserUseCase {
   username?: string;
   description?: string;
   gender?: string;
-  degree?: string;
-  semester?: string;
   telNumber?: string;
   userTypeId?: string;
 }
