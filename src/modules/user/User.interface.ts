@@ -1,3 +1,5 @@
+// server/src/modules/user/User.interface.ts
+
 export interface User {
   uid: string;
   name: string;
@@ -9,6 +11,8 @@ export interface User {
   isActive: boolean;
   userTypeId: string;
   photoId?: string | null;
+  roleId?: string | null;
+  roleData?: unknown;
 }
 
 export interface AuthorInfo {
@@ -24,10 +28,11 @@ export interface AuthorInfo {
 export interface UserWithRelations extends User {
   userType?: { uid: string; name?: string } | null;
   photo?: { uid: string; url?: string } | null;
+  role?: { uid: string; name?: string; slug?: string } | null;
   groups?: { group: { uid: string; name?: string } }[] | null;
 }
 
-export interface CreateUserUseCase {
+export interface CreateStudentUseCase {
   uid: string;
   user: {
     name: string;
@@ -36,13 +41,23 @@ export interface CreateUserUseCase {
     description?: string;
     gender: string;
     telNumber: string;
-    userTypeId: string;
+    roleId: string;
+    roleData: unknown;
   };
-  photo?: {
-    base64: string;
+  photo?: { base64: string; name: string; folder: string };
+}
+
+export interface CreateProfessorUseCase {
+  uid: string;   // Credentials UID del profesor (viene del body, no del JWT del admin)
+  user: {
     name: string;
-    folder: string;
+    lastName: string;
+    username: string;
+    description?: string;
+    gender: string;
+    telNumber: string;
   };
+  photo?: { base64: string; name: string; folder: string };
 }
 
 export interface UpdateUserUseCase {

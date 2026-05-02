@@ -1,5 +1,6 @@
+// server/src/modules/user/User.dto.ts
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsOptional, IsBoolean } from 'class-validator';
+import { IsString, IsOptional, IsObject } from 'class-validator';
 
 class PhotoDto {
   @ApiProperty({ example: '/9j/4AAQSkZJRgAB...' })
@@ -15,7 +16,7 @@ class PhotoDto {
   folder: string;
 }
 
-export class CreateUserDto {
+export class CreateStudentDto {
   @ApiProperty({ example: 'Juan' })
   @IsString()
   name: string;
@@ -41,9 +42,48 @@ export class CreateUserDto {
   @IsString()
   telNumber: string;
 
-  @ApiProperty({ example: 'uuid-del-tipo' })
+  @ApiProperty({ example: 'uuid-del-rol' })
   @IsString()
-  userTypeId: string;
+  roleId: string;
+
+  @ApiProperty({ example: { career: 'Ingeniería de Sistemas', semester: '5' } })
+  @IsObject()
+  roleData: Record<string, string>;
+
+  @ApiPropertyOptional({ type: PhotoDto })
+  @IsOptional()
+  photo?: PhotoDto;
+}
+
+export class CreateProfessorDto {
+  @ApiProperty({ description: 'UID de las Credentials del profesor (ya debe haber hecho register)' })
+  @IsString()
+  uid: string;
+
+  @ApiProperty({ example: 'María' })
+  @IsString()
+  name: string;
+
+  @ApiProperty({ example: 'López' })
+  @IsString()
+  lastName: string;
+
+  @ApiProperty({ example: 'maria_lopez' })
+  @IsString()
+  username: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @ApiProperty({ example: 'F' })
+  @IsString()
+  gender: string;
+
+  @ApiProperty({ example: '3009876543' })
+  @IsString()
+  telNumber: string;
 
   @ApiPropertyOptional({ type: PhotoDto })
   @IsOptional()

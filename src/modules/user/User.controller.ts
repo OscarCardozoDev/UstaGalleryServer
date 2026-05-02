@@ -1,3 +1,4 @@
+// server/src/modules/user/User.controller.ts
 import {
   Body,
   Controller,
@@ -13,7 +14,12 @@ import {
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { CurrentUser } from 'src/decorators/currentUser';
 import { UserService } from './User.service';
-import { CreateUserDto, UpdateUserDto, UpdateUserPhotoDto } from './User.dto';
+import {
+  CreateStudentDto,
+  CreateProfessorDto,
+  UpdateUserDto,
+  UpdateUserPhotoDto,
+} from './User.dto';
 import type { JwtPayload } from 'src/interface/jwtPayload';
 import { AuthGuard } from 'src/middleware/jwt.guard';
 import { Roles } from 'src/decorators/roles.decorator';
@@ -24,14 +30,14 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('create')
-  @ApiOperation({ summary: 'Crear perfil de usuario' })
+  @ApiOperation({ summary: 'Crear perfil de estudiante' })
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)
   async createUser(
-    @Body() body: CreateUserDto,
+    @Body() body: CreateStudentDto,
     @CurrentUser('uid') uid: string,
   ) {
-    return this.userService.createUserUseCase({
+    return this.userService.createStudentUseCase({
       uid,
       user: {
         name: body.name,
@@ -40,7 +46,29 @@ export class UserController {
         description: body.description,
         gender: body.gender,
         telNumber: body.telNumber,
-        userTypeId: body.userTypeId,
+        roleId: body.roleId,
+        roleData: body.roleData,
+      },
+      photo: body.photo,
+    });
+  }
+
+  @Post('professor')
+  @ApiOperation({ summary: 'Crear perfil de profesor (solo admin) — el profesor debe haber hecho register primero' })
+  @UseGuards(AuthGuard)
+  @Roles('admin')
+  @HttpCode(HttpStatus.CREATED)
+  async createProfessor(@Body() body: CreateProfessorDto) {
+    // uid viene del body (UID de las Credentials del profesor), no del admin que hace la petición
+    return this.userService.createProfessorUseCase({
+      uid: body.uid,
+      user: {
+        name: body.name,
+        lastName: body.lastName,
+        username: body.username,
+        description: body.description,
+        gender: body.gender,
+        telNumber: body.telNumber,
       },
       photo: body.photo,
     });
@@ -48,6 +76,7 @@ export class UserController {
 
   @Get('allActive')
   @ApiOperation({ summary: 'Obtener todos los usuarios activos' })
+  @UseGuards(AuthGuard)
   @Roles('admin', 'professor')
   @HttpCode(HttpStatus.OK)
   async getActiveUsers() {
@@ -78,6 +107,7 @@ export class UserController {
 
   @Put('update')
   @ApiOperation({ summary: 'Actualizar usuario actual' })
+  @UseGuards(AuthGuard)
   @Roles('professor', 'student')
   @HttpCode(HttpStatus.OK)
   async updateCurrentUser(
@@ -89,6 +119,7 @@ export class UserController {
 
   @Put(':uid')
   @ApiOperation({ summary: 'Actualizar usuario por UID (admin)' })
+  @UseGuards(AuthGuard)
   @Roles('admin')
   @HttpCode(HttpStatus.OK)
   async updateUser(@Param('uid') uid: string, @Body() body: UpdateUserDto) {
@@ -97,6 +128,7 @@ export class UserController {
 
   @Patch('photo')
   @ApiOperation({ summary: 'Actualizar foto del usuario actual' })
+  @UseGuards(AuthGuard)
   @Roles('student')
   @HttpCode(HttpStatus.OK)
   async updateCurrentUserPhoto(
@@ -108,7 +140,8 @@ export class UserController {
 
   @Patch(':uid/photo')
   @ApiOperation({ summary: 'Actualizar foto de usuario por UID (admin)' })
-  @Roles('student')
+  @UseGuards(AuthGuard)
+  @Roles('admin')
   @HttpCode(HttpStatus.OK)
   async updateUserPhoto(
     @Param('uid') uid: string,
@@ -127,6 +160,7 @@ export class UserController {
 
   @Patch(':uid/desactivate')
   @ApiOperation({ summary: 'Desactivar usuario por UID (admin)' })
+  @UseGuards(AuthGuard)
   @Roles('admin')
   @HttpCode(HttpStatus.OK)
   async deactivateUser(@Param('uid') uid: string) {
@@ -135,6 +169,7 @@ export class UserController {
 
   @Patch(':uid/reactivate')
   @ApiOperation({ summary: 'Reactivar usuario (admin)' })
+  @UseGuards(AuthGuard)
   @Roles('admin')
   @HttpCode(HttpStatus.OK)
   async reactivateUser(@Param('uid') uid: string) {
