@@ -3,8 +3,10 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  ConflictException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Prisma } from 'src/generated/prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PhotosService } from 'src/modules/photos/Photos.service';
 import { validateRoleData, sanitizeRoleData } from 'src/utils/role-data.validator';
@@ -103,26 +105,36 @@ export class UserService {
       photoResult = { uid: created.uid };
     }
 
-    return this.prismaService.$transaction(async (tx) => {
-      const created = await tx.users.create({
-        data: {
-          uid,
-          name: user.name,
-          lastName: user.lastName,
-          username: user.username,
-          description: user.description,
-          gender: user.gender,
-          telNumber: user.telNumber,
-          userType: { connect: { uid: studentTypeId } },
-          role: { connect: { uid: user.roleId } },
-          roleData: sanitized,
-          ...(photoResult && { photo: { connect: { uid: photoResult.uid } } }),
-        },
-        select: { uid: true },
-      });
+    try {
+      return await this.prismaService.$transaction(async (tx) => {
+        const created = await tx.users.create({
+          data: {
+            uid,
+            name: user.name,
+            lastName: user.lastName,
+            username: user.username,
+            description: user.description,
+            gender: user.gender,
+            telNumber: user.telNumber,
+            userType: { connect: { uid: studentTypeId } },
+            role: { connect: { uid: user.roleId } },
+            roleData: sanitized,
+            ...(photoResult && { photo: { connect: { uid: photoResult.uid } } }),
+          },
+          select: { uid: true },
+        });
 
-      return { uid: created.uid, ...(photoResult && { photo: photoResult }) };
-    });
+        return { uid: created.uid, ...(photoResult && { photo: photoResult }) };
+      });
+    } catch (e) {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2002'
+      ) {
+        throw new ConflictException('username or uid already in use');
+      }
+      throw e;
+    }
   }
 
   async createProfessorUseCase(data: CreateProfessorUseCase): Promise<UserUidResult> {
@@ -143,26 +155,36 @@ export class UserService {
       photoResult = { uid: created.uid };
     }
 
-    return this.prismaService.$transaction(async (tx) => {
-      const created = await tx.users.create({
-        data: {
-          uid,
-          name: user.name,
-          lastName: user.lastName,
-          username: user.username,
-          description: user.description,
-          gender: user.gender,
-          telNumber: user.telNumber,
-          userType: { connect: { uid: professorTypeId } },
-          role: { connect: { uid: particularRole.uid } },
-          roleData: {},
-          ...(photoResult && { photo: { connect: { uid: photoResult.uid } } }),
-        },
-        select: { uid: true },
-      });
+    try {
+      return await this.prismaService.$transaction(async (tx) => {
+        const created = await tx.users.create({
+          data: {
+            uid,
+            name: user.name,
+            lastName: user.lastName,
+            username: user.username,
+            description: user.description,
+            gender: user.gender,
+            telNumber: user.telNumber,
+            userType: { connect: { uid: professorTypeId } },
+            role: { connect: { uid: particularRole.uid } },
+            roleData: {},
+            ...(photoResult && { photo: { connect: { uid: photoResult.uid } } }),
+          },
+          select: { uid: true },
+        });
 
-      return { uid: created.uid, ...(photoResult && { photo: photoResult }) };
-    });
+        return { uid: created.uid, ...(photoResult && { photo: photoResult }) };
+      });
+    } catch (e) {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2002'
+      ) {
+        throw new ConflictException('username or uid already in use');
+      }
+      throw e;
+    }
   }
 
   async updateUser(uid: string, userData: UpdateUserDto): Promise<UserUidResult> {

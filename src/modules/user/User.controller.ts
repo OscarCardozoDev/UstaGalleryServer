@@ -32,6 +32,7 @@ export class UserController {
   @Post('create')
   @ApiOperation({ summary: 'Crear perfil de estudiante' })
   @UseGuards(AuthGuard)
+  @Roles('student')
   @HttpCode(HttpStatus.CREATED)
   async createUser(
     @Body() body: CreateStudentDto,
@@ -129,7 +130,7 @@ export class UserController {
   @Patch('photo')
   @ApiOperation({ summary: 'Actualizar foto del usuario actual' })
   @UseGuards(AuthGuard)
-  @Roles('student')
+  @Roles('student', 'professor')
   @HttpCode(HttpStatus.OK)
   async updateCurrentUserPhoto(
     @CurrentUser() user: JwtPayload,
