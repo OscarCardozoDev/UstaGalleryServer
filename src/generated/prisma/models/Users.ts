@@ -31,13 +31,11 @@ export type UsersMinAggregateOutputType = {
   username: string | null
   description: string | null
   gender: string | null
-  idCard: string | null
-  degree: string | null
-  semester: string | null
   telNumber: string | null
   isActive: boolean | null
   userTypeId: string | null
   photoId: string | null
+  roleId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   finishAt: Date | null
@@ -50,13 +48,11 @@ export type UsersMaxAggregateOutputType = {
   username: string | null
   description: string | null
   gender: string | null
-  idCard: string | null
-  degree: string | null
-  semester: string | null
   telNumber: string | null
   isActive: boolean | null
   userTypeId: string | null
   photoId: string | null
+  roleId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   finishAt: Date | null
@@ -69,13 +65,12 @@ export type UsersCountAggregateOutputType = {
   username: number
   description: number
   gender: number
-  idCard: number
-  degree: number
-  semester: number
   telNumber: number
   isActive: number
   userTypeId: number
   photoId: number
+  roleId: number
+  roleData: number
   createdAt: number
   updatedAt: number
   finishAt: number
@@ -90,13 +85,11 @@ export type UsersMinAggregateInputType = {
   username?: true
   description?: true
   gender?: true
-  idCard?: true
-  degree?: true
-  semester?: true
   telNumber?: true
   isActive?: true
   userTypeId?: true
   photoId?: true
+  roleId?: true
   createdAt?: true
   updatedAt?: true
   finishAt?: true
@@ -109,13 +102,11 @@ export type UsersMaxAggregateInputType = {
   username?: true
   description?: true
   gender?: true
-  idCard?: true
-  degree?: true
-  semester?: true
   telNumber?: true
   isActive?: true
   userTypeId?: true
   photoId?: true
+  roleId?: true
   createdAt?: true
   updatedAt?: true
   finishAt?: true
@@ -128,13 +119,12 @@ export type UsersCountAggregateInputType = {
   username?: true
   description?: true
   gender?: true
-  idCard?: true
-  degree?: true
-  semester?: true
   telNumber?: true
   isActive?: true
   userTypeId?: true
   photoId?: true
+  roleId?: true
+  roleData?: true
   createdAt?: true
   updatedAt?: true
   finishAt?: true
@@ -220,13 +210,12 @@ export type UsersGroupByOutputType = {
   username: string
   description: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive: boolean
   userTypeId: string
   photoId: string | null
+  roleId: string | null
+  roleData: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
   finishAt: Date | null
@@ -260,18 +249,18 @@ export type UsersWhereInput = {
   username?: Prisma.StringFilter<"Users"> | string
   description?: Prisma.StringNullableFilter<"Users"> | string | null
   gender?: Prisma.StringFilter<"Users"> | string
-  idCard?: Prisma.StringFilter<"Users"> | string
-  degree?: Prisma.StringFilter<"Users"> | string
-  semester?: Prisma.StringFilter<"Users"> | string
   telNumber?: Prisma.StringFilter<"Users"> | string
   isActive?: Prisma.BoolFilter<"Users"> | boolean
   userTypeId?: Prisma.UuidFilter<"Users"> | string
   photoId?: Prisma.UuidNullableFilter<"Users"> | string | null
+  roleId?: Prisma.UuidNullableFilter<"Users"> | string | null
+  roleData?: Prisma.JsonNullableFilter<"Users">
   createdAt?: Prisma.DateTimeFilter<"Users"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Users"> | Date | string
   finishAt?: Prisma.DateTimeNullableFilter<"Users"> | Date | string | null
   userType?: Prisma.XOR<Prisma.UserTypesScalarRelationFilter, Prisma.UserTypesWhereInput>
   photo?: Prisma.XOR<Prisma.PhotosNullableScalarRelationFilter, Prisma.PhotosWhereInput> | null
+  role?: Prisma.XOR<Prisma.RolesNullableScalarRelationFilter, Prisma.RolesWhereInput> | null
   groups?: Prisma.UsersGroupsListRelationFilter
   products?: Prisma.UserProductListRelationFilter
   managedGroups?: Prisma.GroupsListRelationFilter
@@ -286,18 +275,18 @@ export type UsersOrderByWithRelationInput = {
   username?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   gender?: Prisma.SortOrder
-  idCard?: Prisma.SortOrder
-  degree?: Prisma.SortOrder
-  semester?: Prisma.SortOrder
   telNumber?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
   photoId?: Prisma.SortOrderInput | Prisma.SortOrder
+  roleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  roleData?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   finishAt?: Prisma.SortOrderInput | Prisma.SortOrder
   userType?: Prisma.UserTypesOrderByWithRelationInput
   photo?: Prisma.PhotosOrderByWithRelationInput
+  role?: Prisma.RolesOrderByWithRelationInput
   groups?: Prisma.UsersGroupsOrderByRelationAggregateInput
   products?: Prisma.UserProductOrderByRelationAggregateInput
   managedGroups?: Prisma.GroupsOrderByRelationAggregateInput
@@ -308,7 +297,6 @@ export type UsersOrderByWithRelationInput = {
 export type UsersWhereUniqueInput = Prisma.AtLeast<{
   uid?: string
   username?: string
-  idCard?: string
   photoId?: string
   AND?: Prisma.UsersWhereInput | Prisma.UsersWhereInput[]
   OR?: Prisma.UsersWhereInput[]
@@ -317,22 +305,23 @@ export type UsersWhereUniqueInput = Prisma.AtLeast<{
   lastName?: Prisma.StringFilter<"Users"> | string
   description?: Prisma.StringNullableFilter<"Users"> | string | null
   gender?: Prisma.StringFilter<"Users"> | string
-  degree?: Prisma.StringFilter<"Users"> | string
-  semester?: Prisma.StringFilter<"Users"> | string
   telNumber?: Prisma.StringFilter<"Users"> | string
   isActive?: Prisma.BoolFilter<"Users"> | boolean
   userTypeId?: Prisma.UuidFilter<"Users"> | string
+  roleId?: Prisma.UuidNullableFilter<"Users"> | string | null
+  roleData?: Prisma.JsonNullableFilter<"Users">
   createdAt?: Prisma.DateTimeFilter<"Users"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Users"> | Date | string
   finishAt?: Prisma.DateTimeNullableFilter<"Users"> | Date | string | null
   userType?: Prisma.XOR<Prisma.UserTypesScalarRelationFilter, Prisma.UserTypesWhereInput>
   photo?: Prisma.XOR<Prisma.PhotosNullableScalarRelationFilter, Prisma.PhotosWhereInput> | null
+  role?: Prisma.XOR<Prisma.RolesNullableScalarRelationFilter, Prisma.RolesWhereInput> | null
   groups?: Prisma.UsersGroupsListRelationFilter
   products?: Prisma.UserProductListRelationFilter
   managedGroups?: Prisma.GroupsListRelationFilter
   createdEvents?: Prisma.EventsListRelationFilter
   attendance?: Prisma.AttendanceListRelationFilter
-}, "uid" | "uid" | "username" | "idCard" | "photoId">
+}, "uid" | "uid" | "username" | "photoId">
 
 export type UsersOrderByWithAggregationInput = {
   uid?: Prisma.SortOrder
@@ -341,13 +330,12 @@ export type UsersOrderByWithAggregationInput = {
   username?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   gender?: Prisma.SortOrder
-  idCard?: Prisma.SortOrder
-  degree?: Prisma.SortOrder
-  semester?: Prisma.SortOrder
   telNumber?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
   photoId?: Prisma.SortOrderInput | Prisma.SortOrder
+  roleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  roleData?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   finishAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -366,13 +354,12 @@ export type UsersScalarWhereWithAggregatesInput = {
   username?: Prisma.StringWithAggregatesFilter<"Users"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Users"> | string | null
   gender?: Prisma.StringWithAggregatesFilter<"Users"> | string
-  idCard?: Prisma.StringWithAggregatesFilter<"Users"> | string
-  degree?: Prisma.StringWithAggregatesFilter<"Users"> | string
-  semester?: Prisma.StringWithAggregatesFilter<"Users"> | string
   telNumber?: Prisma.StringWithAggregatesFilter<"Users"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"Users"> | boolean
   userTypeId?: Prisma.UuidWithAggregatesFilter<"Users"> | string
   photoId?: Prisma.UuidNullableWithAggregatesFilter<"Users"> | string | null
+  roleId?: Prisma.UuidNullableWithAggregatesFilter<"Users"> | string | null
+  roleData?: Prisma.JsonNullableWithAggregatesFilter<"Users">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Users"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Users"> | Date | string
   finishAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Users"> | Date | string | null
@@ -385,16 +372,15 @@ export type UsersCreateInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
   userType: Prisma.UserTypesCreateNestedOneWithoutUsersInput
   photo?: Prisma.PhotosCreateNestedOneWithoutUserInput
+  role?: Prisma.RolesCreateNestedOneWithoutUsersInput
   groups?: Prisma.UsersGroupsCreateNestedManyWithoutUserInput
   products?: Prisma.UserProductCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
@@ -409,13 +395,12 @@ export type UsersUncheckedCreateInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
   userTypeId: string
   photoId?: string | null
+  roleId?: string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -433,16 +418,15 @@ export type UsersUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userType?: Prisma.UserTypesUpdateOneRequiredWithoutUsersNestedInput
   photo?: Prisma.PhotosUpdateOneWithoutUserNestedInput
+  role?: Prisma.RolesUpdateOneWithoutUsersNestedInput
   groups?: Prisma.UsersGroupsUpdateManyWithoutUserNestedInput
   products?: Prisma.UserProductUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
@@ -457,13 +441,12 @@ export type UsersUncheckedUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -481,13 +464,12 @@ export type UsersCreateManyInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
   userTypeId: string
   photoId?: string | null
+  roleId?: string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -500,11 +482,9 @@ export type UsersUpdateManyMutationInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -517,13 +497,12 @@ export type UsersUncheckedUpdateManyInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -546,13 +525,12 @@ export type UsersCountOrderByAggregateInput = {
   username?: Prisma.SortOrder
   description?: Prisma.SortOrder
   gender?: Prisma.SortOrder
-  idCard?: Prisma.SortOrder
-  degree?: Prisma.SortOrder
-  semester?: Prisma.SortOrder
   telNumber?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
+  roleId?: Prisma.SortOrder
+  roleData?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   finishAt?: Prisma.SortOrder
@@ -565,13 +543,11 @@ export type UsersMaxOrderByAggregateInput = {
   username?: Prisma.SortOrder
   description?: Prisma.SortOrder
   gender?: Prisma.SortOrder
-  idCard?: Prisma.SortOrder
-  degree?: Prisma.SortOrder
-  semester?: Prisma.SortOrder
   telNumber?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
+  roleId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   finishAt?: Prisma.SortOrder
@@ -584,13 +560,11 @@ export type UsersMinOrderByAggregateInput = {
   username?: Prisma.SortOrder
   description?: Prisma.SortOrder
   gender?: Prisma.SortOrder
-  idCard?: Prisma.SortOrder
-  degree?: Prisma.SortOrder
-  semester?: Prisma.SortOrder
   telNumber?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   userTypeId?: Prisma.SortOrder
   photoId?: Prisma.SortOrder
+  roleId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   finishAt?: Prisma.SortOrder
@@ -645,6 +619,48 @@ export type UsersUncheckedUpdateManyWithoutUserTypeNestedInput = {
   connect?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
   update?: Prisma.UsersUpdateWithWhereUniqueWithoutUserTypeInput | Prisma.UsersUpdateWithWhereUniqueWithoutUserTypeInput[]
   updateMany?: Prisma.UsersUpdateManyWithWhereWithoutUserTypeInput | Prisma.UsersUpdateManyWithWhereWithoutUserTypeInput[]
+  deleteMany?: Prisma.UsersScalarWhereInput | Prisma.UsersScalarWhereInput[]
+}
+
+export type UsersCreateNestedManyWithoutRoleInput = {
+  create?: Prisma.XOR<Prisma.UsersCreateWithoutRoleInput, Prisma.UsersUncheckedCreateWithoutRoleInput> | Prisma.UsersCreateWithoutRoleInput[] | Prisma.UsersUncheckedCreateWithoutRoleInput[]
+  connectOrCreate?: Prisma.UsersCreateOrConnectWithoutRoleInput | Prisma.UsersCreateOrConnectWithoutRoleInput[]
+  createMany?: Prisma.UsersCreateManyRoleInputEnvelope
+  connect?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+}
+
+export type UsersUncheckedCreateNestedManyWithoutRoleInput = {
+  create?: Prisma.XOR<Prisma.UsersCreateWithoutRoleInput, Prisma.UsersUncheckedCreateWithoutRoleInput> | Prisma.UsersCreateWithoutRoleInput[] | Prisma.UsersUncheckedCreateWithoutRoleInput[]
+  connectOrCreate?: Prisma.UsersCreateOrConnectWithoutRoleInput | Prisma.UsersCreateOrConnectWithoutRoleInput[]
+  createMany?: Prisma.UsersCreateManyRoleInputEnvelope
+  connect?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+}
+
+export type UsersUpdateManyWithoutRoleNestedInput = {
+  create?: Prisma.XOR<Prisma.UsersCreateWithoutRoleInput, Prisma.UsersUncheckedCreateWithoutRoleInput> | Prisma.UsersCreateWithoutRoleInput[] | Prisma.UsersUncheckedCreateWithoutRoleInput[]
+  connectOrCreate?: Prisma.UsersCreateOrConnectWithoutRoleInput | Prisma.UsersCreateOrConnectWithoutRoleInput[]
+  upsert?: Prisma.UsersUpsertWithWhereUniqueWithoutRoleInput | Prisma.UsersUpsertWithWhereUniqueWithoutRoleInput[]
+  createMany?: Prisma.UsersCreateManyRoleInputEnvelope
+  set?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  disconnect?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  delete?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  connect?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  update?: Prisma.UsersUpdateWithWhereUniqueWithoutRoleInput | Prisma.UsersUpdateWithWhereUniqueWithoutRoleInput[]
+  updateMany?: Prisma.UsersUpdateManyWithWhereWithoutRoleInput | Prisma.UsersUpdateManyWithWhereWithoutRoleInput[]
+  deleteMany?: Prisma.UsersScalarWhereInput | Prisma.UsersScalarWhereInput[]
+}
+
+export type UsersUncheckedUpdateManyWithoutRoleNestedInput = {
+  create?: Prisma.XOR<Prisma.UsersCreateWithoutRoleInput, Prisma.UsersUncheckedCreateWithoutRoleInput> | Prisma.UsersCreateWithoutRoleInput[] | Prisma.UsersUncheckedCreateWithoutRoleInput[]
+  connectOrCreate?: Prisma.UsersCreateOrConnectWithoutRoleInput | Prisma.UsersCreateOrConnectWithoutRoleInput[]
+  upsert?: Prisma.UsersUpsertWithWhereUniqueWithoutRoleInput | Prisma.UsersUpsertWithWhereUniqueWithoutRoleInput[]
+  createMany?: Prisma.UsersCreateManyRoleInputEnvelope
+  set?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  disconnect?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  delete?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  connect?: Prisma.UsersWhereUniqueInput | Prisma.UsersWhereUniqueInput[]
+  update?: Prisma.UsersUpdateWithWhereUniqueWithoutRoleInput | Prisma.UsersUpdateWithWhereUniqueWithoutRoleInput[]
+  updateMany?: Prisma.UsersUpdateManyWithWhereWithoutRoleInput | Prisma.UsersUpdateManyWithWhereWithoutRoleInput[]
   deleteMany?: Prisma.UsersScalarWhereInput | Prisma.UsersScalarWhereInput[]
 }
 
@@ -769,15 +785,14 @@ export type UsersCreateWithoutUserTypeInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
   photo?: Prisma.PhotosCreateNestedOneWithoutUserInput
+  role?: Prisma.RolesCreateNestedOneWithoutUsersInput
   groups?: Prisma.UsersGroupsCreateNestedManyWithoutUserInput
   products?: Prisma.UserProductCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
@@ -792,12 +807,11 @@ export type UsersUncheckedCreateWithoutUserTypeInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
   photoId?: string | null
+  roleId?: string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -844,16 +858,85 @@ export type UsersScalarWhereInput = {
   username?: Prisma.StringFilter<"Users"> | string
   description?: Prisma.StringNullableFilter<"Users"> | string | null
   gender?: Prisma.StringFilter<"Users"> | string
-  idCard?: Prisma.StringFilter<"Users"> | string
-  degree?: Prisma.StringFilter<"Users"> | string
-  semester?: Prisma.StringFilter<"Users"> | string
   telNumber?: Prisma.StringFilter<"Users"> | string
   isActive?: Prisma.BoolFilter<"Users"> | boolean
   userTypeId?: Prisma.UuidFilter<"Users"> | string
   photoId?: Prisma.UuidNullableFilter<"Users"> | string | null
+  roleId?: Prisma.UuidNullableFilter<"Users"> | string | null
+  roleData?: Prisma.JsonNullableFilter<"Users">
   createdAt?: Prisma.DateTimeFilter<"Users"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Users"> | Date | string
   finishAt?: Prisma.DateTimeNullableFilter<"Users"> | Date | string | null
+}
+
+export type UsersCreateWithoutRoleInput = {
+  uid: string
+  name: string
+  lastName: string
+  username: string
+  description?: string | null
+  gender: string
+  telNumber: string
+  isActive?: boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  finishAt?: Date | string | null
+  userType: Prisma.UserTypesCreateNestedOneWithoutUsersInput
+  photo?: Prisma.PhotosCreateNestedOneWithoutUserInput
+  groups?: Prisma.UsersGroupsCreateNestedManyWithoutUserInput
+  products?: Prisma.UserProductCreateNestedManyWithoutUserInput
+  managedGroups?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
+  createdEvents?: Prisma.EventsCreateNestedManyWithoutCreatedByInput
+  attendance?: Prisma.AttendanceCreateNestedManyWithoutUserInput
+}
+
+export type UsersUncheckedCreateWithoutRoleInput = {
+  uid: string
+  name: string
+  lastName: string
+  username: string
+  description?: string | null
+  gender: string
+  telNumber: string
+  isActive?: boolean
+  userTypeId: string
+  photoId?: string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  finishAt?: Date | string | null
+  groups?: Prisma.UsersGroupsUncheckedCreateNestedManyWithoutUserInput
+  products?: Prisma.UserProductUncheckedCreateNestedManyWithoutUserInput
+  managedGroups?: Prisma.GroupsUncheckedCreateNestedManyWithoutProfesorInput
+  createdEvents?: Prisma.EventsUncheckedCreateNestedManyWithoutCreatedByInput
+  attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UsersCreateOrConnectWithoutRoleInput = {
+  where: Prisma.UsersWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsersCreateWithoutRoleInput, Prisma.UsersUncheckedCreateWithoutRoleInput>
+}
+
+export type UsersCreateManyRoleInputEnvelope = {
+  data: Prisma.UsersCreateManyRoleInput | Prisma.UsersCreateManyRoleInput[]
+  skipDuplicates?: boolean
+}
+
+export type UsersUpsertWithWhereUniqueWithoutRoleInput = {
+  where: Prisma.UsersWhereUniqueInput
+  update: Prisma.XOR<Prisma.UsersUpdateWithoutRoleInput, Prisma.UsersUncheckedUpdateWithoutRoleInput>
+  create: Prisma.XOR<Prisma.UsersCreateWithoutRoleInput, Prisma.UsersUncheckedCreateWithoutRoleInput>
+}
+
+export type UsersUpdateWithWhereUniqueWithoutRoleInput = {
+  where: Prisma.UsersWhereUniqueInput
+  data: Prisma.XOR<Prisma.UsersUpdateWithoutRoleInput, Prisma.UsersUncheckedUpdateWithoutRoleInput>
+}
+
+export type UsersUpdateManyWithWhereWithoutRoleInput = {
+  where: Prisma.UsersScalarWhereInput
+  data: Prisma.XOR<Prisma.UsersUpdateManyMutationInput, Prisma.UsersUncheckedUpdateManyWithoutRoleInput>
 }
 
 export type UsersCreateWithoutManagedGroupsInput = {
@@ -863,16 +946,15 @@ export type UsersCreateWithoutManagedGroupsInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
   userType: Prisma.UserTypesCreateNestedOneWithoutUsersInput
   photo?: Prisma.PhotosCreateNestedOneWithoutUserInput
+  role?: Prisma.RolesCreateNestedOneWithoutUsersInput
   groups?: Prisma.UsersGroupsCreateNestedManyWithoutUserInput
   products?: Prisma.UserProductCreateNestedManyWithoutUserInput
   createdEvents?: Prisma.EventsCreateNestedManyWithoutCreatedByInput
@@ -886,13 +968,12 @@ export type UsersUncheckedCreateWithoutManagedGroupsInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
   userTypeId: string
   photoId?: string | null
+  roleId?: string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -925,16 +1006,15 @@ export type UsersUpdateWithoutManagedGroupsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userType?: Prisma.UserTypesUpdateOneRequiredWithoutUsersNestedInput
   photo?: Prisma.PhotosUpdateOneWithoutUserNestedInput
+  role?: Prisma.RolesUpdateOneWithoutUsersNestedInput
   groups?: Prisma.UsersGroupsUpdateManyWithoutUserNestedInput
   products?: Prisma.UserProductUpdateManyWithoutUserNestedInput
   createdEvents?: Prisma.EventsUpdateManyWithoutCreatedByNestedInput
@@ -948,13 +1028,12 @@ export type UsersUncheckedUpdateWithoutManagedGroupsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -971,16 +1050,15 @@ export type UsersCreateWithoutGroupsInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
   userType: Prisma.UserTypesCreateNestedOneWithoutUsersInput
   photo?: Prisma.PhotosCreateNestedOneWithoutUserInput
+  role?: Prisma.RolesCreateNestedOneWithoutUsersInput
   products?: Prisma.UserProductCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
   createdEvents?: Prisma.EventsCreateNestedManyWithoutCreatedByInput
@@ -994,13 +1072,12 @@ export type UsersUncheckedCreateWithoutGroupsInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
   userTypeId: string
   photoId?: string | null
+  roleId?: string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -1033,16 +1110,15 @@ export type UsersUpdateWithoutGroupsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userType?: Prisma.UserTypesUpdateOneRequiredWithoutUsersNestedInput
   photo?: Prisma.PhotosUpdateOneWithoutUserNestedInput
+  role?: Prisma.RolesUpdateOneWithoutUsersNestedInput
   products?: Prisma.UserProductUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
   createdEvents?: Prisma.EventsUpdateManyWithoutCreatedByNestedInput
@@ -1056,13 +1132,12 @@ export type UsersUncheckedUpdateWithoutGroupsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1079,15 +1154,14 @@ export type UsersCreateWithoutPhotoInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
   userType: Prisma.UserTypesCreateNestedOneWithoutUsersInput
+  role?: Prisma.RolesCreateNestedOneWithoutUsersInput
   groups?: Prisma.UsersGroupsCreateNestedManyWithoutUserInput
   products?: Prisma.UserProductCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
@@ -1102,12 +1176,11 @@ export type UsersUncheckedCreateWithoutPhotoInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
   userTypeId: string
+  roleId?: string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -1141,15 +1214,14 @@ export type UsersUpdateWithoutPhotoInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userType?: Prisma.UserTypesUpdateOneRequiredWithoutUsersNestedInput
+  role?: Prisma.RolesUpdateOneWithoutUsersNestedInput
   groups?: Prisma.UsersGroupsUpdateManyWithoutUserNestedInput
   products?: Prisma.UserProductUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
@@ -1164,12 +1236,11 @@ export type UsersUncheckedUpdateWithoutPhotoInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1187,16 +1258,15 @@ export type UsersCreateWithoutCreatedEventsInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
   userType: Prisma.UserTypesCreateNestedOneWithoutUsersInput
   photo?: Prisma.PhotosCreateNestedOneWithoutUserInput
+  role?: Prisma.RolesCreateNestedOneWithoutUsersInput
   groups?: Prisma.UsersGroupsCreateNestedManyWithoutUserInput
   products?: Prisma.UserProductCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
@@ -1210,13 +1280,12 @@ export type UsersUncheckedCreateWithoutCreatedEventsInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
   userTypeId: string
   photoId?: string | null
+  roleId?: string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -1249,16 +1318,15 @@ export type UsersUpdateWithoutCreatedEventsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userType?: Prisma.UserTypesUpdateOneRequiredWithoutUsersNestedInput
   photo?: Prisma.PhotosUpdateOneWithoutUserNestedInput
+  role?: Prisma.RolesUpdateOneWithoutUsersNestedInput
   groups?: Prisma.UsersGroupsUpdateManyWithoutUserNestedInput
   products?: Prisma.UserProductUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
@@ -1272,13 +1340,12 @@ export type UsersUncheckedUpdateWithoutCreatedEventsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1295,16 +1362,15 @@ export type UsersCreateWithoutProductsInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
   userType: Prisma.UserTypesCreateNestedOneWithoutUsersInput
   photo?: Prisma.PhotosCreateNestedOneWithoutUserInput
+  role?: Prisma.RolesCreateNestedOneWithoutUsersInput
   groups?: Prisma.UsersGroupsCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
   createdEvents?: Prisma.EventsCreateNestedManyWithoutCreatedByInput
@@ -1318,13 +1384,12 @@ export type UsersUncheckedCreateWithoutProductsInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
   userTypeId: string
   photoId?: string | null
+  roleId?: string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -1357,16 +1422,15 @@ export type UsersUpdateWithoutProductsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userType?: Prisma.UserTypesUpdateOneRequiredWithoutUsersNestedInput
   photo?: Prisma.PhotosUpdateOneWithoutUserNestedInput
+  role?: Prisma.RolesUpdateOneWithoutUsersNestedInput
   groups?: Prisma.UsersGroupsUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
   createdEvents?: Prisma.EventsUpdateManyWithoutCreatedByNestedInput
@@ -1380,13 +1444,12 @@ export type UsersUncheckedUpdateWithoutProductsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1403,16 +1466,15 @@ export type UsersCreateWithoutAttendanceInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
   userType: Prisma.UserTypesCreateNestedOneWithoutUsersInput
   photo?: Prisma.PhotosCreateNestedOneWithoutUserInput
+  role?: Prisma.RolesCreateNestedOneWithoutUsersInput
   groups?: Prisma.UsersGroupsCreateNestedManyWithoutUserInput
   products?: Prisma.UserProductCreateNestedManyWithoutUserInput
   managedGroups?: Prisma.GroupsCreateNestedManyWithoutProfesorInput
@@ -1426,13 +1488,12 @@ export type UsersUncheckedCreateWithoutAttendanceInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
   userTypeId: string
   photoId?: string | null
+  roleId?: string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -1465,16 +1526,15 @@ export type UsersUpdateWithoutAttendanceInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userType?: Prisma.UserTypesUpdateOneRequiredWithoutUsersNestedInput
   photo?: Prisma.PhotosUpdateOneWithoutUserNestedInput
+  role?: Prisma.RolesUpdateOneWithoutUsersNestedInput
   groups?: Prisma.UsersGroupsUpdateManyWithoutUserNestedInput
   products?: Prisma.UserProductUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
@@ -1488,13 +1548,12 @@ export type UsersUncheckedUpdateWithoutAttendanceInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1511,12 +1570,11 @@ export type UsersCreateManyUserTypeInput = {
   username: string
   description?: string | null
   gender: string
-  idCard: string
-  degree: string
-  semester: string
   telNumber: string
   isActive?: boolean
   photoId?: string | null
+  roleId?: string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   finishAt?: Date | string | null
@@ -1529,15 +1587,14 @@ export type UsersUpdateWithoutUserTypeInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.PhotosUpdateOneWithoutUserNestedInput
+  role?: Prisma.RolesUpdateOneWithoutUsersNestedInput
   groups?: Prisma.UsersGroupsUpdateManyWithoutUserNestedInput
   products?: Prisma.UserProductUpdateManyWithoutUserNestedInput
   managedGroups?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
@@ -1552,12 +1609,11 @@ export type UsersUncheckedUpdateWithoutUserTypeInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1575,12 +1631,89 @@ export type UsersUncheckedUpdateManyWithoutUserTypeInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.StringFieldUpdateOperationsInput | string
-  idCard?: Prisma.StringFieldUpdateOperationsInput | string
-  degree?: Prisma.StringFieldUpdateOperationsInput | string
-  semester?: Prisma.StringFieldUpdateOperationsInput | string
   telNumber?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type UsersCreateManyRoleInput = {
+  uid: string
+  name: string
+  lastName: string
+  username: string
+  description?: string | null
+  gender: string
+  telNumber: string
+  isActive?: boolean
+  userTypeId: string
+  photoId?: string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  finishAt?: Date | string | null
+}
+
+export type UsersUpdateWithoutRoleInput = {
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userType?: Prisma.UserTypesUpdateOneRequiredWithoutUsersNestedInput
+  photo?: Prisma.PhotosUpdateOneWithoutUserNestedInput
+  groups?: Prisma.UsersGroupsUpdateManyWithoutUserNestedInput
+  products?: Prisma.UserProductUpdateManyWithoutUserNestedInput
+  managedGroups?: Prisma.GroupsUpdateManyWithoutProfesorNestedInput
+  createdEvents?: Prisma.EventsUpdateManyWithoutCreatedByNestedInput
+  attendance?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
+}
+
+export type UsersUncheckedUpdateWithoutRoleInput = {
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
+  photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  groups?: Prisma.UsersGroupsUncheckedUpdateManyWithoutUserNestedInput
+  products?: Prisma.UserProductUncheckedUpdateManyWithoutUserNestedInput
+  managedGroups?: Prisma.GroupsUncheckedUpdateManyWithoutProfesorNestedInput
+  createdEvents?: Prisma.EventsUncheckedUpdateManyWithoutCreatedByNestedInput
+  attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UsersUncheckedUpdateManyWithoutRoleInput = {
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  telNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userTypeId?: Prisma.StringFieldUpdateOperationsInput | string
+  photoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1660,18 +1793,18 @@ export type UsersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   username?: boolean
   description?: boolean
   gender?: boolean
-  idCard?: boolean
-  degree?: boolean
-  semester?: boolean
   telNumber?: boolean
   isActive?: boolean
   userTypeId?: boolean
   photoId?: boolean
+  roleId?: boolean
+  roleData?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   finishAt?: boolean
   userType?: boolean | Prisma.UserTypesDefaultArgs<ExtArgs>
   photo?: boolean | Prisma.Users$photoArgs<ExtArgs>
+  role?: boolean | Prisma.Users$roleArgs<ExtArgs>
   groups?: boolean | Prisma.Users$groupsArgs<ExtArgs>
   products?: boolean | Prisma.Users$productsArgs<ExtArgs>
   managedGroups?: boolean | Prisma.Users$managedGroupsArgs<ExtArgs>
@@ -1687,18 +1820,18 @@ export type UsersSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   username?: boolean
   description?: boolean
   gender?: boolean
-  idCard?: boolean
-  degree?: boolean
-  semester?: boolean
   telNumber?: boolean
   isActive?: boolean
   userTypeId?: boolean
   photoId?: boolean
+  roleId?: boolean
+  roleData?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   finishAt?: boolean
   userType?: boolean | Prisma.UserTypesDefaultArgs<ExtArgs>
   photo?: boolean | Prisma.Users$photoArgs<ExtArgs>
+  role?: boolean | Prisma.Users$roleArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
 export type UsersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1708,18 +1841,18 @@ export type UsersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   username?: boolean
   description?: boolean
   gender?: boolean
-  idCard?: boolean
-  degree?: boolean
-  semester?: boolean
   telNumber?: boolean
   isActive?: boolean
   userTypeId?: boolean
   photoId?: boolean
+  roleId?: boolean
+  roleData?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   finishAt?: boolean
   userType?: boolean | Prisma.UserTypesDefaultArgs<ExtArgs>
   photo?: boolean | Prisma.Users$photoArgs<ExtArgs>
+  role?: boolean | Prisma.Users$roleArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
 export type UsersSelectScalar = {
@@ -1729,22 +1862,22 @@ export type UsersSelectScalar = {
   username?: boolean
   description?: boolean
   gender?: boolean
-  idCard?: boolean
-  degree?: boolean
-  semester?: boolean
   telNumber?: boolean
   isActive?: boolean
   userTypeId?: boolean
   photoId?: boolean
+  roleId?: boolean
+  roleData?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   finishAt?: boolean
 }
 
-export type UsersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "name" | "lastName" | "username" | "description" | "gender" | "idCard" | "degree" | "semester" | "telNumber" | "isActive" | "userTypeId" | "photoId" | "createdAt" | "updatedAt" | "finishAt", ExtArgs["result"]["users"]>
+export type UsersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"uid" | "name" | "lastName" | "username" | "description" | "gender" | "telNumber" | "isActive" | "userTypeId" | "photoId" | "roleId" | "roleData" | "createdAt" | "updatedAt" | "finishAt", ExtArgs["result"]["users"]>
 export type UsersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   userType?: boolean | Prisma.UserTypesDefaultArgs<ExtArgs>
   photo?: boolean | Prisma.Users$photoArgs<ExtArgs>
+  role?: boolean | Prisma.Users$roleArgs<ExtArgs>
   groups?: boolean | Prisma.Users$groupsArgs<ExtArgs>
   products?: boolean | Prisma.Users$productsArgs<ExtArgs>
   managedGroups?: boolean | Prisma.Users$managedGroupsArgs<ExtArgs>
@@ -1755,10 +1888,12 @@ export type UsersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type UsersIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   userType?: boolean | Prisma.UserTypesDefaultArgs<ExtArgs>
   photo?: boolean | Prisma.Users$photoArgs<ExtArgs>
+  role?: boolean | Prisma.Users$roleArgs<ExtArgs>
 }
 export type UsersIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   userType?: boolean | Prisma.UserTypesDefaultArgs<ExtArgs>
   photo?: boolean | Prisma.Users$photoArgs<ExtArgs>
+  role?: boolean | Prisma.Users$roleArgs<ExtArgs>
 }
 
 export type $UsersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1766,6 +1901,7 @@ export type $UsersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     userType: Prisma.$UserTypesPayload<ExtArgs>
     photo: Prisma.$PhotosPayload<ExtArgs> | null
+    role: Prisma.$RolesPayload<ExtArgs> | null
     groups: Prisma.$UsersGroupsPayload<ExtArgs>[]
     products: Prisma.$UserProductPayload<ExtArgs>[]
     managedGroups: Prisma.$GroupsPayload<ExtArgs>[]
@@ -1779,13 +1915,12 @@ export type $UsersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     username: string
     description: string | null
     gender: string
-    idCard: string
-    degree: string
-    semester: string
     telNumber: string
     isActive: boolean
     userTypeId: string
     photoId: string | null
+    roleId: string | null
+    roleData: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
     finishAt: Date | null
@@ -2185,6 +2320,7 @@ export interface Prisma__UsersClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   userType<T extends Prisma.UserTypesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserTypesDefaultArgs<ExtArgs>>): Prisma.Prisma__UserTypesClient<runtime.Types.Result.GetResult<Prisma.$UserTypesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   photo<T extends Prisma.Users$photoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Users$photoArgs<ExtArgs>>): Prisma.Prisma__PhotosClient<runtime.Types.Result.GetResult<Prisma.$PhotosPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  role<T extends Prisma.Users$roleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Users$roleArgs<ExtArgs>>): Prisma.Prisma__RolesClient<runtime.Types.Result.GetResult<Prisma.$RolesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   groups<T extends Prisma.Users$groupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Users$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UsersGroupsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   products<T extends Prisma.Users$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Users$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   managedGroups<T extends Prisma.Users$managedGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Users$managedGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2225,13 +2361,12 @@ export interface UsersFieldRefs {
   readonly username: Prisma.FieldRef<"Users", 'String'>
   readonly description: Prisma.FieldRef<"Users", 'String'>
   readonly gender: Prisma.FieldRef<"Users", 'String'>
-  readonly idCard: Prisma.FieldRef<"Users", 'String'>
-  readonly degree: Prisma.FieldRef<"Users", 'String'>
-  readonly semester: Prisma.FieldRef<"Users", 'String'>
   readonly telNumber: Prisma.FieldRef<"Users", 'String'>
   readonly isActive: Prisma.FieldRef<"Users", 'Boolean'>
   readonly userTypeId: Prisma.FieldRef<"Users", 'String'>
   readonly photoId: Prisma.FieldRef<"Users", 'String'>
+  readonly roleId: Prisma.FieldRef<"Users", 'String'>
+  readonly roleData: Prisma.FieldRef<"Users", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Users", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Users", 'DateTime'>
   readonly finishAt: Prisma.FieldRef<"Users", 'DateTime'>
@@ -2647,6 +2782,25 @@ export type Users$photoArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    */
   include?: Prisma.PhotosInclude<ExtArgs> | null
   where?: Prisma.PhotosWhereInput
+}
+
+/**
+ * Users.role
+ */
+export type Users$roleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Roles
+   */
+  select?: Prisma.RolesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Roles
+   */
+  omit?: Prisma.RolesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RolesInclude<ExtArgs> | null
+  where?: Prisma.RolesWhereInput
 }
 
 /**

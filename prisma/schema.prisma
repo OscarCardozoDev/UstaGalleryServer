@@ -68,6 +68,21 @@ model UserTypes {
 }
 
 //////////////////////////////////////////////////////
+// ROLES
+//////////////////////////////////////////////////////
+
+model Roles {
+  uid       String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(50) @unique
+  slug      String   @db.VarChar(30) @unique
+
+  users     Users[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//////////////////////////////////////////////////////
 // USERS
 //////////////////////////////////////////////////////
 
@@ -77,20 +92,19 @@ model Users {
   lastName       String    @db.VarChar(30)
   username       String    @db.VarChar(30) @unique
   description    String?   @db.VarChar(500)
-     
+
   gender         String    @db.VarChar(3)
-  idCard         String    @db.VarChar(12) @unique
-  degree         String    @db.VarChar(120)
-  semester       String    @db.VarChar(2)
   telNumber      String    @db.VarChar(12)
-     
+
   isActive       Boolean   @default(true)
 
-  // RELACIONES
   userType       UserTypes @relation(fields: [userTypeId], references: [uid])
   userTypeId     String    @db.Uuid
   photo          Photos?   @relation("UserPhoto", fields: [photoId], references: [uid])
   photoId        String?   @unique @db.Uuid
+  role           Roles?    @relation(fields: [roleId], references: [uid])
+  roleId         String?   @db.Uuid
+  roleData       Json?
 
   groups         UsersGroups[]
   products       UserProduct[]
@@ -100,7 +114,7 @@ model Users {
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  finishAt     DateTime?
+  finishAt    DateTime?
 }
 
 model Credentials {

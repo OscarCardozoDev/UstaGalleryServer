@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   UserTypes: 'UserTypes',
+  Roles: 'Roles',
   Users: 'Users',
   Credentials: 'Credentials',
   VerificationCodes: 'VerificationCodes',
@@ -99,6 +100,17 @@ export const UserTypesScalarFieldEnum = {
 export type UserTypesScalarFieldEnum = (typeof UserTypesScalarFieldEnum)[keyof typeof UserTypesScalarFieldEnum]
 
 
+export const RolesScalarFieldEnum = {
+  uid: 'uid',
+  name: 'name',
+  slug: 'slug',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RolesScalarFieldEnum = (typeof RolesScalarFieldEnum)[keyof typeof RolesScalarFieldEnum]
+
+
 export const UsersScalarFieldEnum = {
   uid: 'uid',
   name: 'name',
@@ -106,13 +118,12 @@ export const UsersScalarFieldEnum = {
   username: 'username',
   description: 'description',
   gender: 'gender',
-  idCard: 'idCard',
-  degree: 'degree',
-  semester: 'semester',
   telNumber: 'telNumber',
   isActive: 'isActive',
   userTypeId: 'userTypeId',
   photoId: 'photoId',
+  roleId: 'roleId',
+  roleData: 'roleData',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   finishAt: 'finishAt'
@@ -362,12 +373,29 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull'
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const JsonNullValueFilter = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull',
+  AnyNull: 'AnyNull'
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 export const NullsOrder = {
