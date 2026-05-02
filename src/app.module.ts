@@ -12,6 +12,7 @@ import { ProductModule } from 'src/modules/products/Product.module';
 import { EventModule } from 'src/modules/events/Event.module';
 import { ScheduleModule } from 'src/modules/schedule/Schedule.module';
 import { ClassesModule } from 'src/modules/classes/Classes.module';
+import { RolesModule } from 'src/modules/roles/Roles.module';
 import { join } from 'path';
 
 import configurationApp from 'config/configuration-app';
@@ -39,6 +40,7 @@ import configurationApp from 'config/configuration-app';
     EventModule,
     ScheduleModule,
     ClassesModule,
+    RolesModule,
   ],
   controllers: [],
   providers: [
