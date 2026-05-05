@@ -17,10 +17,12 @@ export class ClassesService {
   constructor(private readonly prisma: PrismaService) {}
 
   private getCurrentTimeStr(): string {
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2, '0');
-    const mm = String(now.getMinutes()).padStart(2, '0');
-    return `${hh}:${mm}`;
+    return new Date().toLocaleTimeString('en-GB', {
+      timeZone: 'America/Bogota',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
   }
 
   private getTodayRange(): { start: Date; end: Date } {
