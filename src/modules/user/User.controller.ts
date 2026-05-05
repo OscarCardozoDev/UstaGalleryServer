@@ -32,7 +32,6 @@ export class UserController {
   @Post('create')
   @ApiOperation({ summary: 'Crear perfil de estudiante' })
   @UseGuards(AuthGuard)
-  @Roles('student')
   @HttpCode(HttpStatus.CREATED)
   async createUser(
     @Body() body: CreateStudentDto,
@@ -55,7 +54,10 @@ export class UserController {
   }
 
   @Post('professor')
-  @ApiOperation({ summary: 'Crear perfil de profesor (solo admin) — el profesor debe haber hecho register primero' })
+  @ApiOperation({
+    summary:
+      'Crear perfil de profesor (solo admin) — el profesor debe haber hecho register primero',
+  })
   @UseGuards(AuthGuard)
   @Roles('admin')
   @HttpCode(HttpStatus.CREATED)

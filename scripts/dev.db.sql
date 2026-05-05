@@ -1,11 +1,11 @@
 DO $$
 DECLARE
   artesId      UUID := '2c4707a0-541d-4fc1-a4e9-b4f830114332';
-  rolePregrad  UUID := '00000000-0000-0000-0000-000000000001';
-  rolePosgrado UUID := '00000000-0000-0000-0000-000000000002';
-  roleFuncion  UUID := '00000000-0000-0000-0000-000000000003';
-  roleEgresado UUID := '00000000-0000-0000-0000-000000000004';
-  roleParticu  UUID := '00000000-0000-0000-0000-000000000005';
+  rolePregrad  UUID := '7cb5a57c-fe74-4600-841a-d8ee02dd1a6d';
+  rolePosgrado UUID := '5e13ea33-23dd-4a35-8497-66647d68e79b';
+  roleFuncion  UUID := 'ec04c721-45d6-4e35-bafa-e79e69951c0a';
+  roleEgresado UUID := 'fa5067a3-ae1b-4c35-9c10-316201021cab';
+  roleParticu  UUID := '275aaa4f-6990-40f4-b42b-f72f937e5cb8';
 BEGIN
 
 INSERT INTO "UserTypes" ("uid", "name", "updatedAt") VALUES
