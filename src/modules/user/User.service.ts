@@ -9,7 +9,10 @@ import { ConfigService } from '@nestjs/config';
 import { Prisma } from 'src/generated/prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PhotosService } from 'src/modules/photos/Photos.service';
-import { validateRoleData, sanitizeRoleData } from 'src/utils/role-data.validator';
+import {
+  validateRoleData,
+  sanitizeRoleData,
+} from 'src/utils/role-data.validator';
 import {
   CreateStudentUseCase,
   CreateProfessorUseCase,
@@ -59,7 +62,7 @@ export class UserService {
       select: USER_SELECT,
     });
 
-    if (!user) throw new NotFoundException(`User with uid ${uid} not found`);
+    if (!user) throw new NotFoundException(`User not found`);
     return user;
   }
 
@@ -81,11 +84,16 @@ export class UserService {
     return user;
   }
 
-  async createStudentUseCase(data: CreateStudentUseCase): Promise<UserUidResult> {
+  async createStudentUseCase(
+    data: CreateStudentUseCase,
+  ): Promise<UserUidResult> {
     const { uid, user, photo } = data;
 
-    const studentTypeId = this.configService.get<string>('config.roles.student');
-    if (!studentTypeId) throw new BadRequestException('Student type not configured');
+    const studentTypeId = this.configService.get<string>(
+      'config.roles.student',
+    );
+    if (!studentTypeId)
+      throw new BadRequestException('Student type not configured');
 
     const role = await this.prismaService.roles.findUnique({
       where: { uid: user.roleId },
@@ -119,7 +127,9 @@ export class UserService {
             userType: { connect: { uid: studentTypeId } },
             role: { connect: { uid: user.roleId } },
             roleData: sanitized,
-            ...(photoResult && { photo: { connect: { uid: photoResult.uid } } }),
+            ...(photoResult && {
+              photo: { connect: { uid: photoResult.uid } },
+            }),
           },
           select: { uid: true },
         });
@@ -137,17 +147,23 @@ export class UserService {
     }
   }
 
-  async createProfessorUseCase(data: CreateProfessorUseCase): Promise<UserUidResult> {
+  async createProfessorUseCase(
+    data: CreateProfessorUseCase,
+  ): Promise<UserUidResult> {
     const { uid, user, photo } = data;
 
-    const professorTypeId = this.configService.get<string>('config.roles.professor');
-    if (!professorTypeId) throw new BadRequestException('Professor type not configured');
+    const professorTypeId = this.configService.get<string>(
+      'config.roles.professor',
+    );
+    if (!professorTypeId)
+      throw new BadRequestException('Professor type not configured');
 
     const particularRole = await this.prismaService.roles.findUnique({
       where: { slug: 'particular' },
       select: { uid: true },
     });
-    if (!particularRole) throw new BadRequestException('Role "particular" not found — run seed');
+    if (!particularRole)
+      throw new BadRequestException('Role "particular" not found — run seed');
 
     let photoResult: { uid: string } | null = null;
     if (photo) {
@@ -169,7 +185,9 @@ export class UserService {
             userType: { connect: { uid: professorTypeId } },
             role: { connect: { uid: particularRole.uid } },
             roleData: {},
-            ...(photoResult && { photo: { connect: { uid: photoResult.uid } } }),
+            ...(photoResult && {
+              photo: { connect: { uid: photoResult.uid } },
+            }),
           },
           select: { uid: true },
         });
@@ -187,12 +205,16 @@ export class UserService {
     }
   }
 
-  async updateUser(uid: string, userData: UpdateUserDto): Promise<UserUidResult> {
+  async updateUser(
+    uid: string,
+    userData: UpdateUserDto,
+  ): Promise<UserUidResult> {
     const existing = await this.prismaService.users.findUnique({
       where: { uid },
       select: { uid: true },
     });
-    if (!existing) throw new NotFoundException(`User with uid ${uid} not found`);
+    if (!existing)
+      throw new NotFoundException(`User with uid ${uid} not found`);
 
     const data = Object.fromEntries(
       Object.entries(userData).filter(([, v]) => v !== undefined),
@@ -220,7 +242,8 @@ export class UserService {
       where: { uid },
       select: { uid: true, photoId: true },
     });
-    if (!existing) throw new NotFoundException(`User with uid ${uid} not found`);
+    if (!existing)
+      throw new NotFoundException(`User with uid ${uid} not found`);
 
     const created = await this.photosService.createPhotoUseCase(photo);
 
