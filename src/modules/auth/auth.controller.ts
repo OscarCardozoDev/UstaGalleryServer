@@ -17,7 +17,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { hashText, verifyText } from 'src/utils/crypto.util';
-import { CreateCredentialDto, VerifyCodeDto } from './auth.dto';
+import { CreateCredentialDto, VerifyCodeDto, ForgotPasswordDto, ResetPasswordDto } from './auth.dto';
 import { AuthGuard } from 'src/middleware/jwt.guard';
 import type { AuthenticatedRequest } from 'src/interface/jwtPayload';
 import { Roles } from 'src/decorators/roles.decorator';
@@ -42,12 +42,12 @@ export class AuthController {
       this.configService.get<string>('config.nodeEnv') === 'production';
 
     if (!credential) {
-      throw new HttpException('Email not found', 404);
+      throw new HttpException('Correo no encontrado', 404);
     }
 
     const isValid = await verifyText(auth.password, credential.password);
     if (!isValid) {
-      throw new UnauthorizedException('Password not match');
+      throw new UnauthorizedException('Contraseña incorrecta');
     }
 
     const token = await this.jwtService.signAsync({
@@ -121,11 +121,27 @@ export class AuthController {
   }
 
   @Get('without-profile')
-  @ApiOperation({ summary: 'Obtener credenciales sin perfil de usuario (admin)' })
+  @ApiOperation({
+    summary: 'Obtener credenciales sin perfil de usuario (admin)',
+  })
   @UseGuards(AuthGuard)
   @Roles('admin')
   @HttpCode(HttpStatus.OK)
   async getWithoutProfile() {
     return this.authService.getCredentialsWithoutProfile();
+  }
+
+  @Post('forgot-password')
+  @ApiOperation({ summary: 'Solicitar código de recuperación de contraseña' })
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    await this.authService.sendPasswordResetCode(dto.mail);
+    return { message: 'Código enviado' };
+  }
+
+  @Post('reset-password')
+  @ApiOperation({ summary: 'Resetear contraseña con código de verificación' })
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    await this.authService.resetPassword(dto.mail, dto.code, dto.newPassword);
+    return { message: 'Contraseña actualizada' };
   }
 }
