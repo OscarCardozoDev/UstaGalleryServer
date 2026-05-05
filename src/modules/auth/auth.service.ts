@@ -176,4 +176,36 @@ export class AuthService {
       throw new InternalServerErrorException('Error al enviar el correo');
     }
   }
+
+  async resetPassword(mail: string, code: string, newPassword: string): Promise<void> {
+    const credential = await this.prismaService.credentials.findUnique({
+      where: { mail },
+      select: { uid: true },
+    });
+
+    if (!credential) {
+      throw new NotFoundException('Correo no encontrado');
+    }
+
+    const record = await this.prismaService.verificationCodes.findFirst({
+      where: {
+        credentialUid: credential.uid,
+        code,
+        usedAt: null,
+        expiresAt: { gt: new Date() },
+      },
+    });
+
+    if (!record) {
+      throw new BadRequestException('Código inválido o expirado');
+    }
+
+    await this.prismaService.verificationCodes.update({
+      where: { uid: record.uid },
+      data: { usedAt: new Date() },
+    });
+
+    const hashedPassword = await hashText(newPassword);
+    await this.putPasswordByEmail({ mail, password: hashedPassword });
+  }
 }
