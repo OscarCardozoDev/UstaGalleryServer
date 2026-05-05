@@ -184,7 +184,7 @@ export class AuthService {
     });
 
     if (!credential) {
-      throw new NotFoundException('Correo no encontrado');
+      throw new BadRequestException('Código inválido o expirado');
     }
 
     const record = await this.prismaService.verificationCodes.findFirst({
