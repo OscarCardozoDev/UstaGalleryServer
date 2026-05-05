@@ -3,6 +3,7 @@ import {
   NotFoundException,
   ConflictException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateGroupUseCase,
@@ -17,7 +18,10 @@ import {
 
 @Injectable()
 export class GroupService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly configService: ConfigService,
+  ) {}
 
   /* =========================
    * CREATE
@@ -304,8 +308,15 @@ export class GroupService {
    * GET ALL STUDENTS BY GROUP
    * ========================= */
   async getAllStudentsByGroup(groupId: string) {
+    const studentTypeId = this.configService.get<string>(
+      'config.roles.student',
+    );
+
     return this.prisma.usersGroups.findMany({
-      where: { groupId },
+      where: {
+        groupId,
+        user: { userTypeId: studentTypeId },
+      },
       select: {
         user: {
           select: {
