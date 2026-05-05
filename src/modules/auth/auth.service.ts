@@ -9,6 +9,7 @@ import { Resend } from 'resend';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCredentialDto } from './auth.dto';
 import { GetCredentialResult, CredentialWithoutProfile } from './auth.interface';
+import { hashText } from 'src/utils/crypto.util';
 
 @Injectable()
 export class AuthService {
@@ -136,5 +137,43 @@ export class AuthService {
       WHERE uid NOT IN (SELECT uid FROM "Users")
       ORDER BY "createdAt" DESC
     `;
+  }
+
+  async sendPasswordResetCode(mail: string): Promise<void> {
+    const resendKey = this.configService.get<string>('config.resendKey');
+    const resend = new Resend(resendKey);
+
+    const credential = await this.prismaService.credentials.findUnique({
+      where: { mail },
+      select: { uid: true },
+    });
+
+    if (!credential) {
+      throw new NotFoundException('Correo no encontrado');
+    }
+
+    await this.prismaService.verificationCodes.updateMany({
+      where: { credentialUid: credential.uid, usedAt: null },
+      data: { usedAt: new Date() },
+    });
+
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+    await this.prismaService.verificationCodes.create({
+      data: { credentialUid: credential.uid, code, expiresAt },
+    });
+
+    const { error } = await resend.emails.send({
+      from: 'UstaGallery <onboarding@resend.dev>',
+      to: mail,
+      subject: 'Recuperar contraseña - UstaGallery',
+      text: `Tu código para recuperar la contraseña es: ${code}\n\nEste código expira en 10 minutos.\n\nSi no solicitaste este cambio, ignora este correo.`,
+    });
+
+    if (error) {
+      console.error('Error sending email:', error);
+      throw new InternalServerErrorException('Error al enviar el correo');
+    }
   }
 }
