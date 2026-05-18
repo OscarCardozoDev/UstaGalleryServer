@@ -78,3 +78,15 @@ export class ChangeProfesorDto {
   @IsString()
   newProfesorId: string;
 }
+
+export class GroupMembersQueryDto {
+  @ApiPropertyOptional({ example: 1, default: 1 })
+  @IsOptional()
+  @Transform(({ value }) => Number(value))
+  page?: number = 1;
+
+  @ApiPropertyOptional({ example: 10, default: 10 })
+  @IsOptional()
+  @Transform(({ value }) => Number(value))
+  limit?: number = 10;
+}

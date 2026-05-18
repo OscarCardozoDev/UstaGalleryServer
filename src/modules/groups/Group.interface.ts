@@ -58,3 +58,32 @@ export interface DeleteStudentByGroupUseCase {
   groupId: string;
   userId: string;
 }
+
+export interface GroupProfesor {
+  uid: string;
+  name: string;
+  username: string;
+}
+
+export interface GroupStats {
+  uid: string;
+  name: string;
+  category: string;
+  profesor: GroupProfesor;
+  students: { total: number };
+  products: { total: number; approved: number; pending: number; rejected: number };
+  events: { total: number; approved: number; pending: number; cancelled: number; completed: number };
+}
+
+export interface GroupMember {
+  uid: string;
+  name: string;
+  username: string;
+}
+
+export interface GroupMembersResult {
+  data: GroupMember[];
+  total: number;
+  page: number;
+  limit: number;
+}
