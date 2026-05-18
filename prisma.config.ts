@@ -1,8 +1,10 @@
 import { defineConfig } from 'prisma/config';
 import { config } from 'dotenv';
 
-const env = process.env.NODE_ENV || 'development';
-config({ path: `env/${env}.env` });
+if (!process.env.DATABASE_URL) {
+  const env = process.env.NODE_ENV || 'production';
+  config({ path: `env/${env}.env` });
+}
 
 export default defineConfig({
   schema: 'prisma/schema.prisma',
