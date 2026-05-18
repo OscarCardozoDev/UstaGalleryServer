@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ProductStatus, EventStatus } from 'src/generated/prisma';
 import {
   CreateGroupUseCase,
   UpdateGroupUseCase,
@@ -14,6 +15,8 @@ import {
   DeleteStudentByGroupUseCase,
   AddStudentToGroupsUseCase,
   ChangeProfesorUseCase,
+  GroupStats,
+  GroupMembersResult,
 } from './Group.interface';
 
 @Injectable()
@@ -397,5 +400,102 @@ export class GroupService {
 
       return { groupId };
     });
+  }
+
+  /* =========================
+   * GET GROUP STATS
+   * ========================= */
+  async getGroupStats(groupId: string): Promise<GroupStats> {
+    const studentTypeId = this.configService.get<string>('config.roles.student');
+
+    const group = await this.prisma.groups.findUnique({
+      where: { uid: groupId },
+      select: {
+        uid: true,
+        name: true,
+        category: true,
+        profesor: { select: { uid: true, name: true, username: true } },
+      },
+    });
+
+    if (!group) throw new NotFoundException('Group not found');
+
+    const [
+      studentTotal,
+      approvedProducts,
+      pendingProducts,
+      rejectedProducts,
+      totalProducts,
+      approvedEvents,
+      pendingEvents,
+      cancelledEvents,
+      completedEvents,
+      totalEvents,
+    ] = await Promise.all([
+      this.prisma.usersGroups.count({ where: { groupId, user: { userTypeId: studentTypeId } } }),
+      this.prisma.products.count({ where: { groupId, status: ProductStatus.APPROVED } }),
+      this.prisma.products.count({ where: { groupId, status: ProductStatus.PENDING } }),
+      this.prisma.products.count({ where: { groupId, status: ProductStatus.REJECTED } }),
+      this.prisma.products.count({ where: { groupId } }),
+      this.prisma.groupEvent.count({ where: { groupId, event: { status: EventStatus.APPROVED } } }),
+      this.prisma.groupEvent.count({ where: { groupId, event: { status: EventStatus.PENDING } } }),
+      this.prisma.groupEvent.count({ where: { groupId, event: { status: EventStatus.CANCELLED } } }),
+      this.prisma.groupEvent.count({ where: { groupId, event: { status: EventStatus.COMPLETED } } }),
+      this.prisma.groupEvent.count({ where: { groupId } }),
+    ]);
+
+    return {
+      uid: group.uid,
+      name: group.name,
+      category: group.category,
+      profesor: group.profesor,
+      students: { total: studentTotal },
+      products: {
+        total: totalProducts,
+        approved: approvedProducts,
+        pending: pendingProducts,
+        rejected: rejectedProducts,
+      },
+      events: {
+        total: totalEvents,
+        approved: approvedEvents,
+        pending: pendingEvents,
+        cancelled: cancelledEvents,
+        completed: completedEvents,
+      },
+    };
+  }
+
+  /* =========================
+   * GET GROUP MEMBERS (PAGINATED)
+   * ========================= */
+  async getGroupMembers(
+    groupId: string,
+    page: number,
+    limit: number,
+  ): Promise<GroupMembersResult> {
+    const studentTypeId = this.configService.get<string>('config.roles.student');
+
+    const group = await this.prisma.groups.findUnique({ where: { uid: groupId } });
+    if (!group) throw new NotFoundException('Group not found');
+
+    const [rows, total] = await Promise.all([
+      this.prisma.usersGroups.findMany({
+        where: { groupId, user: { userTypeId: studentTypeId } },
+        skip: (page - 1) * limit,
+        take: limit,
+        select: { user: { select: { uid: true, name: true, username: true } } },
+      }),
+      this.prisma.usersGroups.count({
+        where: { groupId, user: { userTypeId: studentTypeId } },
+      }),
+    ]);
+
+    return {
+      data: rows.map((r) => r.user),
+      total,
+      page,
+      limit,
+    };
   }
 }
