@@ -1,9 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsOptional, IsArray } from 'class-validator';
+import { IsString, IsOptional, IsArray, IsUUID } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class GroupParamsDto {
   @ApiProperty({ example: 'uuid-del-grupo' })
+  @IsUUID()
   uid: string;
 }
 

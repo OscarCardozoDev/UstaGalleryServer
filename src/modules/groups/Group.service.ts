@@ -406,64 +406,92 @@ export class GroupService {
    * GET GROUP STATS
    * ========================= */
   async getGroupStats(groupId: string): Promise<GroupStats> {
-    const studentTypeId = this.configService.get<string>('config.roles.student');
+    console.log(`getGroupStats called — groupId=${groupId}`);
+    try {
+      const studentTypeId = this.configService.get<string>(
+        'config.roles.student',
+      );
+      console.debug(`studentTypeId resolved: ${studentTypeId}`);
 
-    const group = await this.prisma.groups.findUnique({
-      where: { uid: groupId },
-      select: {
-        uid: true,
-        name: true,
-        category: true,
-        profesor: { select: { uid: true, name: true, username: true } },
-      },
-    });
+      const group = await this.prisma.groups.findUnique({
+        where: { uid: groupId },
+        select: {
+          uid: true,
+          name: true,
+          category: true,
+          profesor: { select: { uid: true, name: true, username: true } },
+        },
+      });
 
-    if (!group) throw new NotFoundException('Group not found');
+      if (!group) throw new NotFoundException('Group not found');
 
-    const [
-      studentTotal,
-      approvedProducts,
-      pendingProducts,
-      rejectedProducts,
-      totalProducts,
-      approvedEvents,
-      pendingEvents,
-      cancelledEvents,
-      completedEvents,
-      totalEvents,
-    ] = await Promise.all([
-      this.prisma.usersGroups.count({ where: { groupId, user: { userTypeId: studentTypeId } } }),
-      this.prisma.products.count({ where: { groupId, status: ProductStatus.APPROVED } }),
-      this.prisma.products.count({ where: { groupId, status: ProductStatus.PENDING } }),
-      this.prisma.products.count({ where: { groupId, status: ProductStatus.REJECTED } }),
-      this.prisma.products.count({ where: { groupId } }),
-      this.prisma.groupEvent.count({ where: { groupId, event: { status: EventStatus.APPROVED } } }),
-      this.prisma.groupEvent.count({ where: { groupId, event: { status: EventStatus.PENDING } } }),
-      this.prisma.groupEvent.count({ where: { groupId, event: { status: EventStatus.CANCELLED } } }),
-      this.prisma.groupEvent.count({ where: { groupId, event: { status: EventStatus.COMPLETED } } }),
-      this.prisma.groupEvent.count({ where: { groupId } }),
-    ]);
+      const [
+        studentTotal,
+        approvedProducts,
+        pendingProducts,
+        rejectedProducts,
+        totalProducts,
+        approvedEvents,
+        pendingEvents,
+        cancelledEvents,
+        completedEvents,
+        totalEvents,
+      ] = await Promise.all([
+        this.prisma.usersGroups.count({
+          where: { groupId, user: { userTypeId: studentTypeId } },
+        }),
+        this.prisma.products.count({
+          where: { groupId, status: ProductStatus.APPROVED },
+        }),
+        this.prisma.products.count({
+          where: { groupId, status: ProductStatus.PENDING },
+        }),
+        this.prisma.products.count({
+          where: { groupId, status: ProductStatus.REJECTED },
+        }),
+        this.prisma.products.count({ where: { groupId } }),
+        this.prisma.groupEvent.count({
+          where: { groupId, event: { status: EventStatus.APPROVED } },
+        }),
+        this.prisma.groupEvent.count({
+          where: { groupId, event: { status: EventStatus.PENDING } },
+        }),
+        this.prisma.groupEvent.count({
+          where: { groupId, event: { status: EventStatus.CANCELLED } },
+        }),
+        this.prisma.groupEvent.count({
+          where: { groupId, event: { status: EventStatus.COMPLETED } },
+        }),
+        this.prisma.groupEvent.count({ where: { groupId } }),
+      ]);
 
-    return {
-      uid: group.uid,
-      name: group.name,
-      category: group.category,
-      profesor: group.profesor,
-      students: { total: studentTotal },
-      products: {
-        total: totalProducts,
-        approved: approvedProducts,
-        pending: pendingProducts,
-        rejected: rejectedProducts,
-      },
-      events: {
-        total: totalEvents,
-        approved: approvedEvents,
-        pending: pendingEvents,
-        cancelled: cancelledEvents,
-        completed: completedEvents,
-      },
-    };
+      return {
+        uid: group.uid,
+        name: group.name,
+        category: group.category,
+        profesor: group.profesor,
+        students: { total: studentTotal },
+        products: {
+          total: totalProducts,
+          approved: approvedProducts,
+          pending: pendingProducts,
+          rejected: rejectedProducts,
+        },
+        events: {
+          total: totalEvents,
+          approved: approvedEvents,
+          pending: pendingEvents,
+          cancelled: cancelledEvents,
+          completed: completedEvents,
+        },
+      };
+    } catch (err) {
+      console.error(
+        `getGroupStats failed — groupId=${groupId}`,
+        err instanceof Error ? err.stack : err,
+      );
+      throw err;
+    }
   }
 
   /* =========================
@@ -474,28 +502,46 @@ export class GroupService {
     page: number,
     limit: number,
   ): Promise<GroupMembersResult> {
-    const studentTypeId = this.configService.get<string>('config.roles.student');
+    console.log(
+      `getGroupMembers called — groupId=${groupId} page=${page} limit=${limit}`,
+    );
+    try {
+      const studentTypeId = this.configService.get<string>(
+        'config.roles.student',
+      );
+      console.debug(`studentTypeId resolved: ${studentTypeId}`);
 
-    const group = await this.prisma.groups.findUnique({ where: { uid: groupId } });
-    if (!group) throw new NotFoundException('Group not found');
+      const group = await this.prisma.groups.findUnique({
+        where: { uid: groupId },
+      });
+      if (!group) throw new NotFoundException('Group not found');
 
-    const [rows, total] = await Promise.all([
-      this.prisma.usersGroups.findMany({
-        where: { groupId, user: { userTypeId: studentTypeId } },
-        skip: (page - 1) * limit,
-        take: limit,
-        select: { user: { select: { uid: true, name: true, username: true } } },
-      }),
-      this.prisma.usersGroups.count({
-        where: { groupId, user: { userTypeId: studentTypeId } },
-      }),
-    ]);
+      const [rows, total] = await Promise.all([
+        this.prisma.usersGroups.findMany({
+          where: { groupId, user: { userTypeId: studentTypeId } },
+          skip: (page - 1) * limit,
+          take: limit,
+          select: {
+            user: { select: { uid: true, name: true, username: true } },
+          },
+        }),
+        this.prisma.usersGroups.count({
+          where: { groupId, user: { userTypeId: studentTypeId } },
+        }),
+      ]);
 
-    return {
-      data: rows.map((r) => r.user),
-      total,
-      page,
-      limit,
-    };
+      return {
+        data: rows.map((r) => r.user),
+        total,
+        page,
+        limit,
+      };
+    } catch (err) {
+      console.error(
+        `getGroupMembers failed — groupId=${groupId}`,
+        err instanceof Error ? err.stack : err,
+      );
+      throw err;
+    }
   }
 }
