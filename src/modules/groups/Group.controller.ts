@@ -25,6 +25,7 @@ import {
   DeleteStudentDto,
   UpdateStudentsDto,
   ChangeProfesorDto,
+  GroupMembersQueryDto,
 } from './Group.dto';
 
 @ApiTags('groups')
@@ -144,5 +145,26 @@ export class GroupController {
       groupId,
       users: body.users,
     });
+  }
+
+  @Get(':uid/stats')
+  @Roles('admin')
+  @ApiOperation({ summary: 'Obtener estadísticas del grupo (solo admin)' })
+  async getStats(@Param() params: GroupParamsDto) {
+    return this.groupService.getGroupStats(params.uid);
+  }
+
+  @Get(':uid/members')
+  @Roles('admin')
+  @ApiOperation({ summary: 'Obtener lista paginada de estudiantes del grupo (solo admin)' })
+  async getMembers(
+    @Param() params: GroupParamsDto,
+    @Query() query: GroupMembersQueryDto,
+  ) {
+    return this.groupService.getGroupMembers(
+      params.uid,
+      query.page ?? 1,
+      query.limit ?? 10,
+    );
   }
 }

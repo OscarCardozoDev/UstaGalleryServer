@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ProductStatus, EventStatus } from 'src/generated/prisma';
+import { ProductStatus, EventStatus } from 'src/generated/prisma/enums';
 import {
   CreateGroupUseCase,
   UpdateGroupUseCase,
