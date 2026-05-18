@@ -151,7 +151,6 @@ export class GroupController {
   @Roles('admin')
   @ApiOperation({ summary: 'Obtener estadísticas del grupo (solo admin)' })
   async getStats(@Param() params: GroupParamsDto) {
-    console.debug(`getStats called for groupId=${params.uid}`);
     return this.groupService.getGroupStats(params.uid);
   }
 

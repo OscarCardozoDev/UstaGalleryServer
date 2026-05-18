@@ -406,7 +406,6 @@ export class GroupService {
    * GET GROUP STATS
    * ========================= */
   async getGroupStats(groupId: string): Promise<GroupStats> {
-    console.log(`getGroupStats called — groupId=${groupId}`);
     try {
       const studentTypeId = this.configService.get<string>(
         'config.roles.student',
