@@ -9,6 +9,8 @@ import {
   ProductStatus,
 } from './Product.interface';
 import { PhotosService } from 'src/modules/photos/Photos.service';
+import { photoManagment } from 'src/utils/photosManagment';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class ProductService {
@@ -308,7 +310,7 @@ export class ProductService {
             photoId: true,
             isMain: true,
             photo: {
-              select: { uid: true },
+              select: { uid: true, url: true },
             },
           },
         },
@@ -318,29 +320,43 @@ export class ProductService {
     if (!product) throw new NotFoundException('Product not found');
 
     /**
-     * FASE 1️⃣ — Sincronización de imágenes (fuera de transacción)
+     * FASE 1️⃣ — Guardar archivos nuevos en disco (fuera de transacción)
+     * Si la transacción falla, se eliminan estos archivos.
      */
+    const savedFiles: {
+      fileName: string;
+      url: string;
+      folder: string;
+      isMain: boolean;
+    }[] = [];
+
     if (images && images.length > 0) {
-      const incomingExistingUids = images
-        .filter((img) => img.isExisting && img.uid)
-        .map((img) => img.uid!);
-
-      // Fotos que estaban en BD pero el usuario eliminó
-      const toDelete = product.photos.filter(
-        (p) => !incomingExistingUids.includes(p.photo.uid),
-      );
-
-      // Eliminar del storage y BD
-      for (const photo of toDelete) {
-        await this.photosService.deletePhotoUseCase(photo.photoId);
-      }
-
-      // Crear fotos nuevas
       for (const img of images.filter((i) => !i.isExisting)) {
-        await this.photosService.createPhotoUseCase({
-          base64: img.base64!,
-          name: img.name!,
-          folder: img.folder ?? 'products',
+        const base64 = img.base64!;
+        const match = base64.match(/^data:image\/(\w+);base64,(.+)$/);
+        const buffer = match
+          ? Buffer.from(match[2], 'base64')
+          : Buffer.from(base64, 'base64');
+        const extension = match ? match[1] : 'jpeg';
+
+        const uid = uuidv4();
+        const rawName = img.name!;
+        const fileName = rawName.includes('.')
+          ? `${uid}_${rawName}`
+          : `${uid}_${rawName}.${extension}`;
+        const folder = img.folder ?? 'products';
+
+        const fileResult = await photoManagment.save({
+          fileBuffer: buffer,
+          fileName,
+          folderPath: folder,
+        });
+
+        savedFiles.push({
+          fileName,
+          url: fileResult.url,
+          folder,
+          isMain: img.isMain,
         });
       }
     }
@@ -355,52 +371,129 @@ export class ProductService {
     };
 
     /**
-     * FASE 2️⃣ — Transacción DB
+     * FASE 2️⃣ — Transacción atómica (TODO en BD se revierte si algo falla)
      */
-    return this.prisma.$transaction(async (tx) => {
-      // 1️⃣ Update producto
-      await tx.products.update({
-        where: { uid: productId },
-        data: {
-          ...parsedData,
-          status: ProductStatus.PENDING,
-          feedback: null,
-        },
-      });
-
-      // 2️⃣ Sincronizar isMain de fotos
-      if (images && images.length > 0) {
-        await tx.productPhoto.updateMany({
-          where: { productId },
-          data: { isMain: false },
+    try {
+      const result = await this.prisma.$transaction(async (tx) => {
+        // 1️⃣ Update producto
+        await tx.products.update({
+          where: { uid: productId },
+          data: {
+            ...parsedData,
+            status: ProductStatus.PENDING,
+            feedback: null,
+          },
         });
 
-        const mainImage = images.find((img) => img.isMain);
-        if (mainImage?.uid) {
+        // 2️⃣ Sincronizar imágenes
+        if (images && images.length > 0) {
+          const incomingExistingUids = images
+            .filter((img) => img.isExisting && img.uid)
+            .map((img) => img.uid!);
+
+          // Eliminar relaciones ProductPhoto de fotos removidas
+          const toDelete = product.photos.filter(
+            (p) => !incomingExistingUids.includes(p.photo.uid),
+          );
+
+          if (toDelete.length) {
+            await tx.productPhoto.deleteMany({
+              where: {
+                productId,
+                photoId: { in: toDelete.map((p) => p.photoId) },
+              },
+            });
+
+            // Eliminar registros Photos de las fotos removidas
+            await tx.photos.deleteMany({
+              where: { uid: { in: toDelete.map((p) => p.photoId) } },
+            });
+          }
+
+          // Resetear isMain de fotos que permanecen
           await tx.productPhoto.updateMany({
-            where: {
-              productId,
-              photo: { uid: mainImage.uid },
-            },
-            data: { isMain: true },
+            where: { productId },
+            data: { isMain: false },
           });
+
+          // Crear registros Photos + ProductPhoto para fotos nuevas
+          for (const file of savedFiles) {
+            const newPhoto = await tx.photos.create({
+              data: { name: file.fileName, url: file.url },
+            });
+
+            await tx.productPhoto.create({
+              data: {
+                productId,
+                photoId: newPhoto.uid,
+                isMain: file.isMain,
+              },
+            });
+          }
+
+          // Establecer isMain en foto existente seleccionada
+          const mainImage = images.find((img) => img.isMain && img.isExisting);
+          if (mainImage?.uid) {
+            await tx.productPhoto.updateMany({
+              where: {
+                productId,
+                photo: { uid: mainImage.uid },
+              },
+              data: { isMain: true },
+            });
+          }
+        }
+
+        // 3️⃣ Estilos
+        if (styles) {
+          await tx.productStyle.deleteMany({ where: { productId } });
+
+          if (styles.length) {
+            await tx.productStyle.createMany({
+              data: styles.map((styleId) => ({ productId, styleId })),
+              skipDuplicates: true,
+            });
+          }
+        }
+
+        return { uid: productId };
+      });
+
+      // Transacción exitosa → eliminar archivos viejos del disco
+      if (images && images.length > 0) {
+        const incomingExistingUids = images
+          .filter((img) => img.isExisting && img.uid)
+          .map((img) => img.uid!);
+
+        const toDeleteFromDisk = product.photos.filter(
+          (p) => !incomingExistingUids.includes(p.photo.uid),
+        );
+
+        for (const photo of toDeleteFromDisk) {
+          try {
+            const cleanPath = photo.photo.url.replace(/^\/images\//, '');
+            const segments = cleanPath.split('/').filter(Boolean);
+            const fileName = segments.pop()!;
+            const folderPath = segments.join('/');
+            await photoManagment.remove(fileName, folderPath);
+          } catch {
+            // Archivo ya no existe, no es crítico
+          }
         }
       }
 
-      // 3️⃣ Estilos
-      if (styles) {
-        await tx.productStyle.deleteMany({ where: { productId } });
-
-        if (styles.length) {
-          await tx.productStyle.createMany({
-            data: styles.map((styleId) => ({ productId, styleId })),
-            skipDuplicates: true,
-          });
+      return result;
+    } catch (error) {
+      // Transacción falló → eliminar archivos nuevos del disco (rollback)
+      for (const file of savedFiles) {
+        try {
+          await photoManagment.remove(file.fileName, file.folder);
+        } catch {
+          // Best-effort cleanup
         }
       }
-
-      return { uid: productId };
-    });
+      throw error;
+    }
   }
   async updateStatus(data: UpdateStatusUseCase) {
     return this.prisma.products.update({
