@@ -410,7 +410,6 @@ export class GroupService {
       const studentTypeId = this.configService.get<string>(
         'config.roles.student',
       );
-      console.debug(`studentTypeId resolved: ${studentTypeId}`);
 
       const group = await this.prisma.groups.findUnique({
         where: { uid: groupId },
@@ -505,7 +504,6 @@ export class GroupService {
       const studentTypeId = this.configService.get<string>(
         'config.roles.student',
       );
-      console.debug(`studentTypeId resolved: ${studentTypeId}`);
 
       const group = await this.prisma.groups.findUnique({
         where: { uid: groupId },
