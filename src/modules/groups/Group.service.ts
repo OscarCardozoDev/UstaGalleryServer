@@ -501,9 +501,6 @@ export class GroupService {
     page: number,
     limit: number,
   ): Promise<GroupMembersResult> {
-    console.log(
-      `getGroupMembers called — groupId=${groupId} page=${page} limit=${limit}`,
-    );
     try {
       const studentTypeId = this.configService.get<string>(
         'config.roles.student',
