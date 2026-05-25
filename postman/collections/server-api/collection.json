@@ -752,7 +752,7 @@
             "url": "{{baseUrl}}/user/create",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"X\",\n  \"lastName\": \"Y\",\n  \"username\": \"xy_001\",\n  \"gender\": \"M\",\n  \"telNumber\": \"3000000002\",\n  \"roleId\": \"00000000-0000-0000-0000-000000000010\",\n  \"roleData\": {}\n}",
+              "raw": "{\n  \"name\": \"X\",\n  \"lastName\": \"Y\",\n  \"username\": \"xy_001\",\n  \"gender\": \"M\",\n  \"telNumber\": \"3000000002\",\n  \"roleId\": \"{{studentId}}\",\n  \"roleData\": {}\n}",
               "options": {
                 "raw": {
                   "language": "json"
