@@ -51,7 +51,7 @@ describe('ClassesService', () => {
   describe('getCurrentClass', () => {
     it('returns active class when current time is within window', async () => {
       jest.useFakeTimers();
-      jest.setSystemTime(new Date('2026-04-24T10:30:00'));
+      jest.setSystemTime(new Date('2026-04-24T15:30:00Z'));
       mockPrisma.classes.findMany.mockResolvedValue([CLASS_TODAY]);
 
       const result = await service.getCurrentClass('group-1');
@@ -61,7 +61,7 @@ describe('ClassesService', () => {
 
     it('returns inactive when current time is before class window', async () => {
       jest.useFakeTimers();
-      jest.setSystemTime(new Date('2026-04-24T09:59:00'));
+      jest.setSystemTime(new Date('2026-04-24T14:59:00Z'));
       mockPrisma.classes.findMany.mockResolvedValue([CLASS_TODAY]);
 
       const result = await service.getCurrentClass('group-1');
@@ -71,7 +71,7 @@ describe('ClassesService', () => {
 
     it('returns inactive when current time is after class window', async () => {
       jest.useFakeTimers();
-      jest.setSystemTime(new Date('2026-04-24T11:01:00'));
+      jest.setSystemTime(new Date('2026-04-24T16:01:00Z'));
       mockPrisma.classes.findMany.mockResolvedValue([CLASS_TODAY]);
 
       const result = await service.getCurrentClass('group-1');
@@ -81,7 +81,7 @@ describe('ClassesService', () => {
 
     it('returns inactive when no classes exist today', async () => {
       jest.useFakeTimers();
-      jest.setSystemTime(new Date('2026-04-24T10:30:00'));
+      jest.setSystemTime(new Date('2026-04-24T15:30:00Z'));
       mockPrisma.classes.findMany.mockResolvedValue([]);
 
       const result = await service.getCurrentClass('group-1');
@@ -91,7 +91,7 @@ describe('ClassesService', () => {
 
     it('returns first active class when multiple classes today', async () => {
       jest.useFakeTimers();
-      jest.setSystemTime(new Date('2026-04-24T14:30:00'));
+      jest.setSystemTime(new Date('2026-04-24T19:30:00Z'));
       mockPrisma.classes.findMany.mockResolvedValue([
         { ...CLASS_TODAY, uid: 'class-morning', startTime: '10:00', endTime: '11:00' },
         { ...CLASS_TODAY, uid: 'class-afternoon', startTime: '14:00', endTime: '16:00' },
@@ -116,7 +116,7 @@ describe('ClassesService', () => {
 
     it('throws ForbiddenException when class is not today', async () => {
       jest.useFakeTimers();
-      jest.setSystemTime(new Date('2026-04-24T10:30:00'));
+      jest.setSystemTime(new Date('2026-04-24T15:30:00Z'));
       mockPrisma.classes.findUnique.mockResolvedValue({
         ...CLASS_TODAY,
         date: new Date(2026, 3, 23, 0, 0, 0), // yesterday, local time
@@ -127,7 +127,7 @@ describe('ClassesService', () => {
 
     it('throws ForbiddenException when class is today but outside time window', async () => {
       jest.useFakeTimers();
-      jest.setSystemTime(new Date('2026-04-24T12:00:00'));
+      jest.setSystemTime(new Date('2026-04-24T17:00:00Z'));
       mockPrisma.classes.findUnique.mockResolvedValue(CLASS_TODAY);
 
       await expect(service.attend(params)).rejects.toThrow(ForbiddenException);
@@ -135,7 +135,7 @@ describe('ClassesService', () => {
 
     it('throws ForbiddenException when user is not in the group', async () => {
       jest.useFakeTimers();
-      jest.setSystemTime(new Date('2026-04-24T10:30:00'));
+      jest.setSystemTime(new Date('2026-04-24T15:30:00Z'));
       mockPrisma.classes.findUnique.mockResolvedValue(CLASS_TODAY);
       mockPrisma.usersGroups.findFirst.mockResolvedValue(null);
 
@@ -144,7 +144,7 @@ describe('ClassesService', () => {
 
     it('throws ConflictException on duplicate attendance (P2002)', async () => {
       jest.useFakeTimers();
-      jest.setSystemTime(new Date('2026-04-24T10:30:00'));
+      jest.setSystemTime(new Date('2026-04-24T15:30:00Z'));
       mockPrisma.classes.findUnique.mockResolvedValue(CLASS_TODAY);
       mockPrisma.usersGroups.findFirst.mockResolvedValue({ uid: 'ug-1' });
       mockPrisma.attendance.create.mockRejectedValue({ code: 'P2002' });
@@ -154,7 +154,7 @@ describe('ClassesService', () => {
 
     it('returns success when all conditions are met', async () => {
       jest.useFakeTimers();
-      jest.setSystemTime(new Date('2026-04-24T10:30:00'));
+      jest.setSystemTime(new Date('2026-04-24T15:30:00Z'));
       mockPrisma.classes.findUnique.mockResolvedValue(CLASS_TODAY);
       mockPrisma.usersGroups.findFirst.mockResolvedValue({ uid: 'ug-1' });
       mockPrisma.attendance.create.mockResolvedValue({ uid: 'att-1' });
