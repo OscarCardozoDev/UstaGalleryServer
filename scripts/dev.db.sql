@@ -21,8 +21,8 @@ INSERT INTO "Roles" ("uid", "name", "slug", "updatedAt") VALUES
   (roleParticu,  'Profesor Particular', 'particular',  NOW());
 
 INSERT INTO "Credentials" ("uid", "mail", "password", "isEmailVerified", "updatedAt") VALUES 
-  ('40693052-0e35-4d3b-9366-3fe1ecc9ac3d', 'admin@gmail.com',     '$2a$12$xXjevI/oABdIC3g7ZRbGgOhPleI1qdkfHea.80wF1aX.qo5fZJuMC', true, NOW()),
-  ('568c79c2-7bb8-4d1a-98d3-8d23205a6814', 'professor@gmail.com', '$2a$12$xXjevI/oABdIC3g7ZRbGgOhPleI1qdkfHea.80wF1aX.qo5fZJuMC', true, NOW());
+  ('40693052-0e35-4d3b-9366-3fe1ecc9ac3d', 'admin@usantoto.edu.co',     '$2a$12$q4NtQXiEuQ/CZbW6.krvLuNOgsaue7ZgUjzYMqYx602ZiymJkZJbS', true, NOW()),
+  ('568c79c2-7bb8-4d1a-98d3-8d23205a6814', 'professor@usantoto.edu.co', '$2a$12$YncP2ZJ11hGu.8WnhZ.7aeUDMb/gOZi65BFSNneB4nYfYKLInHDHG', true, NOW());
 
 INSERT INTO "Users" ("uid", "name", "lastName", "username", "description", "gender", "telNumber", "isActive", "userTypeId", "roleId", "roleData", "updatedAt") VALUES
   (
