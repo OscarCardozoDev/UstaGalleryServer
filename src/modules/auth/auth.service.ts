@@ -8,7 +8,10 @@ import { ConfigService } from '@nestjs/config';
 import { Resend } from 'resend';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCredentialDto } from './auth.dto';
-import { GetCredentialResult, CredentialWithoutProfile } from './auth.interface';
+import {
+  GetCredentialResult,
+  CredentialWithoutProfile,
+} from './auth.interface';
 import { hashText } from 'src/utils/crypto.util';
 
 @Injectable()
@@ -64,7 +67,12 @@ export class AuthService {
 
   async sendVerificationCode(uid: string): Promise<void> {
     const resendKey = this.configService.get<string>('config.resendKey');
+    const emailFrom = this.configService.get<string>('config.emailFrom');
     const resend = new Resend(resendKey);
+
+    if (!emailFrom) {
+      throw new Error('config.emailFrom no está configurado');
+    }
 
     const credential = await this.prismaService.credentials.findUnique({
       where: { uid },
@@ -88,7 +96,7 @@ export class AuthService {
     });
 
     const { error } = await resend.emails.send({
-      from: 'UstaGallery <onboarding@resend.dev>',
+      from: emailFrom,
       to: credential.mail,
       subject: 'Código de verificación - UstaGallery',
       text: `Tu código de verificación es: ${code}\n\nEste código expira en 10 minutos.`,
@@ -141,7 +149,12 @@ export class AuthService {
 
   async sendPasswordResetCode(mail: string): Promise<void> {
     const resendKey = this.configService.get<string>('config.resendKey');
+    const emailFrom = this.configService.get<string>('config.emailFrom');
     const resend = new Resend(resendKey);
+
+    if (!emailFrom) {
+      throw new Error('config.emailFrom no está configurado');
+    }
 
     const credential = await this.prismaService.credentials.findUnique({
       where: { mail },
@@ -165,7 +178,7 @@ export class AuthService {
     });
 
     const { error } = await resend.emails.send({
-      from: 'UstaGallery <onboarding@resend.dev>',
+      from: emailFrom,
       to: mail,
       subject: 'Recuperar contraseña - UstaGallery',
       text: `Tu código para recuperar la contraseña es: ${code}\n\nEste código expira en 10 minutos.\n\nSi no solicitaste este cambio, ignora este correo.`,
@@ -177,7 +190,11 @@ export class AuthService {
     }
   }
 
-  async resetPassword(mail: string, code: string, newPassword: string): Promise<void> {
+  async resetPassword(
+    mail: string,
+    code: string,
+    newPassword: string,
+  ): Promise<void> {
     const credential = await this.prismaService.credentials.findUnique({
       where: { mail },
       select: { uid: true },
